@@ -4,9 +4,11 @@ description: >
   Generate CI/CD workflows (GitHub Actions) through interactive conversation by analyzing
   repository structure and user preferences. Use when the user asks to: (1) set up CI/CD
   for a project, (2) create GitHub Actions workflows, (3) add automated testing/building/deployment
-  pipelines, (4) improve or review existing CI/CD configuration. Triggers on: "CI/CD", "CI",
-  "GitHub Actions", "workflow", "pipeline", "continuous integration", "continuous deployment",
-  ".github/workflows".
+  pipelines, (4) improve or review existing CI/CD configuration. Also use when the user
+  mentions automating tests, running checks on PRs, or deploying on merge — even without
+  explicitly saying "CI/CD". Triggers on: "CI/CD", "CI", "GitHub Actions", "workflow",
+  "pipeline", "continuous integration", "continuous deployment", ".github/workflows",
+  "automate tests", "run checks on PRs", "deploy on merge".
 ---
 
 # Generate CI/CD Workflows
@@ -20,7 +22,7 @@ CI/CD involves **policy decisions** (PR vs direct push, release triggers, deploy
 - **Verify everything** before adding any step, secret, or config — examine the actual codebase. Ask when uncertain.
 - **Always present workflow choices** — even if tests and a Dockerfile are detected, the user decides when/how they run.
 - **Use project automation** over inline commands — call `npm test`, not `jest --coverage --ci`. See [references/best-practices.md](references/best-practices.md).
-- **GitHub Actions only** — if user needs another platform, inform them it's not supported and offer to open a feature request at https://github.com/dot-ai-app/dot-ai/issues.
+- **GitHub Actions only** — if the user needs another CI platform, let them know this skill only covers GitHub Actions.
 
 ## Process
 
@@ -30,9 +32,9 @@ Execute sequentially. Each phase may change direction. Do NOT batch all question
 PHASE 1: ANALYZE → PHASE 2: PRESENT & ASK → PHASE 3: GENERATE
 ```
 
-### Step 0: Confirm CI Platform (Blocking Gate)
+### Step 0: Confirm CI Platform
 
-Ask which CI/CD platform before any analysis. If not GitHub Actions, stop and offer feature request.
+This skill generates GitHub Actions workflows. If the user mentions a different CI platform, let them know and stop. Otherwise, proceed directly to analysis — no need to ask if they already indicated GitHub Actions or didn't specify a platform.
 
 ### Step 1: Analyze Repository
 

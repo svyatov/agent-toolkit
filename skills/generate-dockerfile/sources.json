@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-03-17T00:00:00.000Z",
+  "type": "copy",
+  "sources": [
+    {
+      "url": "https://github.com/vfarcic/dot-ai/tree/main/shared-prompts",
+      "repository": "vfarcic/dot-ai",
+      "path": "shared-prompts/generate-dockerfile.md",
+      "branch": "main",
+      "sha": "7f573c31a3885cb94d049baa85f438b06b04836e",
+      "original_name": "generate-dockerfile",
+      "fetched_at": "2026-03-17T00:00:00.000Z"
+    }
+  ],
+  "license": "MIT",
+  "copyright": "Copyright (c) 2025 Viktor Farcic",
+  "notes": "Original is a single .md file in shared-prompts/. Refactored locally: best practices section extracted into references/best-practices.md."
+}

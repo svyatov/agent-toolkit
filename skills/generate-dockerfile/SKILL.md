@@ -4,8 +4,11 @@ description: >
   Generate optimized, secure, multi-stage Dockerfiles and .dockerignore files for any project.
   Use when the user asks to: (1) containerize a project, (2) create or generate a Dockerfile,
   (3) improve or optimize an existing Dockerfile, (4) add Docker support to a project,
-  (5) review a Dockerfile for best practices. Triggers on: "Dockerfile", "dockerize",
-  "containerize", "Docker build", "docker image", ".dockerignore".
+  (5) review a Dockerfile for best practices. Also use when the user wants to make something
+  deployable, set up containers, or ship an app — even without mentioning Docker explicitly.
+  Triggers on: "Dockerfile", "dockerize", "containerize", "Docker build", "docker image",
+  ".dockerignore", "make this deployable", "container setup", "production-ready setup",
+  "ship this app".
 ---
 
 # Generate Production-Ready Dockerfile
@@ -24,9 +27,9 @@ Thoroughness over speed: shallow analysis leads to broken Dockerfiles. Read actu
 
 Ensure all instructions support multiple architectures (amd64, arm64). Use multi-arch official images. Detect architecture dynamically for binary downloads—never hardcode amd64/x86_64.
 
-### NEVER Add HEALTHCHECK
+### Skip HEALTHCHECK
 
-Do NOT add HEALTHCHECK under any circumstances. Health endpoints are application-specific and cannot be verified from codebase analysis alone. Adding unverified health checks causes containers to be marked unhealthy incorrectly.
+Health endpoints are application-specific and cannot be verified from codebase analysis alone. Adding unverified health checks causes containers to be marked unhealthy incorrectly — so don't add HEALTHCHECK to generated Dockerfiles.
 
 ## Process
 
@@ -55,13 +58,7 @@ Consult [references/best-practices.md](references/best-practices.md) for detaile
 
 **Existing Dockerfile** → Evaluate against checklists, identify issues, preserve intentional customizations, edit to fix. Briefly explain changes.
 
-Key rules:
-- Never use `COPY . .` — explicitly copy only required files
-- Copy dependency manifests before source code for layer caching
-- Combine RUN commands with `&&`, clean caches in same layer
-- Create non-root user (UID 10001+), set USER before CMD
-- Pin image versions, use minimal base images
-- CMD in exec form (`["executable", "arg"]`)
+Follow the patterns and checklists in the reference file.
 
 ### Step 3: Create or Improve .dockerignore
 
@@ -74,7 +71,7 @@ Generate a **minimal** .dockerignore (~10-15 lines). Since the Dockerfile uses e
 
 ### Step 4: Build, Test, and Iterate
 
-Validate before presenting to user.
+Validate before presenting to user. First verify Docker is available (`docker info`). If Docker is not installed or not running, skip validation — present the Dockerfile with a note that it hasn't been tested.
 
 **4.1 Build:**
 ```bash
