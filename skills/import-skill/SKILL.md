@@ -14,11 +14,19 @@ Import skills from GitHub directory URLs or pasted content. Supports single-skil
 
 Only public GitHub repositories are supported.
 
+## Speed Guidelines
+
+This workflow involves multiple GitHub API calls and file writes. Minimize turns by following these rules:
+
+- **Batch independent API calls** into single turns with parallel Bash calls
+- **Use `curl`** for all GitHub content fetches — WebFetch summarizes HTML instead of returning raw content, making it unsuitable for fetching source files
+- **Combine download + write** with `curl -s URL > path` instead of fetch-then-write-separately
+
 ## Process
 
-### Step 1: Get Source
+### Step 1: Parse Source
 
-Ask the user for the source. Accept one of:
+Accept one of:
 
 1. **One GitHub directory URL** — single skill copy
 2. **Multiple GitHub directory URLs** — multi-skill merge
@@ -26,161 +34,130 @@ Ask the user for the source. Accept one of:
 
 Expected URL format: `https://github.com/{owner}/{repo}/tree/{branch}/{path}`
 
-If the URL doesn't match this pattern, ask for clarification.
+Parse to extract `owner`, `repo`, `branch`, and `path`. If the format doesn't match, ask for clarification.
 
-### Step 2: Get New Skill Name
+For pasted content, skip to Step 4.
 
-Ask the user for a name. Validate:
+### Step 2: Parallel Discovery
 
-- Lowercase kebab-case (letters, numbers, hyphens)
-- Doesn't already exist in the `skills/` directory
-- Not empty
+**Launch ALL of these in a single turn using parallel tool calls:**
 
-If the name conflicts with an existing skill, list existing skills and ask for a different name.
+```bash
+# 1. Commit SHA
+curl -s "https://api.github.com/repos/{owner}/{repo}/commits?sha={branch}&per_page=1" | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['sha'])"
 
-### Step 3: Check License Compatibility
+# 2. Directory listing
+curl -s "https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch}"
 
-This repo is MIT-licensed. Any imported code must be under a compatible license — otherwise incorporating it would violate the source's license terms or force a license change on this repo.
-
-For each unique `{owner}/{repo}`, fetch the repo metadata:
-
-```
-GET https://api.github.com/repos/{owner}/{repo}
+# 3. License check
+curl -s "https://api.github.com/repos/{owner}/{repo}/license" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('license',{}).get('spdx_id','unknown'))"
 ```
 
-Extract `license.spdx_id` from the response.
+```
+# 4. Existing skills (Glob tool, parallel with the above)
+Glob: skills/*/SKILL.md
+```
 
-**Compatible licenses** (permissive, safe to include in an MIT project):
+If the directory listing contains subdirectories (`"type": "dir"`), list their contents too — add parallel curl calls for each subdirectory in the **same turn** or the next turn.
 
-`MIT`, `ISC`, `BSD-2-Clause`, `BSD-3-Clause`, `Apache-2.0`, `0BSD`, `Unlicense`, `CC0-1.0`, `WTFPL`, `Zlib`, `BSL-1.0`
+**Error handling:**
+- 404 → invalid URL or directory doesn't exist, report and stop
+- 403 / rate limit → inform the user, suggest waiting or retrying later
 
-**Decision logic:**
+### Step 3: Validate License & Confirm Name
+
+**License validation** — this repo is MIT-licensed, so imported code must be under a compatible license:
+
+Compatible: `MIT`, `ISC`, `BSD-2-Clause`, `BSD-3-Clause`, `Apache-2.0`, `0BSD`, `Unlicense`, `CC0-1.0`, `WTFPL`, `Zlib`, `BSL-1.0`
 
 | Result | Action |
 |--------|--------|
 | SPDX ID is in the compatible list | Proceed. Record the license. |
-| SPDX ID is `NOASSERTION` or `null` / missing | **Stop.** Tell the user: no detectable license means all rights reserved by default — copying is not permitted. Offer to skip this source. |
-| SPDX ID is anything else (GPL, LGPL, AGPL, MPL, CC-BY-SA, CC-BY-NC, etc.) | **Stop.** Tell the user the license (`{spdx_id}`) is incompatible with MIT. Explain briefly why (e.g., copyleft would require relicensing this repo). Offer to skip this source. |
+| `NOASSERTION` or `null` / missing | **Stop.** No detectable license means all rights reserved. Offer to skip this source. |
+| Anything else (GPL, LGPL, AGPL, MPL, etc.) | **Stop.** Explain the license is incompatible with MIT. Offer to skip. |
 
-If the user explicitly asks to override (e.g., "I have permission from the author"), proceed but record the override in `sources.json` — set `"license_override": true` and `"license_override_reason"` with the user's stated justification.
+If the user explicitly overrides (e.g., "I have permission from the author"), proceed but record `"license_override": true` and the user's reason in `sources.json`.
 
-Also look for a LICENSE or NOTICE file in the fetched directory (or repo root) to capture the copyright line for `sources.json`.
+**Name resolution** — always ask the user for the skill name via AskUserQuestion. Offer the original name (extracted from the URL path) as the recommended option. Validate: lowercase kebab-case, no conflict with existing skills, not empty.
 
-### Step 4: Fetch from GitHub
+### Step 4: Download & Write Files
 
-For each URL, parse it to extract `owner`, `repo`, `branch`, and `path`.
+**Create the directory structure, then download ALL files directly to disk in a single turn using parallel Bash calls:**
 
-**Get commit SHA:**
+```bash
+# First: create directories
+mkdir -p skills/{name}/references  # include any subdirectories found in Step 2
 
-```
-GET https://api.github.com/repos/{owner}/{repo}/commits?sha={branch}&per_page=1
-```
-
-Extract `[0].sha` from the JSON response.
-
-**List directory contents:**
-
-```
-GET https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch}
+# Then: parallel downloads (one Bash call per file)
+curl -s "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{full-path-to-file}" > skills/{name}/{relative-path}
 ```
 
-Returns a JSON array. Each entry has `name`, `type` (`"file"` or `"dir"`), and `download_url`.
+Use `download_url` values from the directory listing (these point to `raw.githubusercontent.com`) for each file. Each curl download should be a separate parallel Bash tool call so they execute concurrently.
 
-**Fetch files recursively:**
+**After writing:** if the skill name differs from the original, update the `name:` field in SKILL.md frontmatter using the Edit tool.
 
-- Files: fetch content via `download_url`
-- Directories: recurse by calling the contents API on that subpath
+**For merge (multiple sources):**
 
-Collect all files with their paths relative to the skill root.
-
-**Error handling:**
-
-- 404 → the URL is invalid or the directory doesn't exist, report and stop
-- 403 / rate limit → inform the user they've hit GitHub's rate limit, suggest waiting or retry later
-- Individual file fetch failure → report which file failed, ask whether to continue without it
-
-### Step 5: Write Files
-
-**Single skill (copy):**
-
-Write all fetched files into `skills/{new-name}/`, preserving directory structure. Update the `name:` field in `SKILL.md` frontmatter to match the new skill name.
-
-**Multiple skills (merge):**
-
-1. Read all fetched `SKILL.md` files
-2. Understand each skill's purpose, capabilities, and process
-3. Synthesize a new `SKILL.md` that combines the capabilities — merged description, unified process steps, deduplicated where they overlap
+1. Download all files from all sources first
+2. Read the fetched SKILL.md files
+3. Synthesize a merged SKILL.md combining capabilities — merged description, unified process steps, deduplicated where they overlap
 4. Copy all supporting files (`references/`, `scripts/`, `assets/`) from all sources
-5. **On filename conflicts:** suggest a descriptive alternative name and ask the user to confirm or provide their own. Don't just mechanically prefix — pick a name that makes sense for what the file contains.
+5. On filename conflicts: suggest a descriptive alternative name, ask user to confirm
 
-**Pasted content:**
+### Step 5: Finalize
 
-Ask the user which file each pasted block represents (default: `SKILL.md`). Write files into `skills/{new-name}/`. Update the `name:` field in frontmatter.
+**Do ALL of these in a single turn using parallel tool calls:**
 
-### Step 6: Create `sources.json`
-
-Write `skills/{new-name}/sources.json`:
+1. **Write `sources.json`** (Write tool):
 
 ```json
 {
-  "created_at": "2026-03-17T12:00:00.000Z",
+  "created_at": "YYYY-MM-DDTHH:mm:ss.000Z",
   "type": "copy",
   "sources": [
     {
-      "url": "https://github.com/user/repo/tree/main/skills/example",
-      "repository": "user/repo",
-      "path": "skills/example",
-      "branch": "main",
-      "sha": "abc123...",
-      "original_name": "example",
-      "fetched_at": "2026-03-17T12:00:00.000Z"
+      "url": "https://github.com/{owner}/{repo}/tree/{branch}/{path}",
+      "repository": "{owner}/{repo}",
+      "path": "{path}",
+      "branch": "{branch}",
+      "sha": "{full-commit-sha}",
+      "original_name": "{original-name}",
+      "fetched_at": "YYYY-MM-DDTHH:mm:ss.000Z"
     }
   ],
-  "license": "MIT",
-  "copyright": "Copyright (c) 2025 Example Author",
+  "license": "{spdx-id}",
+  "copyright": "Copyright (c) {owner}",
   "license_override": false,
   "license_override_reason": null
 }
 ```
 
 - `type`: `"copy"` for single source, `"merge"` for multiple, `"paste"` for pasted content
-- `sources`: array of source entries (empty for `"paste"`)
 - `sha`: full commit SHA at fetch time — used to check for upstream updates later
-- `license`: SPDX identifier from the source repo (e.g., `"MIT"`, `"Apache-2.0"`)
-- `copyright`: copyright line from the source repo's LICENSE file
-- `license_override` / `license_override_reason`: only present when the user overrode an incompatible or missing license check
 
-### Step 7: Register in Plugin
+2. **Create symlink + verify** (single Bash call):
+   ```bash
+   ln -s ../../../skills/{name} plugins/leo/skills/{name} && ls -la plugins/leo/skills/{name}/SKILL.md
+   ```
 
-Create a symlink:
+3. **Read + bump plugin version** in `plugins/leo/.claude-plugin/plugin.json` (Read tool, then Edit tool — these are sequential but can run in parallel with items 1 and 2)
 
-```bash
-ln -s ../../../skills/{new-name} plugins/leo/skills/{new-name}
-```
+4. **Verify sources.json** (Bash call, parallel with above):
+   ```bash
+   python3 -c "import json; json.load(open('skills/{name}/sources.json')); print('sources.json: valid')"
+   ```
 
-Verify it resolves:
+Present a summary: skill name, source(s), files created, license, symlink status.
 
-```bash
-ls -la plugins/leo/skills/{new-name}
-```
+### Step 6: Post-Import Review
 
-### Step 8: Verify and Report
+Invoke the `skill-creator:skill-creator` skill to analyze the imported skill and suggest improvements — simplifications, better structure, clearer instructions, or anything else that would make the skill more effective.
 
-Confirm:
-1. `skills/{new-name}/SKILL.md` exists with correct frontmatter
-2. `skills/{new-name}/sources.json` is valid JSON
-3. Symlink resolves correctly
-
-Present a summary: skill name, source(s), files created, symlink status.
-
-### Step 9: Post-Import Review
-
-After the import is complete, invoke the `skill-creator:skill-creator` skill to analyze the imported skill. The goal is to review the skill and suggest improvements — simplifications, better structure, clearer instructions, or anything else that would make the skill more effective.
-
-**Important:** present all suggested changes to the user and wait for explicit confirmation before applying anything. Do not auto-apply improvements.
+**Important:** Present all suggested changes to the user and wait for explicit confirmation before applying anything. Do not auto-apply improvements.
 
 ## Edge Cases
 
-- **No SKILL.md in fetched directory** — warn the user. Ask whether to treat all files as references and create a minimal SKILL.md, or abort.
+- **No SKILL.md in fetched directory** — warn. Ask whether to treat all files as references and create a minimal SKILL.md, or abort.
 - **Large files (>1MB)** — warn and ask whether to include.
 - **Binary files** — detect by extension, warn, and ask whether to include.
+- **Nested subdirectories** — recurse: list contents via API, then download all files in parallel.
