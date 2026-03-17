@@ -22,3 +22,7 @@ A collection of Claude Code skills and plugins.
 
 - `gh search code "<query>"` — useful for finding skill origins and upstream changes
 - Symlink a new skill: `ln -s ../../../skills/<name> plugins/leo/skills/<name>`
+
+## Gotchas
+
+- Use `curl` (not WebFetch) to fetch raw file content from GitHub — WebFetch summarizes/truncates instead of returning verbatim content
