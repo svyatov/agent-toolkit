@@ -1,7 +1,7 @@
 {
   "name": "leo",
   "description": "A collection of skills and commands for Claude Code",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

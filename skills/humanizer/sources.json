@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-03-17T00:00:00.000Z",
+  "type": "merge",
+  "sources": [
+    {
+      "url": "https://github.com/blader/humanizer/tree/main",
+      "repository": "blader/humanizer",
+      "path": ".",
+      "branch": "main",
+      "sha": "d8085c7da5ddb9a179572837d4806b68cde3e9ff",
+      "original_name": "humanizer",
+      "fetched_at": "2026-03-17T00:00:00.000Z",
+      "note": "Base v2.2.0"
+    },
+    {
+      "url": "https://github.com/blader/humanizer/pull/51",
+      "repository": "blader/humanizer",
+      "path": "PR #51",
+      "branch": "main",
+      "sha": "d8085c7da5ddb9a179572837d4806b68cde3e9ff",
+      "original_name": "humanizer",
+      "fetched_at": "2026-03-17T00:00:00.000Z",
+      "note": "Claude-specific rewrite: severity ranking, context modes, 10 new patterns, DO NOT TOUCH rules, fabrication guardrails"
+    },
+    {
+      "url": "https://github.com/blader/humanizer/pull/39",
+      "repository": "blader/humanizer",
+      "path": "PR #39",
+      "branch": "main",
+      "sha": "d8085c7da5ddb9a179572837d4806b68cde3e9ff",
+      "original_name": "humanizer",
+      "fetched_at": "2026-03-17T00:00:00.000Z",
+      "note": "3 new patterns: persuasive authority tropes, signposting, fragmented headers"
+    }
+  ],
+  "license": "MIT",
+  "copyright": "Copyright (c) blader",
+  "license_override": false,
+  "license_override_reason": null
+}
