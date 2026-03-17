@@ -14,17 +14,7 @@
   "plugins": [
     {
       "name": "leo",
-      "description": "A collection of skills and commands for Claude Code",
-      "version": "1.0.0",
-      "source": "./leo",
-      "author": {
-        "name": "Leonid Svyatov",
-        "email": "leonid@svyatov.com",
-        "url": "https://www.svyatov.com"
-      },
-      "homepage": "https://github.com/svyatov/agent-toolkit",
-      "repository": "https://github.com/svyatov/agent-toolkit",
-      "license": "MIT",
+      "source": "./plugins/leo",
       "category": "productivity",
       "tags": ["skills", "productivity", "automation"]
     }
