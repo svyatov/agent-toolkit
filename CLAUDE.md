@@ -12,7 +12,11 @@ A collection of Claude Code skills and plugins.
 
 - Use `/import-skill` to import skills from GitHub repos
 - Every imported skill must have `sources.json` tracking: source repo, path, branch, commit SHA, license, and copyright
-- Bump plugin version in `plugin.json` when adding or modifying skills
+- Only import skills with MIT-compatible licenses (see import-skill Step 3 for compatible list)
+
+## Checklist — After Any Skill Change
+
+- Bump version in `plugins/leo/.claude-plugin/plugin.json`
 
 ## Commands
 
