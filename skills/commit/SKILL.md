@@ -1,115 +1,101 @@
 ---
 name: commit
-description: 'Git commit with conventional commit messages. Use when user asks to commit changes, create a git commit, or says "/commit". Auto-detects type and scope from diff, generates conventional commit messages, supports optional type/scope/description overrides and logical file staging.'
+description: >
+  Git commit workflow with conventional commits, branch creation, push, and PR support.
+  Use when the user asks to commit, save changes, push, ship it, open a PR, send a PR,
+  or says "/commit". Also triggers on short aliases: "cp" (commit and push), "cb" (commit
+  to new branch), "cpr" (commit and PR). Trigger phrases: "commit", "commit and push",
+  "commit new branch", "commit to new branch", "commit and pr", "commit push pr",
+  "commit pr", "cp", "cb", "cpr", "push this up", "save my changes", "ship it".
 license: MIT
 allowed-tools: Bash
 ---
 
-# Git Commit with Conventional Commits
+# Git Commit
 
-## Overview
+Conventional commits with optional branch creation, push, and PR.
 
-Create standardized, semantic git commits using the Conventional Commits specification. Analyze the actual diff to determine appropriate type, scope, and message.
+## Modes
+
+| Mode | Triggers | Steps |
+|------|----------|-------|
+| commit | "commit", "/commit" | analyze → stage → commit |
+| commit-branch | "commit new branch", "commit to new branch", "cb" | analyze → create branch → stage → commit |
+| commit-push | "commit and push", "cp" | analyze → stage → commit → push |
+| commit-pr | "commit and pr", "commit push pr", "commit pr", "cpr" | analyze → (create branch if on main/master) → stage → commit → push → PR |
+
+Detect mode from user input. Default to **commit** if ambiguous.
 
 ## Conventional Commit Format
 
-```
-<type>[optional scope][optional !]: <description>
+Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) strictly. Description: present tense, imperative mood, under 72 chars.
 
-[optional body]
+| Type | Purpose |
+|------|---------|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `style` | Formatting (no logic change) |
+| `refactor` | Refactor (no feature/fix) |
+| `perf` | Performance improvement |
+| `test` | Add/update tests |
+| `build` | Build system/dependencies |
+| `ci` | CI/config changes |
+| `chore` | Maintenance/misc |
+| `revert` | Revert commit |
 
-[optional footer(s)]
-```
+## Branch Naming
 
-## Commit Types
-
-| Type       | Purpose                        |
-| ---------- | ------------------------------ |
-| `feat`     | New feature                    |
-| `fix`      | Bug fix                        |
-| `docs`     | Documentation only             |
-| `style`    | Formatting/style (no logic)    |
-| `refactor` | Code refactor (no feature/fix) |
-| `perf`     | Performance improvement        |
-| `test`     | Add/update tests               |
-| `build`    | Build system/dependencies      |
-| `ci`       | CI/config changes              |
-| `chore`    | Maintenance/misc               |
-| `revert`   | Revert commit                  |
-
-## Breaking Changes
-
-`BREAKING CHANGE` must always be uppercase. `BREAKING-CHANGE` is also valid.
-
-```
-# Exclamation mark after type/scope
-feat!: remove deprecated endpoint
-
-# BREAKING CHANGE footer
-feat: allow config to extend other configs
-
-BREAKING CHANGE: `extends` key behavior changed
-```
-
-## Footers
-
-Footers follow the body after a blank line. Each footer is a token, a separator, and a value:
-
-- Token uses `-` in place of spaces (e.g., `Acked-by`, `Reviewed-by`), except `BREAKING CHANGE`
-- Separator is either `:<space>` or `<space>#` (e.g., `Refs #123`)
-
-```
-fix(parser): handle nested brackets
-
-Closes #42
-Reviewed-by: Alice
-```
+Format: `<type>/<short-description>` — lowercase kebab-case, max 50 chars total.
+Derive the type and description from the same diff analysis used for the commit message.
+Examples: `feat/add-user-auth`, `fix/null-pointer-in-parser`, `refactor/extract-db-layer`
 
 ## Workflow
 
-### 1. Analyze Diff
+### 1. Analyze Diff (all modes)
 
 ```bash
-# If files are staged, use staged diff
 git diff --staged
-
-# If nothing staged, use working tree diff
 git diff
-
-# Also check status
 git status --porcelain
 ```
 
-### 2. Stage Files (if needed)
+If no changes exist — warn user and stop.
 
-If nothing is staged or you want to group changes differently:
+Determine from the diff:
+- **type**, **scope**, **description** — for the commit message
+- **short-description** — for branch name (modes that create branches)
+
+Use staged diff if files are already staged, otherwise use working tree diff.
+
+### 2. Create Branch (commit-branch, commit-pr)
 
 ```bash
-# Stage specific files
-git add path/to/file1 path/to/file2
-
-# Stage by pattern
-git add *.test.*
-git add src/components/*
+git branch --show-current
 ```
 
-**Never commit secrets** (.env, credentials.json, private keys).
+- **commit-branch**: always create a new branch.
+- **commit-pr**: create a new branch only if currently on `main` or `master`. Otherwise skip — stay on the current feature branch.
 
-### 3. Generate Commit Message
-
-Analyze the diff to determine:
-
-- **Type**: What kind of change is this?
-- **Scope**: What area/module is affected?
-- **Description**: One-line summary of what changed (present tense, imperative mood, <72 chars)
-
-### 4. Execute Commit
+Generate branch name from step 1: `<type>/<short-description>`. Uncommitted changes carry over to the new branch automatically.
 
 ```bash
-# Single line
-git commit -m "<type>(<scope>): <description>"
+git checkout -b <branch-name>
+```
 
-# Multi-line with body/footer
+### 3. Stage Files (all modes)
+
+Stage relevant files by specific paths — this keeps commits focused and avoids accidentally including secrets or unrelated changes.
+
+```bash
+git add path/to/file1 path/to/file2
+```
+
+Never stage secrets (.env, credentials, private keys). Prefer specific paths over `git add .`.
+
+### 4. Commit (all modes)
+
+```bash
 git commit -m "$(cat <<'EOF'
 <type>(<scope>): <description>
 
@@ -120,18 +106,68 @@ EOF
 )"
 ```
 
-## Best Practices
+One logical change per commit. Reference issues in footers when applicable: `Closes #123`, `Refs #456`.
+If a pre-commit hook fails, fix the issue and create a NEW commit — never amend the previous one, as it may contain unrelated changes.
 
-- One logical change per commit
-- Present tense: "add" not "added"
-- Imperative mood: "fix bug" not "fixes bug"
-- Reference issues: `Closes #123`, `Refs #456`
-- Keep description under 72 characters
+### 5. Push (commit-push, commit-pr)
 
-## Git Safety Protocol
+```bash
+git push -u origin HEAD
+```
 
-- NEVER update git config
-- NEVER run destructive commands (--force, hard reset) without explicit request
-- NEVER skip hooks (--no-verify) unless user asks
-- NEVER force push to main/master
-- If commit fails due to hooks, fix and create NEW commit (don't amend)
+The `-u` flag is idempotent — safe whether or not upstream is already configured.
+
+### 6. Pull Request (commit-pr only)
+
+Check for an existing PR on this branch:
+
+```bash
+gh pr view --json number,title,url 2>/dev/null
+```
+
+Generate PR **title** in conventional commit format (same type/scope/description pattern as the commit).
+Generate PR **body** with a summary section and test plan:
+
+```text
+## Summary
+- <bullet points describing changes>
+
+## Test plan
+- [ ] <verification steps>
+```
+
+**No existing PR** — create one (ready for review, not draft):
+
+```bash
+gh pr create --title "<title>" --body "$(cat <<'EOF'
+## Summary
+...
+
+## Test plan
+...
+EOF
+)"
+```
+
+**Existing PR** — update title and body to reflect all commits on the branch. Use `git log main..HEAD --oneline` (or `master..HEAD`) to understand the full scope of changes, then regenerate both:
+
+```bash
+gh pr edit --title "<title>" --body "$(cat <<'EOF'
+## Summary
+...
+
+## Test plan
+...
+EOF
+)"
+```
+
+After creating or updating, return the PR URL to the user.
+
+## Safety
+
+- Never update git config
+- Never run destructive commands (--force, hard reset) without explicit user request
+- Never skip hooks (--no-verify) unless user asks
+- Never force push to main/master
+- If commit fails from hook: fix issue, create new commit (never amend previous)
