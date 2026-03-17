@@ -1,0 +1,12 @@
+{
+  "name": "leo-toolkit",
+  "owner": {
+    "name": "Leonid Svyatov"
+  },
+  "metadata": {
+    "description": "Personal agent toolkit — skills and plugins for Claude, Cursor, Codex, Gemini",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": []
+}
