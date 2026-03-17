@@ -38,7 +38,35 @@ Ask the user for a name. Validate:
 
 If the name conflicts with an existing skill, list existing skills and ask for a different name.
 
-### Step 3: Fetch from GitHub
+### Step 3: Check License Compatibility
+
+This repo is MIT-licensed. Any imported code must be under a compatible license — otherwise incorporating it would violate the source's license terms or force a license change on this repo.
+
+For each unique `{owner}/{repo}`, fetch the repo metadata:
+
+```
+GET https://api.github.com/repos/{owner}/{repo}
+```
+
+Extract `license.spdx_id` from the response.
+
+**Compatible licenses** (permissive, safe to include in an MIT project):
+
+`MIT`, `ISC`, `BSD-2-Clause`, `BSD-3-Clause`, `Apache-2.0`, `0BSD`, `Unlicense`, `CC0-1.0`, `WTFPL`, `Zlib`, `BSL-1.0`
+
+**Decision logic:**
+
+| Result | Action |
+|--------|--------|
+| SPDX ID is in the compatible list | Proceed. Record the license. |
+| SPDX ID is `NOASSERTION` or `null` / missing | **Stop.** Tell the user: no detectable license means all rights reserved by default — copying is not permitted. Offer to skip this source. |
+| SPDX ID is anything else (GPL, LGPL, AGPL, MPL, CC-BY-SA, CC-BY-NC, etc.) | **Stop.** Tell the user the license (`{spdx_id}`) is incompatible with MIT. Explain briefly why (e.g., copyleft would require relicensing this repo). Offer to skip this source. |
+
+If the user explicitly asks to override (e.g., "I have permission from the author"), proceed but record the override in `sources.json` — set `"license_override": true` and `"license_override_reason"` with the user's stated justification.
+
+Also look for a LICENSE or NOTICE file in the fetched directory (or repo root) to capture the copyright line for `sources.json`.
+
+### Step 4: Fetch from GitHub
 
 For each URL, parse it to extract `owner`, `repo`, `branch`, and `path`.
 
@@ -71,7 +99,7 @@ Collect all files with their paths relative to the skill root.
 - 403 / rate limit → inform the user they've hit GitHub's rate limit, suggest waiting or retry later
 - Individual file fetch failure → report which file failed, ask whether to continue without it
 
-### Step 4: Write Files
+### Step 5: Write Files
 
 **Single skill (copy):**
 
@@ -89,7 +117,7 @@ Write all fetched files into `skills/{new-name}/`, preserving directory structur
 
 Ask the user which file each pasted block represents (default: `SKILL.md`). Write files into `skills/{new-name}/`. Update the `name:` field in frontmatter.
 
-### Step 5: Create `sources.json`
+### Step 6: Create `sources.json`
 
 Write `skills/{new-name}/sources.json`:
 
@@ -107,15 +135,22 @@ Write `skills/{new-name}/sources.json`:
       "original_name": "example",
       "fetched_at": "2026-03-17T12:00:00.000Z"
     }
-  ]
+  ],
+  "license": "MIT",
+  "copyright": "Copyright (c) 2025 Example Author",
+  "license_override": false,
+  "license_override_reason": null
 }
 ```
 
 - `type`: `"copy"` for single source, `"merge"` for multiple, `"paste"` for pasted content
 - `sources`: array of source entries (empty for `"paste"`)
 - `sha`: full commit SHA at fetch time — used to check for upstream updates later
+- `license`: SPDX identifier from the source repo (e.g., `"MIT"`, `"Apache-2.0"`)
+- `copyright`: copyright line from the source repo's LICENSE file
+- `license_override` / `license_override_reason`: only present when the user overrode an incompatible or missing license check
 
-### Step 6: Register in Plugin
+### Step 7: Register in Plugin
 
 Create a symlink:
 
@@ -129,7 +164,7 @@ Verify it resolves:
 ls -la plugins/leo/skills/{new-name}
 ```
 
-### Step 7: Verify and Report
+### Step 8: Verify and Report
 
 Confirm:
 1. `skills/{new-name}/SKILL.md` exists with correct frontmatter
@@ -138,7 +173,7 @@ Confirm:
 
 Present a summary: skill name, source(s), files created, symlink status.
 
-### Step 8: Post-Import Review
+### Step 9: Post-Import Review
 
 After the import is complete, invoke the `skill-creator:skill-creator` skill to analyze the imported skill. The goal is to review the skill and suggest improvements — simplifications, better structure, clearer instructions, or anything else that would make the skill more effective.
 
