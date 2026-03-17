@@ -44,6 +44,18 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 | `chore` | Maintenance/misc |
 | `revert` | Revert commit |
 
+## Writing Quality
+
+Invoke the `writing-clearly-and-concisely` skill and apply its principles to all text you produce — commit descriptions, commit bodies, PR titles, and PR descriptions.
+
+Pay special attention to active voice, concrete language, and concision:
+
+| Weak | Strong |
+|------|--------|
+| JWT refresh token rotation was added | add JWT refresh token rotation |
+| fix issue with users | fix null pointer in user lookup |
+| refactor code to extract the database connection pool logic | extract DB connection pool |
+
 ## Branch Naming
 
 Format: `<type>/<short-description>` — lowercase kebab-case, max 50 chars total.
@@ -126,7 +138,7 @@ gh pr view --json number,title,url 2>/dev/null
 ```
 
 Generate PR **title** in conventional commit format (same type/scope/description pattern as the commit).
-Generate PR **body** with a summary section and test plan:
+Generate PR **body** with a summary section and test plan. Apply `writing-clearly-and-concisely` principles — active voice, concrete language, no filler:
 
 ```text
 ## Summary
