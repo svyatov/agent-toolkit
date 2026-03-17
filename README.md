@@ -8,6 +8,13 @@ Personal agent toolkit — reusable skills and plugins for Claude Code, Cursor, 
 - **`plugins/`** — Claude Code plugins
 - **`.claude-plugin/marketplace.json`** — Claude plugin marketplace catalog
 
+## Claude Code Plugin Installation
+
+```bash
+claude plugin marketplace add svyatov/agent-toolkit
+claude plugin install leo@leo-toolkit
+```
+
 ## Skills
 
 | Skill | Description |
