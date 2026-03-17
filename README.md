@@ -21,6 +21,7 @@ claude plugin install leo@leo-toolkit
 |-------|-------------|
 | `generate-cicd` | Generate CI/CD workflows (GitHub Actions) |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles |
+| `import-skill` | Import skills from GitHub repos (copy or merge) |
 
 ## License
 
