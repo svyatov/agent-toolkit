@@ -19,9 +19,14 @@ claude plugin install leo@leo-toolkit
 
 | Skill | Description |
 |-------|-------------|
+| `command-creator` | Create reusable slash commands |
+| `commit` | Git commit workflow with conventional commits, branch/push/PR support |
 | `generate-cicd` | Generate CI/CD workflows (GitHub Actions) |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles |
+| `humanizer` | Remove signs of AI-generated writing from text |
 | `import-skill` | Import skills from GitHub repos (copy or merge) |
+| `improve-architecture` | Find architectural improvement opportunities in a codebase |
+| `writing-clearly-and-concisely` | Apply Strunk's rules for clearer, stronger prose |
 
 ## License
 
