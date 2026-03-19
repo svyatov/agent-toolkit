@@ -26,7 +26,7 @@ claude plugin install leo@leo-toolkit
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles |
 | `humanizer` | Remove signs of AI-generated writing from text |
 | `import-skill` | Import skills from GitHub repos (copy or merge) |
-| `improve-architecture` | Find architectural improvement opportunities in a codebase |
+| `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate |
 | `taskwarrior` | Taskwarrior CLI reference for managing tasks, bugs, and work items |
 | `writing-clearly-and-concisely` | Apply Strunk's rules for clearer, stronger prose |
