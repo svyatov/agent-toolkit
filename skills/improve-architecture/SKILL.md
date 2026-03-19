@@ -7,6 +7,8 @@ description: Explore a codebase to find opportunities for architectural improvem
 
 Explore a codebase like an AI would, surface architectural friction, discover opportunities for improving testability, and propose module-deepening refactors as actionable plans.
 
+**Architecture vs Refactoring:** This skill handles structural changes — module boundaries, interfaces, testability. If the problem is code-level (complexity, duplication, naming, dead code within a well-bounded module), suggest the `refactor` skill instead. After completing an architectural change, `refactor` can clean up the internals of the new module.
+
 ## What is a deep module?
 
 A **deep module** (John Ousterhout, "A Philosophy of Software Design") has a small interface hiding a large implementation. Deep modules are more testable, more AI-navigable, and let you test at the boundary instead of inside.
