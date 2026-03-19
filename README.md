@@ -26,6 +26,7 @@ claude plugin install leo@leo-toolkit
 | `humanizer` | Remove signs of AI-generated writing from text |
 | `import-skill` | Import skills from GitHub repos (copy or merge) |
 | `improve-architecture` | Find architectural improvement opportunities in a codebase |
+| `taskwarrior` | Taskwarrior CLI reference for managing tasks, bugs, and work items |
 | `writing-clearly-and-concisely` | Apply Strunk's rules for clearer, stronger prose |
 
 ## License

@@ -17,6 +17,7 @@ A collection of Claude Code skills and plugins.
 ## Checklist — After Any Skill Change
 
 - Bump version in `plugins/leo/.claude-plugin/plugin.json`
+- Update the skills table in `README.md`
 
 ## Commands
 
