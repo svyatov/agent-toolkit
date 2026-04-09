@@ -19,6 +19,7 @@ claude plugin install leo@leo-toolkit
 
 | Skill | Description |
 |-------|-------------|
+| `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls |
 | `command-creator` | Create reusable slash commands |
 | `commit` | Git commit workflow with conventional commits, branch/push/PR support |
 | `generate-cicd` | Generate CI/CD workflows (GitHub Actions) |
