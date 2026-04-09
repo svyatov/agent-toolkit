@@ -19,6 +19,7 @@ claude plugin install leo@leo-toolkit
 
 | Skill | Description |
 |-------|-------------|
+| `astro` | Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions |
 | `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls |
 | `command-creator` | Create reusable slash commands |
 | `commit` | Git commit workflow with conventional commits, branch/push/PR support |
