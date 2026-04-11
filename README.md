@@ -24,6 +24,7 @@ claude plugin install leo@leo-toolkit
 | `command-creator` | Create reusable slash commands |
 | `commit` | Git commit workflow with conventional commits, branch/push/PR support |
 | `generate-cicd` | Generate CI/CD workflows (GitHub Actions) |
+| `generate-favicon` | Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest |
 | `grill-me` | Stress-test a plan or design through relentless interviewing |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles |
 | `humanizer` | Remove signs of AI-generated writing from text |
