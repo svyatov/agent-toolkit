@@ -67,29 +67,25 @@ Examples: `feat/add-user-auth`, `fix/null-pointer-in-parser`, `refactor/extract-
 ### 1. Analyze Diff (all modes)
 
 ```bash
-git diff --staged
-git diff
-git status --porcelain
+git branch --show-current && git status --porcelain && git diff HEAD
 ```
 
 If no changes exist — warn user and stop.
 
-Determine from the diff:
+`git status --porcelain` shows staged (first column) vs unstaged (second column) state per file.
+`git diff HEAD` shows all changes (staged + unstaged) in one pass.
+
+Determine from the output:
+- **current branch** — needed for branch creation decisions
 - **type**, **scope**, **description** — for the commit message
 - **short-description** — for branch name (modes that create branches)
 
-Use staged diff if files are already staged, otherwise use working tree diff.
-
 ### 2. Create Branch (commit-branch, commit-pr)
 
-```bash
-git branch --show-current
-```
-
 - **commit-branch**: always create a new branch.
-- **commit-pr**: create a new branch only if currently on `main` or `master`. Otherwise skip — stay on the current feature branch.
+- **commit-pr**: create a new branch only if currently on `main` or `master` (from step 1 output). Otherwise skip — stay on the current feature branch.
 
-Generate branch name from step 1: `<type>/<short-description>`. Uncommitted changes carry over to the new branch automatically.
+Generate branch name from step 1: `<type>/<short-description>`. Uncommitted changes carry over automatically.
 
 ```bash
 git checkout -b <branch-name>
@@ -138,7 +134,7 @@ gh pr view --json number,title,url 2>/dev/null
 ```
 
 Generate PR **title** in conventional commit format (same type/scope/description pattern as the commit).
-Generate PR **body** with a summary section and test plan. Apply `writing-clearly-and-concisely` principles — active voice, concrete language, no filler:
+Generate PR **body** with a summary section and test plan:
 
 ```text
 ## Summary
@@ -178,8 +174,4 @@ After creating or updating, return the PR URL to the user.
 
 ## Safety
 
-- Never update git config
-- Never run destructive commands (--force, hard reset) without explicit user request
-- Never skip hooks (--no-verify) unless user asks
-- Never force push to main/master
-- If commit fails from hook: fix issue, create new commit (never amend previous)
+If commit fails from a pre-commit hook: fix the issue and create a new commit — never amend the previous one, as it may contain unrelated changes.
