@@ -86,7 +86,7 @@ If the user explicitly overrides (e.g., "I have permission from the author"), pr
 
 ```bash
 # First: create directories
-mkdir -p skills/{name}/references  # include any subdirectories found in Step 2
+mkdir -p skills/{name}/references skills/{name}/.claude-plugin  # include any subdirectories found in Step 2
 
 # Then: parallel downloads (one Bash call per file)
 curl -s "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{full-path-to-file}" > skills/{name}/{relative-path}
@@ -105,6 +105,8 @@ Use `download_url` values from the directory listing (these point to `raw.github
 5. On filename conflicts: suggest a descriptive alternative name, ask user to confirm
 
 ### Step 5: Finalize
+
+Each skill is its own installable plugin. Finalizing writes three things: `sources.json` (provenance), `.claude-plugin/plugin.json` (plugin manifest), and a new entry in the top-level `.claude-plugin/marketplace.json`.
 
 **Do ALL of these in a single turn using parallel tool calls:**
 
@@ -135,19 +137,48 @@ Use `download_url` values from the directory listing (these point to `raw.github
 - `type`: `"copy"` for single source, `"merge"` for multiple, `"paste"` for pasted content
 - `sha`: full commit SHA at fetch time — used to check for upstream updates later
 
-2. **Create symlink + verify** (single Bash call):
+2. **Write `skills/{name}/.claude-plugin/plugin.json`** (Write tool) using the per-skill manifest template:
+
+```json
+{
+  "name": "{name}",
+  "description": "{one-line description taken from SKILL.md frontmatter}",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT",
+  "skills": ["./"]
+}
+```
+
+- `"skills": ["./"]` tells Claude Code the plugin root itself is the skill directory — `SKILL.md` sits next to `.claude-plugin/`. The invocation name comes from the `name:` in `SKILL.md` frontmatter.
+- New plugins start at `1.0.0`. Version bumps happen per-skill in that skill's own `plugin.json`.
+
+3. **Append new plugin entry to `.claude-plugin/marketplace.json`** (Read tool, then Edit tool) — add an object to the top-level `plugins` array:
+
+```json
+{
+  "name": "{name}",
+  "source": "./{name}",
+  "description": "{one-line description — same as plugin.json}",
+  "category": "productivity",
+  "tags": ["{relevant}", "{tags}"]
+}
+```
+
+Marketplace `metadata.pluginRoot` is `./skills`, so `source` is just `./{name}` (not `./skills/{name}`). Pick 3–5 discovery tags that match the skill's domain; reuse `productivity` for most skills, `writing` for editing/copy skills.
+
+4. **Verify JSON** (Bash call, parallel with above):
    ```bash
-   ln -s ../../../skills/{name} plugins/leo/skills/{name} && ls -la plugins/leo/skills/{name}/SKILL.md
+   python3 -c "import json; json.load(open('skills/{name}/sources.json')); json.load(open('skills/{name}/.claude-plugin/plugin.json')); json.load(open('.claude-plugin/marketplace.json')); print('all JSON valid')"
    ```
 
-3. **Read + bump plugin version** in `plugins/leo/.claude-plugin/plugin.json` (Read tool, then Edit tool — these are sequential but can run in parallel with items 1 and 2)
-
-4. **Verify sources.json** (Bash call, parallel with above):
-   ```bash
-   python3 -c "import json; json.load(open('skills/{name}/sources.json')); print('sources.json: valid')"
-   ```
-
-Present a summary: skill name, source(s), files created, license, symlink status.
+Present a summary: skill name, source(s), files created, license, plugin manifest path, marketplace entry added.
 
 ### Step 6: Post-Import Review
 
