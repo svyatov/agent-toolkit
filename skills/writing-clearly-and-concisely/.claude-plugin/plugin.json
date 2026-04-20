@@ -1,7 +1,7 @@
 {
-  "name": "leo",
-  "description": "A collection of skills and commands for Claude Code",
-  "version": "1.18.0",
+  "name": "writing-clearly-and-concisely",
+  "description": "Apply Strunk's rules for clearer, stronger prose.",
+  "version": "1.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
@@ -10,5 +10,5 @@
   "homepage": "https://github.com/svyatov/agent-toolkit",
   "repository": "https://github.com/svyatov/agent-toolkit",
   "license": "MIT",
-  "skills": "./skills"
+  "skills": ["./"]
 }

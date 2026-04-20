@@ -1,0 +1,14 @@
+{
+  "name": "generate-dockerfile",
+  "description": "Generate optimized, multi-stage Dockerfiles.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT",
+  "skills": ["./"]
+}
