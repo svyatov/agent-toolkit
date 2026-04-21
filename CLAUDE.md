@@ -5,7 +5,7 @@ A Claude Code marketplace of individually installable skill-plugins.
 ## Structure
 
 - `skills/<name>/` — a self-contained plugin. Contains `SKILL.md`, optional `references/`, `sources.json` (for imported skills), and `.claude-plugin/plugin.json` (the plugin manifest).
-- `.claude-plugin/marketplace.json` — lists every skill as a separate plugin with `source: "<name>"` (bare, no `./`; `metadata.pluginRoot` is `./skills` and prepends only when the source has no `./` prefix).
+- `.claude-plugin/marketplace.json` — lists every skill as a separate plugin with `source: "./skills/<name>"` (explicit path from marketplace root; schema requires the `./` prefix, so `pluginRoot` cannot be used with bare names).
 - Each plugin sets `"skills": ["./"]` so `SKILL.md` at the plugin root is discovered. The skill's invocation name comes from the `name:` in `SKILL.md` frontmatter.
 
 There is no wrapper plugin — each skill ships independently.

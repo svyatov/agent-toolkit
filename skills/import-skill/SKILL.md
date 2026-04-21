@@ -164,14 +164,14 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
 ```json
 {
   "name": "{name}",
-  "source": "{name}",
+  "source": "./skills/{name}",
   "description": "{one-line description — same as plugin.json}",
   "category": "productivity",
   "tags": ["{relevant}", "{tags}"]
 }
 ```
 
-Marketplace `metadata.pluginRoot` is `./skills`, so `source` is just the bare `{name}` (no `./` prefix — the `./` form bypasses `pluginRoot` and resolves from marketplace root). Pick 3–5 discovery tags that match the skill's domain; reuse `productivity` for most skills, `writing` for editing/copy skills.
+Schema requires the `./` prefix on relative sources, so use the full path `./skills/{name}` (marketplace does not use `pluginRoot`). Pick 3–5 discovery tags that match the skill's domain; reuse `productivity` for most skills, `writing` for editing/copy skills.
 
 4. **Verify JSON** (Bash call, parallel with above):
    ```bash
