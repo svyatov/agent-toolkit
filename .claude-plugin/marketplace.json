@@ -13,98 +13,98 @@
   "plugins": [
     {
       "name": "astro",
-      "source": "./astro",
+      "source": "astro",
       "description": "Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions.",
       "category": "productivity",
       "tags": ["astro", "web", "ssr", "islands"]
     },
     {
       "name": "browser-bugs",
-      "source": "./browser-bugs",
+      "source": "browser-bugs",
       "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",
       "category": "productivity",
       "tags": ["browser", "compatibility", "mobile", "safari", "audit"]
     },
     {
       "name": "command-creator",
-      "source": "./command-creator",
+      "source": "command-creator",
       "description": "Create reusable slash commands.",
       "category": "productivity",
       "tags": ["commands", "workflow", "automation"]
     },
     {
       "name": "commit",
-      "source": "./commit",
+      "source": "commit",
       "description": "Git commit workflow with conventional commits, branch/push/PR support.",
       "category": "productivity",
       "tags": ["git", "commits", "conventional-commits", "pull-request"]
     },
     {
       "name": "generate-cicd",
-      "source": "./generate-cicd",
+      "source": "generate-cicd",
       "description": "Generate CI/CD workflows (GitHub Actions).",
       "category": "productivity",
       "tags": ["ci", "cd", "github-actions", "workflows"]
     },
     {
       "name": "generate-dockerfile",
-      "source": "./generate-dockerfile",
+      "source": "generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",
       "category": "productivity",
       "tags": ["docker", "dockerfile", "containers"]
     },
     {
       "name": "generate-favicon",
-      "source": "./generate-favicon",
+      "source": "generate-favicon",
       "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
       "category": "productivity",
       "tags": ["favicon", "icons", "pwa", "web"]
     },
     {
       "name": "grill-me",
-      "source": "./grill-me",
+      "source": "grill-me",
       "description": "Stress-test a plan or design through relentless interviewing.",
       "category": "productivity",
       "tags": ["planning", "review", "critique"]
     },
     {
       "name": "humanizer",
-      "source": "./humanizer",
+      "source": "humanizer",
       "description": "Remove signs of AI-generated writing from text.",
       "category": "writing",
       "tags": ["writing", "editing", "ai-detection"]
     },
     {
       "name": "import-skill",
-      "source": "./import-skill",
+      "source": "import-skill",
       "description": "Import skills from GitHub repos (copy or merge).",
       "category": "productivity",
       "tags": ["skills", "import", "github"]
     },
     {
       "name": "improve-architecture",
-      "source": "./improve-architecture",
+      "source": "improve-architecture",
       "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
       "category": "productivity",
       "tags": ["architecture", "refactoring", "testing"]
     },
     {
       "name": "refactor",
-      "source": "./refactor",
+      "source": "refactor",
       "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
       "category": "productivity",
       "tags": ["refactoring", "cleanup", "code-quality"]
     },
     {
       "name": "taskwarrior",
-      "source": "./taskwarrior",
+      "source": "taskwarrior",
       "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
       "category": "productivity",
       "tags": ["taskwarrior", "cli", "tasks", "reference"]
     },
     {
       "name": "writing-clearly-and-concisely",
-      "source": "./writing-clearly-and-concisely",
+      "source": "writing-clearly-and-concisely",
       "description": "Apply Strunk's rules for clearer, stronger prose.",
       "category": "writing",
       "tags": ["writing", "editing", "style"]
