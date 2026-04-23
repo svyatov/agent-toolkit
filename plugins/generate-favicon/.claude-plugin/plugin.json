@@ -1,0 +1,13 @@
+{
+  "name": "generate-favicon",
+  "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "taskwarrior",
+  "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "improve-architecture",
+  "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

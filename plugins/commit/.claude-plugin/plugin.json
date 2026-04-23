@@ -1,0 +1,13 @@
+{
+  "name": "commit",
+  "description": "Git commit workflow with conventional commits, branch/push/PR support.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}
