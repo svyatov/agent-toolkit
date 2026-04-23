@@ -12,98 +12,98 @@
   "plugins": [
     {
       "name": "astro",
-      "source": "./skills/astro",
+      "source": "./plugins/astro",
       "description": "Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions.",
       "category": "productivity",
       "tags": ["astro", "web", "ssr", "islands"]
     },
     {
       "name": "browser-bugs",
-      "source": "./skills/browser-bugs",
+      "source": "./plugins/browser-bugs",
       "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",
       "category": "productivity",
       "tags": ["browser", "compatibility", "mobile", "safari", "audit"]
     },
     {
       "name": "command-creator",
-      "source": "./skills/command-creator",
+      "source": "./plugins/command-creator",
       "description": "Create reusable slash commands.",
       "category": "productivity",
       "tags": ["commands", "workflow", "automation"]
     },
     {
       "name": "commit",
-      "source": "./skills/commit",
+      "source": "./plugins/commit",
       "description": "Git commit workflow with conventional commits, branch/push/PR support.",
       "category": "productivity",
       "tags": ["git", "commits", "conventional-commits", "pull-request"]
     },
     {
       "name": "generate-cicd",
-      "source": "./skills/generate-cicd",
+      "source": "./plugins/generate-cicd",
       "description": "Generate CI/CD workflows (GitHub Actions).",
       "category": "productivity",
       "tags": ["ci", "cd", "github-actions", "workflows"]
     },
     {
       "name": "generate-dockerfile",
-      "source": "./skills/generate-dockerfile",
+      "source": "./plugins/generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",
       "category": "productivity",
       "tags": ["docker", "dockerfile", "containers"]
     },
     {
       "name": "generate-favicon",
-      "source": "./skills/generate-favicon",
+      "source": "./plugins/generate-favicon",
       "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
       "category": "productivity",
       "tags": ["favicon", "icons", "pwa", "web"]
     },
     {
       "name": "grill-me",
-      "source": "./skills/grill-me",
+      "source": "./plugins/grill-me",
       "description": "Stress-test a plan or design through relentless interviewing.",
       "category": "productivity",
       "tags": ["planning", "review", "critique"]
     },
     {
       "name": "humanizer",
-      "source": "./skills/humanizer",
+      "source": "./plugins/humanizer",
       "description": "Remove signs of AI-generated writing from text.",
       "category": "writing",
       "tags": ["writing", "editing", "ai-detection"]
     },
     {
       "name": "import-skill",
-      "source": "./skills/import-skill",
+      "source": "./plugins/import-skill",
       "description": "Import skills from GitHub repos (copy or merge).",
       "category": "productivity",
       "tags": ["skills", "import", "github"]
     },
     {
       "name": "improve-architecture",
-      "source": "./skills/improve-architecture",
+      "source": "./plugins/improve-architecture",
       "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
       "category": "productivity",
       "tags": ["architecture", "refactoring", "testing"]
     },
     {
       "name": "refactor",
-      "source": "./skills/refactor",
+      "source": "./plugins/refactor",
       "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
       "category": "productivity",
       "tags": ["refactoring", "cleanup", "code-quality"]
     },
     {
       "name": "taskwarrior",
-      "source": "./skills/taskwarrior",
+      "source": "./plugins/taskwarrior",
       "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
       "category": "productivity",
       "tags": ["taskwarrior", "cli", "tasks", "reference"]
     },
     {
       "name": "writing-clearly-and-concisely",
-      "source": "./skills/writing-clearly-and-concisely",
+      "source": "./plugins/writing-clearly-and-concisely",
       "description": "Apply Strunk's rules for clearer, stronger prose.",
       "category": "writing",
       "tags": ["writing", "editing", "style"]

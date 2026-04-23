@@ -6,8 +6,8 @@ Each skill is an **individually installable plugin**. Install only what you need
 
 ## Structure
 
-- **`skills/<name>/`** — a self-contained plugin (SKILL.md + `.claude-plugin/plugin.json`)
-- **`.claude-plugin/marketplace.json`** — catalog that exposes every skill as a separate plugin
+- **`plugins/<name>/`** — a self-contained plugin. Contains `.claude-plugin/plugin.json` and `skills/<name>/SKILL.md`.
+- **`.claude-plugin/marketplace.json`** — catalog that exposes every plugin in the repo
 
 ## Claude Code Plugin Installation
 

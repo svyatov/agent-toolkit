@@ -1,7 +1,7 @@
 {
   "name": "writing-clearly-and-concisely",
   "description": "Apply Strunk's rules for clearer, stronger prose.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
@@ -9,6 +9,5 @@
   },
   "homepage": "https://github.com/svyatov/agent-toolkit",
   "repository": "https://github.com/svyatov/agent-toolkit",
-  "license": "MIT",
-  "skills": ["./"]
+  "license": "MIT"
 }

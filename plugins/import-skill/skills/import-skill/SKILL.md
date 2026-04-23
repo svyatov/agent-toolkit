@@ -55,7 +55,7 @@ curl -s "https://api.github.com/repos/{owner}/{repo}/license" | python3 -c "impo
 
 ```
 # 4. Existing skills (Glob tool, parallel with the above)
-Glob: skills/*/SKILL.md
+Glob: plugins/*/skills/*/SKILL.md
 ```
 
 If the directory listing contains subdirectories (`"type": "dir"`), list their contents too — add parallel curl calls for each subdirectory in the **same turn** or the next turn.
@@ -86,10 +86,10 @@ If the user explicitly overrides (e.g., "I have permission from the author"), pr
 
 ```bash
 # First: create directories
-mkdir -p skills/{name}/references skills/{name}/.claude-plugin  # include any subdirectories found in Step 2
+mkdir -p plugins/{name}/skills/{name}/references plugins/{name}/.claude-plugin  # include any subdirectories found in Step 2
 
 # Then: parallel downloads (one Bash call per file)
-curl -s "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{full-path-to-file}" > skills/{name}/{relative-path}
+curl -s "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{full-path-to-file}" > plugins/{name}/skills/{name}/{relative-path}
 ```
 
 Use `download_url` values from the directory listing (these point to `raw.githubusercontent.com`) for each file. Each curl download should be a separate parallel Bash tool call so they execute concurrently.
@@ -110,7 +110,7 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
 
 **Do ALL of these in a single turn using parallel tool calls:**
 
-1. **Write `sources.json`** (Write tool):
+1. **Write `plugins/{name}/skills/{name}/sources.json`** (Write tool):
 
 ```json
 {
@@ -137,7 +137,7 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
 - `type`: `"copy"` for single source, `"merge"` for multiple, `"paste"` for pasted content
 - `sha`: full commit SHA at fetch time — used to check for upstream updates later
 
-2. **Write `skills/{name}/.claude-plugin/plugin.json`** (Write tool) using the per-skill manifest template:
+2. **Write `plugins/{name}/.claude-plugin/plugin.json`** (Write tool) using the per-skill manifest template:
 
 ```json
 {
@@ -151,12 +151,11 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
   },
   "homepage": "https://github.com/svyatov/agent-toolkit",
   "repository": "https://github.com/svyatov/agent-toolkit",
-  "license": "MIT",
-  "skills": ["./"]
+  "license": "MIT"
 }
 ```
 
-- `"skills": ["./"]` tells Claude Code the plugin root itself is the skill directory — `SKILL.md` sits next to `.claude-plugin/`. The invocation name comes from the `name:` in `SKILL.md` frontmatter.
+- No `skills` field — Claude Code auto-discovers `plugins/{name}/skills/{name}/SKILL.md` via default discovery. The invocation name comes from the `name:` in `SKILL.md` frontmatter.
 - New plugins start at `1.0.0`. Version bumps happen per-skill in that skill's own `plugin.json`.
 
 3. **Append new plugin entry to `.claude-plugin/marketplace.json`** (Read tool, then Edit tool) — add an object to the top-level `plugins` array:
@@ -164,18 +163,18 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
 ```json
 {
   "name": "{name}",
-  "source": "./skills/{name}",
+  "source": "./plugins/{name}",
   "description": "{one-line description — same as plugin.json}",
   "category": "productivity",
   "tags": ["{relevant}", "{tags}"]
 }
 ```
 
-Schema requires the `./` prefix on relative sources, so use the full path `./skills/{name}` (marketplace does not use `pluginRoot`). Pick 3–5 discovery tags that match the skill's domain; reuse `productivity` for most skills, `writing` for editing/copy skills.
+Schema requires the `./` prefix on relative sources, so use the full path `./plugins/{name}` (marketplace does not use `pluginRoot`). Pick 3–5 discovery tags that match the skill's domain; reuse `productivity` for most skills, `writing` for editing/copy skills.
 
 4. **Verify JSON** (Bash call, parallel with above):
    ```bash
-   python3 -c "import json; json.load(open('skills/{name}/sources.json')); json.load(open('skills/{name}/.claude-plugin/plugin.json')); json.load(open('.claude-plugin/marketplace.json')); print('all JSON valid')"
+   python3 -c "import json; json.load(open('plugins/{name}/skills/{name}/sources.json')); json.load(open('plugins/{name}/.claude-plugin/plugin.json')); json.load(open('.claude-plugin/marketplace.json')); print('all JSON valid')"
    ```
 
 Present a summary: skill name, source(s), files created, license, plugin manifest path, marketplace entry added.

@@ -1,7 +1,7 @@
 {
   "name": "grill-me",
   "description": "Stress-test a plan or design through relentless interviewing.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
@@ -9,6 +9,5 @@
   },
   "homepage": "https://github.com/svyatov/agent-toolkit",
   "repository": "https://github.com/svyatov/agent-toolkit",
-  "license": "MIT",
-  "skills": ["./"]
+  "license": "MIT"
 }
