@@ -3,17 +3,18 @@
   "type": "copy",
   "sources": [
     {
-      "url": "https://github.com/mattpocock/skills/tree/main/grill-me",
+      "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
       "repository": "mattpocock/skills",
-      "path": "grill-me",
+      "path": "skills/productivity/grill-me",
       "branch": "main",
-      "sha": "fb3629d3a2ba638a65ef336061204995be7f5d5e",
+      "sha": "f76e3ba4af620197f4d7a2d5f5676c669b1cfd6e",
       "original_name": "grill-me",
-      "fetched_at": "2026-03-19T00:00:00.000Z"
+      "fetched_at": "2026-04-28T00:00:00.000Z"
     }
   ],
   "license": "MIT",
   "copyright": "Copyright (c) mattpocock",
   "license_override": false,
-  "license_override_reason": null
+  "license_override_reason": null,
+  "modifications": "Generalized to be domain-agnostic (not just software). Added stop condition, recommendation-with-reason format, and pushback handling. Codebase-exploration clause widened to any available context."
 }

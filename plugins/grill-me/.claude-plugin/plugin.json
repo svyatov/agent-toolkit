@@ -1,7 +1,7 @@
 {
   "name": "grill-me",
-  "description": "Stress-test a plan or design through relentless interviewing.",
-  "version": "1.0.1",
+  "description": "Stress-test any plan, design, or idea through relentless interviewing — domain-agnostic.",
+  "version": "1.0.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

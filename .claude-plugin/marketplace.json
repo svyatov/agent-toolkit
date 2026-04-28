@@ -62,9 +62,9 @@
     {
       "name": "grill-me",
       "source": "./plugins/grill-me",
-      "description": "Stress-test a plan or design through relentless interviewing.",
+      "description": "Stress-test any plan, design, or idea through relentless interviewing — domain-agnostic.",
       "category": "productivity",
-      "tags": ["planning", "review", "critique"]
+      "tags": ["planning", "review", "critique", "brainstorming"]
     },
     {
       "name": "humanizer",
