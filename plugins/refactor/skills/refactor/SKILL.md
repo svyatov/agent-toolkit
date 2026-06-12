@@ -1,13 +1,13 @@
 ---
 name: refactor
-description: "ALWAYS use this skill before refactoring any code. This skill prevents over-refactoring and wrong refactoring by requiring an assessment before changes. It catches cases where code is already clean (stopping unnecessary work), where the real problem is architecture not code (handing off to improve-architecture), and where test coverage must exist before touching business logic. Without this skill, you will skip assessment and jump straight to changes — which risks refactoring code that doesn't need it, or making code-level changes when the real fix is structural. Trigger on: refactor, clean up, simplify, reduce complexity, code smells, messy code, break up function, reduce nesting, remove dead code, file too big, extract method, too many parameters, duplicated code, cognitive complexity, god class, magic numbers. Also trigger when a linter or static analysis tool flags complexity issues. Language-agnostic."
+description: "ALWAYS use this skill before refactoring any code. It prevents over-refactoring and wrong refactoring by requiring an assessment first — catching code that is already clean, problems that are architectural rather than code-level, and missing test coverage that must exist before touching business logic. Trigger on: refactor, clean up, simplify, reduce complexity, code smells, messy code, break up function, reduce nesting, remove dead code, file too big, extract method, too many parameters, duplicated code, cognitive complexity, god class, magic numbers. Also trigger when a linter or static analysis tool flags complexity issues. Language-agnostic."
 ---
 
 # Refactor
 
 Improve code structure without changing behavior. Works at three scopes: **project**, **file**, or **method**. Starts by assessing whether refactoring is even warranted — if the code is already clean, say so and stop.
 
-**Refactoring vs Architecture:** This skill handles code-level improvements — complexity, duplication, naming, dead code, method extraction. If the assessment reveals that the real problem is module boundaries, coupling between packages, or shallow modules that need deepening, suggest the `improve-architecture` skill instead.
+**Refactoring vs Architecture:** This skill handles code-level improvements — complexity, duplication, naming, dead code, method extraction. If the assessment reveals that the real problem is module boundaries, coupling between packages, or shallow modules that need deepening, say so — that's an architecture problem this skill won't fix (suggest the `improve-architecture` skill if installed).
 
 ## Philosophy
 
@@ -77,11 +77,11 @@ All file-level checks, plus:
 | **Significant** | Clear code smells or structural issues | List findings with priorities. Proceed to Step 3. |
 | **Critical** | Major structural problems blocking maintainability | List findings urgently. Proceed to Step 3. |
 
-**Idempotency rule:** If you run this skill on the same code twice and it's already been refactored, the verdict must be **Clean**. Do not invent work. Do not refactor for the sake of refactoring.
+**Idempotency rule:** If you run this skill on the same code twice and it's already been refactored, the verdict must be **Clean**.
 
 **User override:** If the user provides a specific reason to refactor code rated Clean (e.g., "I know it looks fine but I want to extract this into smaller functions"), proceed with their request — but scope the changes strictly to what they asked for. Don't expand into a broader refactoring.
 
-**Architecture signal:** If the assessment reveals problems that are really about module boundaries (tightly coupled packages, shallow modules, missing abstractions at the architectural level), say so and suggest `improve-architecture` instead. Refactoring code inside a badly-bounded module won't fix the real problem.
+**Architecture signal:** If the assessment reveals problems that are really about module boundaries (tightly coupled packages, shallow modules, missing abstractions at the architectural level), say so — refactoring code inside a badly-bounded module won't fix the real problem. Suggest the `improve-architecture` skill if installed.
 
 ## Step 3: Plan
 

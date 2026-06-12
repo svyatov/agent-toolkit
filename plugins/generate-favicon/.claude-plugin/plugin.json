@@ -1,7 +1,7 @@
 {
   "name": "generate-favicon",
   "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

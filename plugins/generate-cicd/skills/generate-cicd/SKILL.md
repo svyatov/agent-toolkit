@@ -15,14 +15,14 @@ description: >
 
 Generate GitHub Actions workflows through interactive conversation: analyze the repository, present findings, ask about workflow preferences, generate workflows based on confirmed choices.
 
-CI/CD involves **policy decisions** (PR vs direct push, release triggers, deployment strategy) that cannot be deduced from code alone. Always present choices and get user confirmation.
+CI/CD involves **policy decisions** (PR vs direct push, release triggers, deployment strategy) that cannot be deduced from code alone.
 
 ## Key Rules
 
 - **Verify everything** before adding any step, secret, or config — examine the actual codebase. Ask when uncertain.
 - **Always present workflow choices** — even if tests and a Dockerfile are detected, the user decides when/how they run.
 - **Use project automation** over inline commands — call `npm test`, not `jest --coverage --ci`. See [references/best-practices.md](references/best-practices.md).
-- **GitHub Actions only** — if the user needs another CI platform, let them know this skill only covers GitHub Actions.
+- **GitHub Actions only** — if the user mentions a different CI platform, say so and stop. Otherwise proceed without asking about the platform.
 
 ## Process
 
@@ -32,10 +32,6 @@ Execute sequentially. Each phase may change direction. Do NOT batch all question
 PHASE 1: ANALYZE → PHASE 2: PRESENT & ASK → PHASE 3: GENERATE
 ```
 
-### Step 0: Confirm CI Platform
-
-This skill generates GitHub Actions workflows. If the user mentions a different CI platform, let them know and stop. Otherwise, proceed directly to analysis — no need to ask if they already indicated GitHub Actions or didn't specify a platform.
-
 ### Step 1: Analyze Repository
 
 Analyze the entire repository — source code, automation, configs, docs, existing CI.
@@ -43,7 +39,7 @@ Analyze the entire repository — source code, automation, configs, docs, existi
 1. **Language/Framework** — Identify from source files and dependency manifests. Note version requirements.
 2. **Existing Automation** — Find build/test/lint scripts and **read them to understand how they work** (arguments, setup, cleanup). If automation exists → use it. If not → ask user whether to add it or use inline commands.
 3. **Existing CI** — Check for `.github/workflows/`. If found, analyze what's configured. Later ask whether to update or create new.
-4. **Container/Registry** — Check for Dockerfile and registry references. If no Dockerfile but project could benefit, suggest using the `generate-dockerfile` skill.
+4. **Container/Registry** — Check for Dockerfile and registry references. If no Dockerfile but the project could benefit, suggest creating one (via the `generate-dockerfile` skill if installed).
 5. **Branching/Release** — Check CI triggers, git tags for versioning patterns, docs for workflow hints.
 6. **Environment/Secrets** — Find `.env.example`, search code for required env vars, identify needed secrets.
 7. **App Definition** — Helm charts, Kustomize, plain K8s manifests, or container-only.

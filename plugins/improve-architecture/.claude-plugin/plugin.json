@@ -1,7 +1,7 @@
 {
   "name": "improve-architecture",
   "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

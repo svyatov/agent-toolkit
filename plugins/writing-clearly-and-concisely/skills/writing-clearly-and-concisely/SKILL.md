@@ -60,7 +60,7 @@ The rules above are summarized from Strunk's original text. For complete explana
 
 ## AI Writing Patterns
 
-After writing, use the `humanizer` skill to scan for and remove AI writing patterns — puffery, empty phrases, promotional adjectives, overused AI vocabulary, and formatting overuse. The humanizer has a comprehensive, severity-ranked pattern catalog specifically tuned for Claude output.
+After writing, scan for and remove AI writing patterns — puffery, empty phrases, promotional adjectives, overused AI vocabulary, and formatting overuse. If the `humanizer` skill is installed, use it for this pass: it has a comprehensive, severity-ranked pattern catalog specifically tuned for Claude output.
 
 ## Bottom Line
 

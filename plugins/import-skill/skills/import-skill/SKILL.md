@@ -181,7 +181,7 @@ Present a summary: skill name, source(s), files created, license, plugin manifes
 
 ### Step 6: Post-Import Review
 
-Invoke the `skill-creator:skill-creator` skill to analyze the imported skill and suggest improvements — simplifications, better structure, clearer instructions, or anything else that would make the skill more effective.
+Review the imported skill and suggest improvements — simplifications, better structure, clearer instructions, content redundant with what Claude already does by default. If the `skill-creator` skill is installed, invoke it for this analysis; otherwise review the SKILL.md directly.
 
 **Important:** Present all suggested changes to the user and wait for explicit confirmation before applying anything. Do not auto-apply improvements.
 

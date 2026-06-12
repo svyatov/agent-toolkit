@@ -1,7 +1,7 @@
 {
   "name": "generate-dockerfile",
   "description": "Generate optimized, multi-stage Dockerfiles.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

@@ -1,7 +1,7 @@
 {
   "name": "astro",
   "description": "Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

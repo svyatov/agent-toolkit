@@ -1,7 +1,7 @@
 {
   "name": "import-skill",
   "description": "Import skills from GitHub repos (copy or merge).",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

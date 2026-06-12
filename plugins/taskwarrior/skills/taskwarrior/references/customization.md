@@ -1,5 +1,7 @@
 # Customization
 
+**Contents:** Configuration Basics (.taskrc, overrides) · User Defined Attributes (UDAs) · Urgency coefficients · Contexts · Color Themes · Verbosity · Key Configuration Settings
+
 ## Configuration Basics
 
 Taskwarrior stores configuration in `~/.taskrc`. Manage settings with:

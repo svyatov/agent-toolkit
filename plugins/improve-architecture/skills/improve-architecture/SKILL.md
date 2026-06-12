@@ -7,7 +7,7 @@ description: "Explore a codebase to find architectural improvement opportunities
 
 Explore a codebase, surface architectural friction, and propose module-deepening refactors with mandatory cohesion checks and test writing. Starts with an assessment — if the architecture is already healthy, say so and stop.
 
-**Architecture vs Refactoring:** This skill handles structural changes — module boundaries, interfaces, testability. If the problem is code-level (complexity, duplication, naming, dead code within a well-bounded module), suggest the `refactor` skill instead. After completing an architectural change, `refactor` can clean up the internals of the new module.
+**Architecture vs Refactoring:** This skill handles structural changes — module boundaries, interfaces, testability. If the problem is code-level (complexity, duplication, naming, dead code within a well-bounded module), that's refactoring, not architecture — recommend handling it separately (via the `refactor` skill if installed). The same applies after completing an architectural change: cleaning up the new module's internals is a separate refactoring pass.
 
 ## What is a deep module?
 
@@ -67,7 +67,7 @@ Produce a verdict:
 
 | Verdict | Meaning | Action |
 |---------|---------|--------|
-| **Healthy** | Sound architecture, minor friction only | Tell the user. **Stop.** Suggest `refactor` for code-level cleanup. |
+| **Healthy** | Sound architecture, minor friction only | Tell the user. **Stop.** Suggest code-level cleanup instead (the `refactor` skill, if installed). |
 | **Localized** | 1-2 areas have structural problems | Present only those candidates. Max 2 per session. |
 | **Systemic** | Widespread structural issues | Present ranked candidates. Recommend tackling 2-3 per session. |
 

@@ -1,7 +1,7 @@
 {
   "name": "taskwarrior",
   "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

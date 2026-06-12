@@ -1,7 +1,7 @@
 {
   "name": "generate-cicd",
   "description": "Generate CI/CD workflows (GitHub Actions).",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

@@ -19,9 +19,7 @@ Generate an optimized, secure, multi-stage Dockerfile and .dockerignore by analy
 
 ### Verify Everything Before Adding
 
-**Before adding ANY instruction to the Dockerfile, verify it by examining the actual codebase.** Search for evidence, read actual source files, trace entry points through imports. Never assume—if uncertain, ask the user.
-
-Thoroughness over speed: shallow analysis leads to broken Dockerfiles. Read actual source files (not just file names), search with multiple queries, trace the application entry point. If analysis feels quick, something was likely missed.
+**Before adding ANY instruction to the Dockerfile, verify it by examining the actual codebase** — read actual source files (not just file names), search with multiple queries, trace the application entry point through imports. Shallow analysis produces broken Dockerfiles; if the analysis felt quick, something was probably missed. Never assume — if uncertain, ask the user.
 
 ### Multi-Architecture Support
 
@@ -73,44 +71,11 @@ Generate a **minimal** .dockerignore (~10-15 lines). Since the Dockerfile uses e
 
 Validate before presenting to user. First verify Docker is available (`docker info`). If Docker is not installed or not running, skip validation — present the Dockerfile with a note that it hasn't been tested.
 
-**4.1 Build:**
-```bash
-docker build -t <project>-validation .
-```
-
-**4.2 Run:**
-```bash
-docker run -d --name <project>-test <project>-validation
-sleep 5
-docker inspect --format='{{.State.Status}}' <project>-test
-docker inspect --format='{{.State.ExitCode}}' <project>-test
-```
-Services should stay running; CLI tools should exit with code 0.
-
-**4.3 Log analysis:**
-```bash
-docker logs <project>-test 2>&1
-```
-Use project knowledge from Step 1 to evaluate whether logs indicate success or failure.
-
-**4.4 Lint** (if hadolint installed):
-```bash
-hadolint Dockerfile
-```
-
-**4.5 Security scan** (if trivy installed):
-```bash
-trivy image --severity HIGH,CRITICAL <project>-validation
-```
-
-**4.6 Iterate** — Max 5 attempts. If still failing, present current state with explanation and ask for guidance.
-
-**4.7 Cleanup** (always):
-```bash
-docker stop <project>-test 2>/dev/null || true
-docker rm <project>-test 2>/dev/null || true
-docker rmi <project>-validation 2>/dev/null || true
-```
+1. **Build** the image, then **run** a detached container from it. Services should stay running; CLI tools should exit with code 0.
+2. **Read the container logs** and use the project knowledge from Step 1 to judge whether they indicate success or failure.
+3. **Lint and scan** if the tools are installed: `hadolint Dockerfile`, `trivy image --severity HIGH,CRITICAL <image>`.
+4. **Iterate** — max 5 attempts. If still failing, present the current state with an explanation and ask for guidance.
+5. **Clean up** the test container and image afterward, even when validation failed.
 
 ## Output
 
@@ -120,28 +85,6 @@ docker rmi <project>-validation 2>/dev/null || true
 
 **Both cases — recommended next steps:** integrate into CI/CD, commit to version control.
 
-## Final Checklists
+## Final Check
 
-### Dockerfile
-- [ ] Builds successfully
-- [ ] Multi-stage build (builder → runtime)
-- [ ] Non-root user (UID 10001+)
-- [ ] Pinned version tags (no `:latest`)
-- [ ] Minimal base images (alpine/slim/distroless)
-- [ ] Dependency manifests before source (layer caching)
-- [ ] Explicit COPY (no `COPY . .`)
-- [ ] Combined RUN with `&&`, caches cleaned in same layer
-- [ ] Exec form CMD
-- [ ] No secrets, no debugging tools unless required
-- [ ] No HEALTHCHECK
-
-### .dockerignore
-- [ ] Minimal (~10-15 lines)
-- [ ] Excludes secrets inside copied directories
-- [ ] Does NOT exclude directories not copied by Dockerfile
-
-### Validation
-- [ ] Image builds successfully
-- [ ] Container starts without crashing
-- [ ] Logs show no application errors
-- [ ] Test container and image cleaned up
+Before presenting, verify the Dockerfile against the Security, Build Optimization, and Stage Pattern checklists in [references/best-practices.md](references/best-practices.md) — plus the rules above: no HEALTHCHECK, minimal .dockerignore, validation artifacts cleaned up.

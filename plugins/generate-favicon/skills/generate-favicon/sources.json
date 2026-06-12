@@ -10,8 +10,8 @@
       "fetched_at": "2026-04-11T00:00:00.000Z"
     }
   ],
-  "license": "article",
+  "license": "NOASSERTION",
   "copyright": "Copyright (c) Evil Martians",
-  "license_override": false,
-  "license_override_reason": null
+  "license_override": true,
+  "license_override_reason": "Skill distills publicly documented techniques from the cited article; no verbatim text copied. The article itself carries no explicit license."
 }
