@@ -26,29 +26,11 @@ Conventional commits with optional branch creation, push, and PR.
 
 Detect mode from user input. Default to **commit** if ambiguous.
 
-## Conventional Commit Format
+## Message Format
 
-Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) strictly. Description: present tense, imperative mood, under 72 chars.
+Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) strictly: `<type>(<scope>): <description>`. Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert. Description: present tense, imperative mood, under 72 chars.
 
-| Type | Purpose |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting (no logic change) |
-| `refactor` | Refactor (no feature/fix) |
-| `perf` | Performance improvement |
-| `test` | Add/update tests |
-| `build` | Build system/dependencies |
-| `ci` | CI/config changes |
-| `chore` | Maintenance/misc |
-| `revert` | Revert commit |
-
-## Writing Quality
-
-Invoke the `writing-clearly-and-concisely` skill and apply its principles to all text you produce — commit descriptions, commit bodies, PR titles, and PR descriptions.
-
-Pay special attention to active voice, concrete language, and concision:
+Use active voice, concrete language, and concision in all text you produce — commit messages, PR titles, and PR descriptions:
 
 | Weak | Strong |
 |------|--------|
@@ -70,36 +52,24 @@ Examples: `feat/add-user-auth`, `fix/null-pointer-in-parser`, `refactor/extract-
 git branch --show-current && git status --porcelain && git diff HEAD
 ```
 
-If no changes exist — warn user and stop.
+If no changes exist — warn user and stop. Untracked files (`??` in status) don't appear in the diff — read them directly before writing the message.
 
-`git status --porcelain` shows staged (first column) vs unstaged (second column) state per file.
-`git diff HEAD` shows all changes (staged + unstaged) in one pass.
-
-Determine from the output:
-- **current branch** — needed for branch creation decisions
-- **type**, **scope**, **description** — for the commit message
-- **short-description** — for branch name (modes that create branches)
+Determine from the output: current branch, **type**/**scope**/**description** for the commit message, and **short-description** for the branch name (modes that create branches).
 
 ### 2. Create Branch (commit-branch, commit-pr)
 
 - **commit-branch**: always create a new branch.
-- **commit-pr**: create a new branch only if currently on `main` or `master` (from step 1 output). Otherwise skip — stay on the current feature branch.
-
-Generate branch name from step 1: `<type>/<short-description>`. Uncommitted changes carry over automatically.
+- **commit-pr**: create a new branch only if currently on `main` or `master`. Otherwise stay on the current feature branch.
 
 ```bash
-git checkout -b <branch-name>
+git checkout -b <type>/<short-description>
 ```
+
+Uncommitted changes carry over automatically.
 
 ### 3. Stage Files (all modes)
 
-Stage relevant files by specific paths — this keeps commits focused and avoids accidentally including secrets or unrelated changes.
-
-```bash
-git add path/to/file1 path/to/file2
-```
-
-Never stage secrets (.env, credentials, private keys). Prefer specific paths over `git add .`.
+Stage relevant files by specific paths — this keeps commits focused and avoids accidentally including secrets or unrelated changes. Never stage secrets (.env, credentials, private keys). Prefer specific paths over `git add .`.
 
 ### 4. Commit (all modes)
 
@@ -133,45 +103,11 @@ Check for an existing PR on this branch:
 gh pr view --json number,title,url 2>/dev/null
 ```
 
-Generate PR **title** in conventional commit format (same type/scope/description pattern as the commit).
-Generate PR **body** with a summary section and test plan:
+PR **title**: conventional commit format (same type/scope/description pattern as the commit).
+PR **body**: a `## Summary` section with bullet points and a `## Test plan` section with checkbox verification steps.
 
-```text
-## Summary
-- <bullet points describing changes>
+**No existing PR** — create one (ready for review, not draft) with `gh pr create --title ... --body ...` (heredoc for the body).
 
-## Test plan
-- [ ] <verification steps>
-```
-
-**No existing PR** — create one (ready for review, not draft):
-
-```bash
-gh pr create --title "<title>" --body "$(cat <<'EOF'
-## Summary
-...
-
-## Test plan
-...
-EOF
-)"
-```
-
-**Existing PR** — update title and body to reflect all commits on the branch. Use `git log main..HEAD --oneline` (or `master..HEAD`) to understand the full scope of changes, then regenerate both:
-
-```bash
-gh pr edit --title "<title>" --body "$(cat <<'EOF'
-## Summary
-...
-
-## Test plan
-...
-EOF
-)"
-```
+**Existing PR** — update title and body to reflect all commits on the branch: run `git log main..HEAD --oneline` (or `master..HEAD`) to see the full scope, then regenerate both via `gh pr edit`.
 
 After creating or updating, return the PR URL to the user.
-
-## Safety
-
-If commit fails from a pre-commit hook: fix the issue and create a new commit — never amend the previous one, as it may contain unrelated changes.
