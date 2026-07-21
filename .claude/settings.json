@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "leo-toolkit": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  },
+  "enabledPlugins": {
+    "import-skill@leo-toolkit": true
+  }
+}
