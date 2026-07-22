@@ -48,6 +48,7 @@ Your existing `leo:` skill invocations (e.g., `leo:commit`) become `<skill>:<ski
 | `generate-cicd` | Generate CI/CD workflows (GitHub Actions) | `claude plugin install generate-cicd@leo-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@leo-toolkit` |
 | `generate-favicon` | Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@leo-toolkit` |
+| `good-readme` | Write or improve an open source README (progressive-JPEG structure, real numbers only) | `claude plugin install good-readme@leo-toolkit` |
 | `grill-me` | Stress-test a plan or design through relentless interviewing | `claude plugin install grill-me@leo-toolkit` |
 | `humanizer` | Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements | `claude plugin install humanizer@leo-toolkit` |
 | `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@leo-toolkit` |

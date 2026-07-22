@@ -1,0 +1,13 @@
+{
+  "name": "good-readme",
+  "description": "Write or improve an open source README: progressive-JPEG structure, scannable facts, real numbers only.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

@@ -60,6 +60,13 @@
       "tags": ["favicon", "icons", "pwa", "web"]
     },
     {
+      "name": "good-readme",
+      "source": "./plugins/good-readme",
+      "description": "Write or improve an open source README: progressive-JPEG structure, scannable facts, real numbers only.",
+      "category": "writing",
+      "tags": ["readme", "documentation", "open-source", "writing"]
+    },
+    {
       "name": "grill-me",
       "source": "./plugins/grill-me",
       "description": "Stress-test any plan, design, or idea through relentless interviewing — domain-agnostic.",
