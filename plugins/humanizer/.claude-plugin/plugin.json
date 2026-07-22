@@ -1,7 +1,7 @@
 {
   "name": "humanizer",
-  "description": "Remove signs of AI-generated writing from text.",
-  "version": "2.0.1",
+  "description": "Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements.",
+  "version": "2.1.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

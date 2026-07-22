@@ -1,7 +1,7 @@
 {
-  "name": "writing-clearly-and-concisely",
-  "description": "Apply Strunk's rules for clearer, stronger prose.",
-  "version": "1.0.2",
+  "name": "repo-prose",
+  "description": "Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages.",
+  "version": "1.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

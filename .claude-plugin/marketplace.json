@@ -69,7 +69,7 @@
     {
       "name": "humanizer",
       "source": "./plugins/humanizer",
-      "description": "Remove signs of AI-generated writing from text.",
+      "description": "Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements.",
       "category": "writing",
       "tags": ["writing", "editing", "ai-detection"]
     },
@@ -95,18 +95,18 @@
       "tags": ["refactoring", "cleanup", "code-quality"]
     },
     {
+      "name": "repo-prose",
+      "source": "./plugins/repo-prose",
+      "description": "Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages.",
+      "category": "writing",
+      "tags": ["writing", "git", "commits", "pull-request", "documentation"]
+    },
+    {
       "name": "taskwarrior",
       "source": "./plugins/taskwarrior",
       "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
       "category": "productivity",
       "tags": ["taskwarrior", "cli", "tasks", "reference"]
-    },
-    {
-      "name": "writing-clearly-and-concisely",
-      "source": "./plugins/writing-clearly-and-concisely",
-      "description": "Apply Strunk's rules for clearer, stronger prose.",
-      "category": "writing",
-      "tags": ["writing", "editing", "style"]
     }
   ]
 }

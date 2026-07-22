@@ -30,13 +30,7 @@ Detect mode from user input. Default to **commit** if ambiguous.
 
 Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) strictly: `<type>(<scope>): <description>`. Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert. Description: present tense, imperative mood, under 72 chars.
 
-Use active voice, concrete language, and concision in all text you produce — commit messages, PR titles, and PR descriptions:
-
-| Weak | Strong |
-|------|--------|
-| JWT refresh token rotation was added | add JWT refresh token rotation |
-| fix issue with users | fix null pointer in user lookup |
-| refactor code to extract the database connection pool logic | extract DB connection pool |
+Apply the `repo-prose` skill to every commit message, PR title, and PR description you write here. It owns the writing rules; this skill owns the workflow.
 
 ## Branch Naming
 
