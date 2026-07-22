@@ -44,6 +44,7 @@ The core rules, whatever the project's shape:
 
 - Trigger on version tags, matching the repo's existing tag format (`v*`, `[0-9]*`, ...).
 - **The publish job installs no Gemfile dependencies, uses no bundler cache, and no third-party actions** beyond checkout, setup-ruby, download-artifact, and `rubygems/configure-rubygems-credentials`, which RubyGems maintains. Anything running in a job with `id-token: write` can publish the gem.
+- **No bundler cache anywhere in this workflow**, not even in the test job. zizmor's `cache-poisoning` audit rates a restored cache in a tag-triggered publishing workflow as high severity, and it is right: a poisoned cache that makes the test job pass is a poisoned cache that lets a release through. Releases are rare, so the lost cache costs nothing. `bundler-cache: false` also stops setup-ruby from running `bundle install`, so the test job needs its own install step.
 - Build in a **separate job**, pass the `.gem` file via artifacts. Only the publish job gets `id-token: write`; every job gets `contents: read` and `persist-credentials: false` on checkout.
 - Pin the publish job to `environment: release` and protect that environment with required reviewers, see [Step 3](#on-githubcom). This is the human gate that replaces `npm stage approve`.
 - The tag already exists, since it triggered the run, so the publish job never needs `contents: write`.
@@ -70,7 +71,9 @@ jobs:
         uses: ruby/setup-ruby@a30dfa457ad68707b8b910ac3a244714b61c0626 # v1.320.0
         with:
           ruby-version: .ruby-version
-          bundler-cache: true
+          bundler-cache: false # A restored cache is a poisoning vector in a publishing workflow
+      - name: Install dependencies
+        run: bundle install
       - name: Run tests
         run: bundle exec rake test
 
@@ -181,19 +184,21 @@ Ask the user which cooldown they want: fast (1 day) or safer (3 days). Use this 
 
 Cooldown needs Bundler 4.0.13 or newer, and the unit is whole days. Check `bundle --version` first; on an older Bundler, tell the user to upgrade rather than silently skipping this step.
 
-Set it for the project so CI and every contributor inherit it:
-
-```bash
-bundle config set cooldown 3
-```
-
-That writes `.bundle/config`, which the repo should commit. The equivalents, in order of precedence, are `bundle install --cooldown 3` on the command line, this config, and a per-source default in the `Gemfile`:
+Set it in the `Gemfile`, so CI and every contributor inherit it:
 
 ```ruby
 source "https://rubygems.org", cooldown: 3
 ```
 
-`BUNDLE_COOLDOWN=3` works too, for CI images that cannot commit config. Tell the user the escape hatch: `bundle install --cooldown 0` reaches the newest version for one run, which they will want the day a real security fix ships.
+Prefer this over `bundle config set cooldown 3`. That command writes `.bundle/config`, and the `.gitignore` that `bundle gem` generates ignores `/.bundle/`, so the setting looks applied locally and reaches nobody else. The `Gemfile` is already tracked.
+
+Precedence runs `bundle install --cooldown 3` on the command line, then `.bundle/config`, then this per-source default. `BUNDLE_COOLDOWN=3` works too, for CI images that cannot read the Gemfile.
+
+Confirm it took effect rather than trusting the syntax. With cooldown active, Bundler names it when it holds a version back:
+
+```
+3 versions excluded by the cooldown setting; pass `--cooldown 0` to bypass.
+``` Tell the user the escape hatch: `bundle install --cooldown 0` reaches the newest version for one run, which they will want the day a real security fix ships.
 
 Cooldown applies to resolution, so it only bites on `bundle install`, `bundle update`, `bundle add`, and `bundle outdated`. It does nothing for a `Gemfile.lock` that already pins a poisoned version.
 
@@ -317,7 +322,7 @@ Worth adding in the same breath, since it is one line: `bundler-audit` checks `G
 
 ## Final checklist
 
-1. `publish.yaml` pushes a prebuilt `.gem` artifact; only the publish job has `id-token: write`; it installs no Gemfile dependencies and uses no bundler cache.
+1. `publish.yaml` pushes a prebuilt `.gem` artifact; only the publish job has `id-token: write`; it installs no Gemfile dependencies, and no job in the workflow uses the bundler cache.
 2. The publish job is pinned to `environment: release`, and that environment has required reviewers.
 3. zizmor workflow added and existing workflows pass it; stale branches deleted.
 4. All actions pinned by SHA.

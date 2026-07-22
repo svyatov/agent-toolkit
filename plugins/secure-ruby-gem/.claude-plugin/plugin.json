@@ -1,7 +1,7 @@
 {
   "name": "secure-ruby-gem",
   "description": "Set up a secure Ruby gem release process (Trusted Publishing, sigstore attestations, approval-gated CI, Bundler cooldown).",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
