@@ -88,6 +88,13 @@
       "tags": ["architecture", "refactoring", "testing"]
     },
     {
+      "name": "llms-visibility",
+      "source": "./plugins/llms-visibility",
+      "description": "Make websites, docs, and blogs readable to LLMs and AI agents — llms.txt, .md routes, Accept negotiation, Content-Signal.",
+      "category": "productivity",
+      "tags": ["llms-txt", "seo", "geo", "markdown", "web"]
+    },
+    {
       "name": "refactor",
       "source": "./plugins/refactor",
       "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",

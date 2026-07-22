@@ -1,0 +1,13 @@
+{
+  "name": "llms-visibility",
+  "description": "Make websites, docs, and blogs readable to LLMs and AI agents — llms.txt, .md routes, Accept negotiation, Content-Signal.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

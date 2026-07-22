@@ -52,6 +52,7 @@ Your existing `leo:` skill invocations (e.g., `leo:commit`) become `<skill>:<ski
 | `humanizer` | Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements | `claude plugin install humanizer@leo-toolkit` |
 | `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@leo-toolkit` |
 | `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing | `claude plugin install improve-architecture@leo-toolkit` |
+| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents (llms.txt, `.md` routes, Accept negotiation) | `claude plugin install llms-visibility@leo-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
 | `repo-prose` | Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages | `claude plugin install repo-prose@leo-toolkit` |
 | `taskwarrior` | Taskwarrior CLI reference for managing tasks, bugs, and work items | `claude plugin install taskwarrior@leo-toolkit` |
