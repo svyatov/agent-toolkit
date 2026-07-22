@@ -1,7 +1,7 @@
 {
   "name": "repo-prose",
   "description": "Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

@@ -4,10 +4,13 @@ description: >
   Write clear technical prose for anything that lives in a repository or on a
   forge: commit messages, PR titles and descriptions, PR and code review
   comments, issue text, READMEs, documentation, changelogs, ADRs, code comments,
-  error and log messages. Use when composing any of these, and when editing an
-  existing one. Combines Strunk's composition rules with a kill list of
-  AI writing tells tuned for Claude output. Not for prose that needs a personal
-  voice, such as blog posts, essays, or launch announcements.
+  error and log messages. Use this whenever you are about to write or edit any of
+  them, including short ones. A one-line commit message or a two-sentence review
+  comment looks too small to need a skill, and that is exactly where the tells
+  show up, so reach for this even when the task seems trivial. Combines Strunk's
+  composition rules with a kill list of AI writing tells tuned for Claude output.
+  Not for prose that needs a personal voice, such as blog posts, essays, or
+  launch announcements.
 license: MIT
 ---
 
@@ -17,7 +20,7 @@ Technical register: neutral, specific, short. No personality injection, no marke
 
 ## Say why, not what
 
-The diff already says what changed. Anyone can read it. Prose earns its place only by carrying what the diff cannot:
+The subject line names what changed: imperative, specific enough to scan in a `git log`. Everything after it answers why, because the diff already covers what. Prose earns its place only by carrying what the diff cannot:
 
 - the reason the change exists
 - the alternative you rejected, and why
@@ -39,7 +42,7 @@ Good: List scan was O(n^2) on the 40k-symbol files in vendor/. Hash map
 Length is not effort. Padding a trivial change into a structured document wastes the reader twice: once reading it, once distrusting the next one.
 
 - Subject line says everything? Write no body.
-- One-line fix? No `## Summary`, no `## Test plan`, no headings.
+- Headings earn their place when the reader needs to navigate, roughly past a screenful. A short PR body is two or three paragraphs, not `## Summary` and `## Test plan`.
 - Nothing was verified? Write no test plan. Never invent one.
 - A README section that repeats the code below it should be deleted, not rewritten.
 
@@ -60,7 +63,7 @@ Length is not effort. Padding a trivial change into a structured document wastes
 
 | Tell | Write instead |
 |------|---------------|
-| Significance inflation: `pivotal`, `crucial`, `key`, `testament to`, `underscores`, `marks a shift` | State the fact and stop |
+| Significance inflation: `pivotal`, `testament to`, `underscores`, `marks a shift`, and `key` or `critical` used as importance adjectives (`a key improvement`). The nouns are fine: `cache key`, `API key`, `critical section` | State the fact and stop |
 | Tacked-on `-ing` clauses: `ensuring reliability`, `enabling faster builds`, `allowing users to` | Split into a sentence, or cut |
 | Promotional adjectives: `robust`, `powerful`, `seamless`, `elegant`, `comprehensive`, `rich` | Name the property: `retries 3x`, `no config file` |
 | Vague attribution: `best practices suggest`, `it is widely believed`, `studies show` | Name the source, or drop the claim. Never invent one |
@@ -74,7 +77,7 @@ Length is not effort. Padding a trivial change into a structured document wastes
 | Filler: `in order to`, `due to the fact that`, `has the ability to`, `it is important to note that` | `to`, `because`, `can`, delete |
 | Hedging stacks: `may potentially`, `could possibly` | Pick one modal or drop it |
 | Generic upbeat closer: `this improves maintainability going forward` | Delete the sentence |
-| Signposting: `let's dive in`, `here's what you need to know`, `this PR aims to` | Start with the content |
+| Signposting: `let's dive in`, `here's what you need to know`, `this PR aims to`, `in this change, we` | Start with the content |
 | Fragmented header: a heading followed by a line restating the heading | Delete the restatement |
 | Aphorism formulas: `X is the Y of Z`, `X becomes a trap` | The concrete claim underneath |
 | Authority tropes: `the real question is`, `at its core`, `fundamentally` | Just make the point |
@@ -108,11 +111,17 @@ Check these before returning any text:
 These come from writing the message as a session log rather than a description of the change:
 
 - One bullet per changed file, or a list of every path touched. The diff has that.
-- `## Summary` and `## Test plan` scaffolding on a change that needs one line.
 - A test plan describing verification that never ran.
 - The body narrating your working process: what you tried, what failed, what you then did.
-- `This PR aims to` and `In this change, we` openers.
 - Restating the subject line as the first line of the body.
+
+## Error messages and comments
+
+Both are read by someone who is already stuck, so they answer a different question than descriptive prose does.
+
+- An error message names what failed, the input that caused it, and what the reader can do next: `config.yaml line 7: timeout must be a positive integer, got -1`. Not `an error occurred while processing your request`.
+- A log line carries the identifiers needed to find the thing again: request id, path, count, duration. Adjectives help nobody grepping at 3am.
+- A comment explains why the code is surprising, not what it does. If it restates the line below it, delete it. The case that earns a comment is a constraint the code cannot show: a spec section, a vendor bug, a benchmark that ruled out the obvious approach.
 
 ## Examples
 

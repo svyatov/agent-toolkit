@@ -27,7 +27,7 @@
     "Authoring-first, not editing-first: humanizer's draft/audit/final rewrite loop, travel-blog example, DETECTION GUIDANCE, and PERSONALITY AND SOUL sections were dropped.",
     "Scope narrowed to repo and forge prose. Voiced and long-form prose stays with humanizer.",
     "Dropped curly-quote pattern (Claude emits straight ASCII) and the Wikipedia-article framing of the significance, notability, and challenges patterns.",
-    "Added a content rule (carry why, not what), length-and-silence rules, git-shaped worked examples, and anti-patterns specific to agent-written git prose. None of these exist upstream.",
+    "Added a content rule (carry why, not what), length-and-silence rules, git-shaped worked examples, guidance for error messages, log lines, and code comments, and anti-patterns specific to agent-written git prose. None of these exist upstream.",
     "Inverted upstream's diff-anchored-writing rule for commits, changelogs, and migration guides, where narrating the change is correct.",
     "DO NOT TOUCH condensed to five lines and extended to identifiers, CLI flags, and file paths."
   ],
