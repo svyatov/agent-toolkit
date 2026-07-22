@@ -116,6 +116,13 @@
       "tags": ["writing", "git", "commits", "pull-request", "documentation"]
     },
     {
+      "name": "secure-npm-package",
+      "source": "./plugins/secure-npm-package",
+      "description": "Set up a secure npm release process (Trusted Publishing, provenance, Staged Publishing, hardened CI workflow).",
+      "category": "productivity",
+      "tags": ["npm", "security", "supply-chain", "release", "github-actions"]
+    },
+    {
       "name": "taskwarrior",
       "source": "./plugins/taskwarrior",
       "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",

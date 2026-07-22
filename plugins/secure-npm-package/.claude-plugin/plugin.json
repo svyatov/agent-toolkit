@@ -1,0 +1,13 @@
+{
+  "name": "secure-npm-package",
+  "description": "Set up a secure npm release process (Trusted Publishing, provenance, Staged Publishing, hardened CI workflow).",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}
