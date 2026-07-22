@@ -57,6 +57,7 @@ Your existing `leo:` skill invocations (e.g., `leo:commit`) become `<skill>:<ski
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
 | `repo-prose` | Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages | `claude plugin install repo-prose@leo-toolkit` |
 | `secure-npm-package` | Set up a secure npm release process (Trusted Publishing, provenance, Staged Publishing, hardened CI) | `claude plugin install secure-npm-package@leo-toolkit` |
+| `secure-ruby-gem` | Set up a secure Ruby gem release process (Trusted Publishing, sigstore attestations, approval-gated CI, Bundler cooldown) | `claude plugin install secure-ruby-gem@leo-toolkit` |
 | `taskwarrior` | Taskwarrior CLI reference for managing tasks, bugs, and work items | `claude plugin install taskwarrior@leo-toolkit` |
 
 ## License

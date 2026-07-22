@@ -1,0 +1,13 @@
+{
+  "name": "secure-ruby-gem",
+  "description": "Set up a secure Ruby gem release process (Trusted Publishing, sigstore attestations, approval-gated CI, Bundler cooldown).",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

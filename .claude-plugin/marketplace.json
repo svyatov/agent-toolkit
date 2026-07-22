@@ -123,6 +123,13 @@
       "tags": ["npm", "security", "supply-chain", "release", "github-actions"]
     },
     {
+      "name": "secure-ruby-gem",
+      "source": "./plugins/secure-ruby-gem",
+      "description": "Set up a secure Ruby gem release process (Trusted Publishing, sigstore attestations, approval-gated CI, Bundler cooldown).",
+      "category": "productivity",
+      "tags": ["ruby", "rubygems", "security", "supply-chain", "release"]
+    },
+    {
       "name": "taskwarrior",
       "source": "./plugins/taskwarrior",
       "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",

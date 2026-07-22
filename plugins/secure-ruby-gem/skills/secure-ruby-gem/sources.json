@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-07-22T00:00:00.000Z",
+  "type": "derived",
+  "sources": [
+    {
+      "url": "https://github.com/evilmartians/agent-skills/tree/main/skills/secure-npm-package",
+      "repository": "evilmartians/agent-skills",
+      "path": "skills/secure-npm-package",
+      "branch": "main",
+      "sha": "0813c8304717dc2fa392b6f4a475f3ac6c8f7336",
+      "original_name": "secure-npm-package",
+      "fetched_at": "2026-07-22T00:00:00.000Z"
+    }
+  ],
+  "license": "MIT",
+  "copyright": "Copyright (c) evilmartians",
+  "license_override": false,
+  "license_override_reason": null,
+  "note": "Structure and section layout follow secure-npm-package. All RubyGems, Bundler, and sigstore content is original and verified against upstream docs in July 2026."
+}
