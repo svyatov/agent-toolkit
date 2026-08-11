@@ -30,7 +30,7 @@ Detect mode from user input. Default to **commit** if ambiguous.
 
 Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) strictly: `<type>(<scope>): <description>`. Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert. Description: present tense, imperative mood, under 72 chars.
 
-Apply the `repo-prose` skill to every commit message, PR title, and PR description you write here. It owns the writing rules; this skill owns the workflow.
+Apply the `oss-writing` skill to every commit message, PR title, and PR description you write here. It owns the writing rules; this skill owns the workflow.
 
 ## Branch Naming
 

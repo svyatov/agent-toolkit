@@ -15,133 +15,165 @@
       "source": "./plugins/astro",
       "description": "Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions.",
       "category": "productivity",
-      "tags": ["astro", "web", "ssr", "islands"]
+      "tags": [
+        "astro",
+        "web",
+        "ssr",
+        "islands"
+      ]
     },
     {
       "name": "browser-bugs",
       "source": "./plugins/browser-bugs",
       "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",
       "category": "productivity",
-      "tags": ["browser", "compatibility", "mobile", "safari", "audit"]
+      "tags": [
+        "browser",
+        "compatibility",
+        "mobile",
+        "safari",
+        "audit"
+      ]
     },
     {
       "name": "command-creator",
       "source": "./plugins/command-creator",
       "description": "Create reusable slash commands.",
       "category": "productivity",
-      "tags": ["commands", "workflow", "automation"]
+      "tags": [
+        "commands",
+        "workflow",
+        "automation"
+      ]
     },
     {
       "name": "commit",
       "source": "./plugins/commit",
       "description": "Git commit workflow with conventional commits, branch/push/PR support.",
       "category": "productivity",
-      "tags": ["git", "commits", "conventional-commits", "pull-request"]
-    },
-    {
-      "name": "generate-cicd",
-      "source": "./plugins/generate-cicd",
-      "description": "Generate CI/CD workflows (GitHub Actions).",
-      "category": "productivity",
-      "tags": ["ci", "cd", "github-actions", "workflows"]
+      "tags": [
+        "git",
+        "commits",
+        "conventional-commits",
+        "pull-request"
+      ]
     },
     {
       "name": "generate-dockerfile",
       "source": "./plugins/generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",
       "category": "productivity",
-      "tags": ["docker", "dockerfile", "containers"]
+      "tags": [
+        "docker",
+        "dockerfile",
+        "containers"
+      ]
     },
     {
       "name": "generate-favicon",
       "source": "./plugins/generate-favicon",
       "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
       "category": "productivity",
-      "tags": ["favicon", "icons", "pwa", "web"]
-    },
-    {
-      "name": "good-readme",
-      "source": "./plugins/good-readme",
-      "description": "Write or improve an open source README: progressive-JPEG structure, scannable facts, real numbers only.",
-      "category": "writing",
-      "tags": ["readme", "documentation", "open-source", "writing"]
+      "tags": [
+        "favicon",
+        "icons",
+        "pwa",
+        "web"
+      ]
     },
     {
       "name": "grill-me",
       "source": "./plugins/grill-me",
       "description": "Stress-test any plan, design, or idea through relentless interviewing — domain-agnostic.",
       "category": "productivity",
-      "tags": ["planning", "review", "critique", "brainstorming"]
+      "tags": [
+        "planning",
+        "review",
+        "critique",
+        "brainstorming"
+      ]
     },
     {
       "name": "humanizer",
       "source": "./plugins/humanizer",
       "description": "Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements.",
       "category": "writing",
-      "tags": ["writing", "editing", "ai-detection"]
+      "tags": [
+        "writing",
+        "editing",
+        "ai-detection"
+      ]
     },
     {
       "name": "import-skill",
       "source": "./plugins/import-skill",
       "description": "Import skills from GitHub repos (copy or merge).",
       "category": "productivity",
-      "tags": ["skills", "import", "github"]
+      "tags": [
+        "skills",
+        "import",
+        "github"
+      ]
     },
     {
       "name": "improve-architecture",
       "source": "./plugins/improve-architecture",
       "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
       "category": "productivity",
-      "tags": ["architecture", "refactoring", "testing"]
+      "tags": [
+        "architecture",
+        "refactoring",
+        "testing"
+      ]
     },
     {
       "name": "llms-visibility",
       "source": "./plugins/llms-visibility",
       "description": "Make websites, docs, and blogs readable to LLMs and AI agents — llms.txt, .md routes, Accept negotiation, Content-Signal.",
       "category": "productivity",
-      "tags": ["llms-txt", "seo", "geo", "markdown", "web"]
+      "tags": [
+        "llms-txt",
+        "seo",
+        "geo",
+        "markdown",
+        "web"
+      ]
     },
     {
       "name": "prior-art",
       "source": "./plugins/prior-art",
       "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",
       "category": "productivity",
-      "tags": ["arxiv", "research", "architecture", "prior-art", "design"]
+      "tags": [
+        "arxiv",
+        "research",
+        "architecture",
+        "prior-art",
+        "design"
+      ]
     },
     {
       "name": "refactor",
       "source": "./plugins/refactor",
       "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
       "category": "productivity",
-      "tags": ["refactoring", "cleanup", "code-quality"]
-    },
-    {
-      "name": "repo-prose",
-      "source": "./plugins/repo-prose",
-      "description": "Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages.",
-      "category": "writing",
-      "tags": ["writing", "git", "commits", "pull-request", "documentation"]
-    },
-    {
-      "name": "secure-npm-package",
-      "source": "./plugins/secure-npm-package",
-      "description": "Set up a secure npm release process (Trusted Publishing, provenance, Staged Publishing, hardened CI workflow).",
-      "category": "productivity",
-      "tags": ["npm", "security", "supply-chain", "release", "github-actions"]
-    },
-    {
-      "name": "secure-ruby-gem",
-      "source": "./plugins/secure-ruby-gem",
-      "description": "Set up a secure Ruby gem release process (Trusted Publishing, sigstore attestations, approval-gated CI, Bundler cooldown).",
-      "category": "productivity",
-      "tags": ["ruby", "rubygems", "security", "supply-chain", "release"]
+      "tags": [
+        "refactoring",
+        "cleanup",
+        "code-quality"
+      ]
     },
     {
       "name": "taskwarrior",
       "source": "./plugins/taskwarrior",
       "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
       "category": "productivity",
-      "tags": ["taskwarrior", "cli", "tasks", "reference"]
+      "tags": [
+        "taskwarrior",
+        "cli",
+        "tasks",
+        "reference"
+      ]
     }
   ]
 }
