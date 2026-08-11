@@ -1,13 +1,13 @@
 # Agent Toolkit
 
-Personal agent toolkit — reusable skills and plugins for Claude Code, Cursor, Codex, and Gemini CLI.
+Personal agent toolkit: individually installable skills for Claude Code.
 
 Each skill is an **individually installable plugin**. Install only what you need for a given project.
 
 ## Structure
 
-- **`plugins/<name>/`** — a self-contained plugin. Contains `.claude-plugin/plugin.json` and `skills/<name>/SKILL.md`.
-- **`.claude-plugin/marketplace.json`** — catalog that exposes every plugin in the repo
+- **`plugins/<name>/`**: a self-contained plugin. Contains `.claude-plugin/plugin.json` and `skills/<name>/SKILL.md`, plus `references/` and `sources.json` where the skill has them.
+- **`.claude-plugin/marketplace.json`**: catalog that exposes every plugin in the repo.
 
 ## Claude Code Plugin Installation
 
@@ -41,19 +41,18 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `astro` | Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions | `claude plugin install astro@leo-toolkit` |
+| `astro` | Build with the Astro web framework (v6+): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@leo-toolkit` |
 | `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@leo-toolkit` |
 | `command-creator` | Create reusable slash commands | `claude plugin install command-creator@leo-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@leo-toolkit` |
-| `generate-favicon` | Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@leo-toolkit` |
-| `grill-me` | Stress-test a plan or design through relentless interviewing | `claude plugin install grill-me@leo-toolkit` |
+| `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@leo-toolkit` |
+| `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@leo-toolkit` |
 | `humanizer` | Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements | `claude plugin install humanizer@leo-toolkit` |
 | `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@leo-toolkit` |
 | `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing | `claude plugin install improve-architecture@leo-toolkit` |
-| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents (llms.txt, `.md` routes, Accept negotiation) | `claude plugin install llms-visibility@leo-toolkit` |
+| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@leo-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@leo-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
-| `taskwarrior` | Taskwarrior CLI reference for managing tasks, bugs, and work items | `claude plugin install taskwarrior@leo-toolkit` |
 
 ## License
 

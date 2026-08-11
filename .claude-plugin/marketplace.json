@@ -7,13 +7,13 @@
     "url": "https://www.svyatov.com"
   },
   "metadata": {
-    "description": "Personal agent toolkit — individually installable skills for Claude Code"
+    "description": "Personal agent toolkit: individually installable skills for Claude Code"
   },
   "plugins": [
     {
       "name": "astro",
       "source": "./plugins/astro",
-      "description": "Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions.",
+      "description": "Build with the Astro web framework (v6+): islands, content collections, actions, SSR, view transitions.",
       "category": "productivity",
       "tags": [
         "astro",
@@ -60,7 +60,7 @@
     {
       "name": "generate-favicon",
       "source": "./plugins/generate-favicon",
-      "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
+      "description": "Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
       "category": "productivity",
       "tags": [
         "favicon",
@@ -72,7 +72,7 @@
     {
       "name": "grill-me",
       "source": "./plugins/grill-me",
-      "description": "Stress-test any plan, design, or idea through relentless interviewing — domain-agnostic.",
+      "description": "Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic.",
       "category": "productivity",
       "tags": [
         "planning",
@@ -117,7 +117,7 @@
     {
       "name": "llms-visibility",
       "source": "./plugins/llms-visibility",
-      "description": "Make websites, docs, and blogs readable to LLMs and AI agents — llms.txt, .md routes, Accept negotiation, Content-Signal.",
+      "description": "Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal.",
       "category": "productivity",
       "tags": [
         "llms-txt",
@@ -149,18 +149,6 @@
         "refactoring",
         "cleanup",
         "code-quality"
-      ]
-    },
-    {
-      "name": "taskwarrior",
-      "source": "./plugins/taskwarrior",
-      "description": "Taskwarrior CLI reference for managing tasks, bugs, and work items.",
-      "category": "productivity",
-      "tags": [
-        "taskwarrior",
-        "cli",
-        "tasks",
-        "reference"
       ]
     }
   ]
