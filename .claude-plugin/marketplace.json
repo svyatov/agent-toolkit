@@ -150,6 +150,18 @@
         "cleanup",
         "code-quality"
       ]
+    },
+    {
+      "name": "verify-skill",
+      "source": "./plugins/verify-skill",
+      "description": "Verify a skill against the current spec, Claude Code features, and upstream docs fetched live.",
+      "category": "productivity",
+      "tags": [
+        "skills",
+        "audit",
+        "review",
+        "freshness"
+      ]
     }
   ]
 }

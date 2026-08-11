@@ -1,0 +1,13 @@
+{
+  "name": "verify-skill",
+  "description": "Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}
