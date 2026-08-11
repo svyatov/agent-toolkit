@@ -54,6 +54,7 @@ Your existing `leo:` skill invocations (e.g., `leo:commit`) become `<skill>:<ski
 | `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@leo-toolkit` |
 | `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing | `claude plugin install improve-architecture@leo-toolkit` |
 | `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents (llms.txt, `.md` routes, Accept negotiation) | `claude plugin install llms-visibility@leo-toolkit` |
+| `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@leo-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
 | `repo-prose` | Write clear technical prose for commits, PRs, reviews, issues, docs, and error messages | `claude plugin install repo-prose@leo-toolkit` |
 | `secure-npm-package` | Set up a secure npm release process (Trusted Publishing, provenance, Staged Publishing, hardened CI) | `claude plugin install secure-npm-package@leo-toolkit` |

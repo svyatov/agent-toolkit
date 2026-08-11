@@ -102,6 +102,13 @@
       "tags": ["llms-txt", "seo", "geo", "markdown", "web"]
     },
     {
+      "name": "prior-art",
+      "source": "./plugins/prior-art",
+      "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",
+      "category": "productivity",
+      "tags": ["arxiv", "research", "architecture", "prior-art", "design"]
+    },
+    {
       "name": "refactor",
       "source": "./plugins/refactor",
       "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
