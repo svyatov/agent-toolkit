@@ -33,9 +33,9 @@ Note: `svh`/`lvh` are broken on Firefox iOS (#26), so prefer `dvh` which has bet
 ### #17: Flex Gap Unsupported on Older Safari
 
 **Detect**: `gap:`, `row-gap:`, `column-gap:` inside a `display: flex` context
-**Problem**: Safari didn't support gap with flexbox until iOS 14.5+.
-**Severity**: P2 (if targeting modern browsers) or P1 (if supporting iOS < 14.5)
-**Affected**: Safari iOS < 14.5
+**Problem**: Safari didn't support gap with flexbox until 14.1 (April 2021).
+**Severity**: P2 (if targeting modern browsers) or P1 (if supporting Safari < 14.1)
+**Affected**: Safari and Safari iOS < 14.1
 **Fix**: If supporting older Safari, use margins instead:
 ```css
 /* Before */
@@ -163,7 +163,7 @@ Also requires in HTML: `<meta name="viewport" content="..., viewport-fit=cover">
 /* Standard */
 html { scrollbar-color: #555 #1a1a1a; }
 
-/* Safari fallback */
+/* Fallback for Safari < 26.2 */
 ::-webkit-scrollbar { background: #1a1a1a; }
 ::-webkit-scrollbar-thumb { background: #555; }
 ```
@@ -532,7 +532,9 @@ These require reading component logic, not just pattern matching.
 **Severity**: P3
 **Fix**: Detect input type and show appropriate verb:
 ```javascript
-const verb = 'ontouchstart' in window ? 'Tap' : 'Click';
+// 'ontouchstart' in window is wrong here — touchscreen laptops expose it too
+const isTouch = matchMedia('(hover: none) and (pointer: coarse)').matches;
+const verb = isTouch ? 'Tap' : 'Click';
 ```
 
 ### #46, #47: Soft Keyboard Covers Content

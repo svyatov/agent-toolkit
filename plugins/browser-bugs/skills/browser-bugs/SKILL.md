@@ -1,6 +1,7 @@
 ---
 name: browser-bugs
 description: "Audit frontend code for 50 known cross-browser bugs and mobile compatibility pitfalls documented in 'Fifty Problems with Standard Web APIs in 2025.' Scans HTML, CSS, and JavaScript/TypeScript for patterns that break on Safari iOS, Firefox iOS, Chrome, and mobile browsers — then produces a severity-ranked report with specific fixes. Use this skill when the user asks to check for browser bugs, audit cross-browser compatibility, review mobile compatibility, check Safari issues, find iOS bugs in their code, or asks why something doesn't work on mobile/Safari/Firefox. Also trigger when the user mentions viewport units breaking, audio not playing on iOS, drag-and-drop not working on mobile, fullscreen issues, or touch interaction problems."
+license: MIT
 ---
 
 # Browser Bugs Audit
@@ -9,13 +10,16 @@ Scan a frontend codebase for 50 documented cross-browser bugs and produce a prio
 
 ## Step 1: Determine Scope
 
-Ask the user what to scan if not obvious from context:
+Infer the scope from context when you can:
 
 | Trigger | Scope |
 |---------|-------|
 | Specific file or component | That file/component and its styles |
 | "check my app" / "audit the frontend" | Scan all HTML, CSS, JS/TS in the project |
 | Specific symptom ("audio broken on iOS") | Targeted scan for related bug patterns |
+
+When no trigger fits, ask with `AskUserQuestion` and offer those three scopes as
+the options rather than a free-text question.
 
 For project-wide scans, find frontend files first:
 
@@ -27,7 +31,10 @@ Glob: **/*.{html,css,scss,less,js,jsx,ts,tsx,vue,svelte}
 
 Read `references/bug-catalog.md` for the full catalog of 50 bugs with detection patterns and fixes.
 
-Scan code in four passes, checking each file against the relevant patterns:
+Scan code in four passes, checking each file against the relevant patterns. The
+passes share no data, so for a project-wide scan dispatch all four as parallel
+subagents in one message and have each return only its findings. This keeps the
+file contents out of the context that writes the report.
 
 ### Pass 1: CSS / Styling
 
@@ -38,15 +45,15 @@ Search for these high-signal patterns across all stylesheets and style blocks:
 - `flex-grow` in scrollable containers without `flex-shrink: 0` on siblings — **Safari shrinks text** (#18)
 - `::selection` for critical UI — **ignored on Safari iOS** (#30)
 - `filter: blur()` on `<svg>` elements — **broken on Safari** (#31)
-- Dark theme without `scrollbar-color` — **white scrollbars on Windows** (#40). Note: Safari still doesn't support `scrollbar-color` as of Safari 18, so `::-webkit-scrollbar` is also needed
+- Dark theme without `scrollbar-color` — **white scrollbars on Windows** (#40). Safari gained `scrollbar-color` in 26.2; add `::-webkit-scrollbar` only when the project targets earlier Safari
 - `:hover` for critical interactions (menus, tooltips with content) — **unavailable on touch** (#44). Fix with `@media (hover: hover)` scoping, add `:active` for touch feedback and `:focus-visible` for keyboard users
 - Missing `touch-action: manipulation` on interactive elements — **double-tap zoom** (#42)
 - `<button>` without explicit padding reset — **Safari adds extra padding** (#24)
-- CSS custom properties in `background-image` on `::backdrop` — **Safari doesn't propagate** (#22). Still broken in Safari 18
+- CSS custom properties in `background-image` on `::backdrop` — **Safari doesn't propagate** (#22). No fixed version is known; verify against current Safari before reporting
 - Missing `env(safe-area-inset-bottom)` — **Firefox iOS cuts off bottom** (#27). Requires `viewport-fit=cover` in meta tag to work
 
 Also check (older browsers — still report these, but at lower severity with a note about which versions are affected):
-- `gap` with `display: flex` — unsupported on Safari < 14.1; ~96%+ global support (#17)
+- `gap` with `display: flex` — unsupported on Safari < 14.1 (April 2021) (#17)
 - `scroll-behavior: smooth` — ignored on Safari < 15.4 (#23)
 - `transform: scale(%)` with percentage — breaks on Safari iOS 12 (#20)
 - `lh` unit usage — unsupported on Safari < 16.4; use `em` fallback (#19)
@@ -61,7 +68,7 @@ Search for these patterns in script files:
     (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
   ```
 - `.play()` called outside user event handler — **blocked on iOS** (#12). The play-then-pause priming pattern inside a click handler is still the standard fix
-- `.volume =` on audio elements — **non-functional on iOS** (#14). Still broken in iOS 18. Use `.muted = true/false` for muting; use GainNode for volume control
+- `.volume =` on audio elements — **non-functional on iOS** (#14). No fixed version is known; feature-detect at runtime. Use `.muted = true/false` for muting; use GainNode for volume control
 - `.pause()` or `.currentTime =` during pending `.play()` promise — **Chrome throws rejection** (#33). The MDN-recommended pattern: check if `.play()` returns a promise, `.then()` before pausing
 - `navigator.clipboard` without feature detection — **missing on older Safari iOS** (#39). Fallback to `document.execCommand('copy')` (deprecated but still the only synchronous alternative)
 - `element.focus()` on input in mobile context — **triggers soft keyboard** (#48). Don't use `'ontouchstart' in window` to detect mobile — touchscreen laptops expose it too. Use `matchMedia('(hover: none) and (pointer: coarse)')` or avoid programmatic focus on inputs universally
@@ -176,4 +183,4 @@ When a bug has a well-known library/polyfill solution, recommend it over hand-ro
 | Drag-and-drop (React) | dnd-kit | `npm install @dnd-kit/core` | Best touch support for React |
 | `inert` polyfill (Safari < 15.5) | wicg-inert | `npm install wicg-inert` | Proper focus trapping + a11y |
 
-Most other APIs (ResizeObserver, Clipboard, Web Animations, smooth scroll) are natively supported in all current browsers and no longer need polyfills as of 2025.
+Most other APIs (ResizeObserver, Clipboard, Web Animations, smooth scroll) shipped in Safari 13.1 to 15.4 and need no polyfill for any browser at or above those versions.
