@@ -53,6 +53,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@leo-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@leo-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
+| `verify-skill` | Verify a skill against the current spec, Claude Code features, and upstream docs fetched live | `claude plugin install verify-skill@leo-toolkit` |
 
 ## License
 
