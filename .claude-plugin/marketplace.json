@@ -47,18 +47,6 @@
       ]
     },
     {
-      "name": "commit",
-      "source": "./plugins/commit",
-      "description": "Git commit workflow with conventional commits, branch/push/PR support.",
-      "category": "productivity",
-      "tags": [
-        "git",
-        "commits",
-        "conventional-commits",
-        "pull-request"
-      ]
-    },
-    {
       "name": "generate-dockerfile",
       "source": "./plugins/generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",

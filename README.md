@@ -20,8 +20,8 @@ claude plugin marketplace add svyatov/agent-toolkit
 Then install any skill on its own:
 
 ```bash
-claude plugin install commit@leo-toolkit
 claude plugin install astro@leo-toolkit
+claude plugin install prior-art@leo-toolkit
 claude plugin install generate-favicon@leo-toolkit
 ```
 
@@ -35,7 +35,7 @@ claude plugin marketplace update leo-toolkit
 claude plugin install <skill>@leo-toolkit  # repeat for each skill you want
 ```
 
-Your existing `leo:` skill invocations (e.g., `leo:commit`) become `<skill>:<skill>` (e.g., `commit:commit`), or the bare `<skill>` name when unambiguous.
+Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<skill>` (e.g., `refactor:refactor`), or the bare `<skill>` name when unambiguous.
 
 ## Skills
 
@@ -44,7 +44,6 @@ Your existing `leo:` skill invocations (e.g., `leo:commit`) become `<skill>:<ski
 | `astro` | Build with the Astro web framework (v6+) — islands, content collections, actions, SSR, view transitions | `claude plugin install astro@leo-toolkit` |
 | `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@leo-toolkit` |
 | `command-creator` | Create reusable slash commands | `claude plugin install command-creator@leo-toolkit` |
-| `commit` | Git commit workflow with conventional commits, branch/push/PR support | `claude plugin install commit@leo-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@leo-toolkit` |
 | `generate-favicon` | Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@leo-toolkit` |
 | `grill-me` | Stress-test a plan or design through relentless interviewing | `claude plugin install grill-me@leo-toolkit` |
