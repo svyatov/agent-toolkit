@@ -7,9 +7,9 @@
       "repository": "github/awesome-copilot",
       "path": "skills/refactor",
       "branch": "main",
-      "sha": "19f43b1b41cf801fe48e94f065ed79f1c6ea7d45",
+      "sha": "318066d2213b510e89b500ed0d53506c54093ddc",
       "original_name": "refactor",
-      "fetched_at": "2026-03-19T12:00:00.000Z"
+      "fetched_at": "2026-08-18T00:00:00.000Z"
     },
     {
       "url": "https://github.com/softaworks/agent-toolkit/tree/main/skills/reducing-entropy",
@@ -18,29 +18,29 @@
       "branch": "main",
       "sha": "3027f20f3181758385a1bb8c022d4041dfb4de84",
       "original_name": "reducing-entropy",
-      "fetched_at": "2026-03-19T12:00:00.000Z"
+      "fetched_at": "2026-08-18T00:00:00.000Z"
     },
     {
       "url": "https://github.com/github/awesome-copilot/tree/main/skills/refactor-plan",
       "repository": "github/awesome-copilot",
       "path": "skills/refactor-plan",
       "branch": "main",
-      "sha": "19f43b1b41cf801fe48e94f065ed79f1c6ea7d45",
+      "sha": "318066d2213b510e89b500ed0d53506c54093ddc",
       "original_name": "refactor-plan",
-      "fetched_at": "2026-03-19T12:00:00.000Z"
+      "fetched_at": "2026-08-18T00:00:00.000Z"
     },
     {
       "url": "https://github.com/github/awesome-copilot/tree/main/skills/refactor-method-complexity-reduce",
       "repository": "github/awesome-copilot",
       "path": "skills/refactor-method-complexity-reduce",
       "branch": "main",
-      "sha": "19f43b1b41cf801fe48e94f065ed79f1c6ea7d45",
+      "sha": "318066d2213b510e89b500ed0d53506c54093ddc",
       "original_name": "refactor-method-complexity-reduce",
-      "fetched_at": "2026-03-19T12:00:00.000Z"
+      "fetched_at": "2026-08-18T00:00:00.000Z"
     }
   ],
   "license": "MIT",
-  "copyright": "Copyright (c) github, softaworks",
+  "copyright": "Copyright (c) GitHub, Inc.; Copyright (c) Leonardo Flores",
   "license_override": false,
   "license_override_reason": null
 }
