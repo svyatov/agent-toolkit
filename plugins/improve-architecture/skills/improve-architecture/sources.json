@@ -3,17 +3,28 @@
   "type": "copy",
   "sources": [
     {
-      "url": "https://github.com/mattpocock/skills/tree/main/improve-codebase-architecture",
+      "url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture",
       "repository": "mattpocock/skills",
-      "path": "improve-codebase-architecture",
+      "path": "skills/engineering/improve-codebase-architecture",
       "branch": "main",
       "sha": "d3850f11b6e3a67d26cae8b4afc089382cf58692",
       "original_name": "improve-codebase-architecture",
-      "fetched_at": "2026-03-17T00:00:00.000Z"
+      "fetched_at": "2026-03-17T00:00:00.000Z",
+      "note": "Base skill. Upstream moved every skill under skills/<category>/ on 2026-04-24; path updated 2026-08-18. Later borrows from this source: git hot-spot scoping, the deletion test, seam discipline, ADR-conflict handling."
+    },
+    {
+      "url": "https://github.com/lukeramsden/software-design-agent-skill/blob/main/skills/software-design/SKILL.md",
+      "repository": "lukeramsden/software-design-agent-skill",
+      "path": "skills/software-design/SKILL.md",
+      "branch": "main",
+      "sha": "251390539d4f3533623279a251ec9916443e8c95",
+      "original_name": "software-design",
+      "fetched_at": "2026-08-18T00:00:00.000Z",
+      "note": "Partial. Structural material only: the named red flags in references/red-flags.md, information leakage and its two repairs, the three symptoms, the Hard to Describe diagnostic, and the net-gain rule. Sections on errors, comments, names, obvious code, and performance were not taken."
     }
   ],
   "license": "MIT",
-  "copyright": "Copyright (c) mattpocock",
+  "copyright": "Copyright (c) mattpocock; Copyright (c) 2026 Luke Ramsden",
   "license_override": false,
   "license_override_reason": null
 }
