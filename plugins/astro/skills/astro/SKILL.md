@@ -1,15 +1,27 @@
 ---
 name: astro
-description: Skill for building with the Astro web framework (v6+). Covers component authoring, islands architecture (client and server islands), content collections with loaders, actions, sessions, view transitions, middleware, on-demand rendering (SSR), adapters, and project configuration. Use when the user works with Astro, mentions .astro files, asks about static site generation (SSG), islands architecture, content collections, server islands, actions, view transitions, deploying an Astro project, or upgrading Astro.
+description: Skill for building with the Astro web framework (v6 and v7). Covers component authoring, islands architecture (client and server islands), content collections with loaders, actions, sessions, view transitions, middleware, on-demand rendering (SSR), adapters, and project configuration. Use when the user works with Astro, mentions .astro files, asks about static site generation (SSG), islands architecture, content collections, server islands, actions, view transitions, deploying an Astro project, or upgrading Astro.
+license: MIT
 ---
 
 # Astro
 
 Astro is the web framework for content-driven websites: server-first, static HTML by default, with opt-in interactive islands.
 
-**Always consult the official docs for the latest API details.** Fetch `https://docs.astro.build/llms-small.txt` for an abridged reference, or `https://docs.astro.build/llms-full.txt` for the complete documentation.
+**Always consult the official docs for the latest API details.** Astro no longer publishes `llms.txt` files. Use the Astro Docs MCP server when it is configured (`claude mcp add --transport http "Astro docs" https://mcp.docs.astro.build/mcp`); otherwise fetch the relevant page under `https://docs.astro.build/en/`.
 
-You already know Astro fundamentals — `.astro` component syntax, `client:*` directives, file-based routing, middleware, scoped styles. This skill covers what changed in v5/v6 and the newer APIs you may know imperfectly. When unsure, fetch the docs above instead of guessing.
+You already know Astro fundamentals — `.astro` component syntax, `client:*` directives, file-based routing, middleware, scoped styles. This skill covers what changed in v5 through v7 and the newer APIs you may know imperfectly. When unsure, fetch the docs above instead of guessing.
+
+## Astro v7 Key Changes
+
+- **Vite 8**
+- **Rust compiler** is the only compiler: unclosed non-void tags are build errors, and invalid HTML is no longer auto-corrected
+- **Sätteri** is the default Markdown pipeline; `@astrojs/markdown-remark` is no longer installed by default, so remark/rehype plugins must be ported or opted back in
+- `compressHTML: 'jsx'` is the default whitespace handling
+- `src/fetch.ts` is a reserved file name
+- **`@astrojs/db` removed**; use `node:sqlite` or another database
+- `TRANSITION_*` constants and `createAnimationScope()` removed from `astro:transitions`; the string event names still work
+- Migration guide: `https://docs.astro.build/en/guides/upgrade-to/v7/`
 
 ## Astro v6 Key Changes
 
@@ -102,4 +114,4 @@ The router component is `<ClientRouter />` from `astro:transitions` (renamed fro
 
 ## Resources
 
-- [Docs](https://docs.astro.build) · [Config Reference](https://docs.astro.build/en/reference/configuration-reference/) · [llms.txt](https://docs.astro.build/llms.txt)
+- [Docs](https://docs.astro.build) · [Config Reference](https://docs.astro.build/en/reference/configuration-reference/) · [Upgrade guides](https://docs.astro.build/en/upgrade-astro/) · [Docs MCP server](https://github.com/withastro/docs-mcp)

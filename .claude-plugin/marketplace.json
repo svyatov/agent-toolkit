@@ -13,7 +13,7 @@
     {
       "name": "astro",
       "source": "./plugins/astro",
-      "description": "Build with the Astro web framework (v6+): islands, content collections, actions, SSR, view transitions.",
+      "description": "Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions.",
       "category": "productivity",
       "tags": [
         "astro",

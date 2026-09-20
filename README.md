@@ -41,7 +41,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `astro` | Build with the Astro web framework (v6+): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@leo-toolkit` |
+| `astro` | Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@leo-toolkit` |
 | `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@leo-toolkit` |
 | `command-creator` | Create reusable slash commands | `claude plugin install command-creator@leo-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@leo-toolkit` |
