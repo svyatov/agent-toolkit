@@ -11,6 +11,7 @@ description: |
   vague attributions, significance inflation, em dash overuse, or manufactured
   drama. Not for prose that lives in a repository or on a forge: commits, PRs,
   reviews, issues, READMEs, docs, changelogs, code comments, error messages.
+disable-model-invocation: true
 ---
 
 # Humanizer: Remove AI Writing Patterns

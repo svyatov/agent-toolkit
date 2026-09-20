@@ -1,6 +1,7 @@
 ---
 name: grill-me
 description: Interview the user relentlessly about a plan, design, or idea until reaching shared understanding, walking each branch of the decision tree one decision at a time. Domain-agnostic — works for software, writing, business, or life decisions. Use to stress-test plans, brainstorm rigorously, or when user says "grill me".
+disable-model-invocation: true
 ---
 
 Interview the user relentlessly about every aspect of this until you reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one.

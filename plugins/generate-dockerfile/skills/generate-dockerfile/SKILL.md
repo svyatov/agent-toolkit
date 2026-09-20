@@ -9,6 +9,7 @@ description: >
   Triggers on: "Dockerfile", "dockerize", "containerize", "Docker build", "docker image",
   ".dockerignore", "make this deployable", "container setup", "production-ready setup",
   "ship this app".
+disable-model-invocation: true
 ---
 
 # Generate Production-Ready Dockerfile

@@ -19,6 +19,7 @@ compatibility: >
   docs.claude.com. Read-only until the user approves a fix. No install and no
   dependencies.
 allowed-tools: Bash Read Grep Glob Edit
+disable-model-invocation: true
 ---
 
 # Verify Skill

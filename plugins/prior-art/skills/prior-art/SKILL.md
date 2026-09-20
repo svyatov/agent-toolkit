@@ -16,6 +16,7 @@ compatibility: >
   Requires network access to export.arxiv.org, curl, and a host that can spawn
   parallel subagents. No install or dependencies needed.
 allowed-tools: Bash Task Agent Read Grep Glob
+disable-model-invocation: true
 ---
 
 # Prior Art

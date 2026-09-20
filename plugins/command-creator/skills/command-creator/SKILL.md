@@ -1,6 +1,7 @@
 ---
 name: command-creator
 description: Guides creation of Claude Code slash commands. Use when users ask to "create a command", "make a slash command", "add a command", want to automate a repetitive workflow ("I keep doing X, can we make a command for it?"), or want to document a consistent process as a reusable slash command — project-level or global.
+disable-model-invocation: true
 ---
 
 # Command Creator

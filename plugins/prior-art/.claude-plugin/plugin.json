@@ -1,7 +1,7 @@
 {
   "name": "prior-art",
   "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

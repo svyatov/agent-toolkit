@@ -6,6 +6,7 @@ description: >
   Use when the user asks to: (1) import, add, or copy a skill from GitHub, (2) merge multiple skills
   into one, (3) paste skill content to create a new local skill. Triggers on: "import skill",
   "add skill from", "copy skill", "merge skills", "fetch skill", "grab skill", "skill from GitHub".
+disable-model-invocation: true
 ---
 
 # Import Skill

@@ -2,6 +2,7 @@
 name: refactor
 description: "ALWAYS use this skill before refactoring any code. It prevents over-refactoring and wrong refactoring by requiring an assessment first — catching code that is already clean, problems that are architectural rather than code-level, and missing test coverage that must exist before touching business logic. Trigger on: refactor, clean up, simplify, reduce complexity, code smells, messy code, break up function, reduce nesting, remove dead code, file too big, extract method, too many parameters, duplicated code, cognitive complexity, god class, magic numbers. Also trigger when a linter or static analysis tool flags complexity issues. Language-agnostic."
 license: MIT
+disable-model-invocation: true
 ---
 
 # Refactor
