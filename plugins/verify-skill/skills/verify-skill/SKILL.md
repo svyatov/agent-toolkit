@@ -20,6 +20,7 @@ compatibility: >
   dependencies.
 allowed-tools: Bash Read Grep Glob Edit
 disable-model-invocation: true
+argument-hint: "[skill path or name]"
 ---
 
 # Verify Skill
@@ -40,7 +41,7 @@ Three axes:
 |---|---|
 | A path to a SKILL.md or to a skill directory | That skill |
 | A skill or plugin name | Find it, then verify it |
-| "all skills in \<dir\>" or "all my skills" | Every SKILL.md below that root, one report each |
+| "all skills in \<dir\>" or "all my skills" | Every SKILL.md below that root, one subagent and one report each, dispatched in one message |
 | Pasted skill content, no file | Verify the text, skip the file-layout checks |
 | No target given | Ask which skill, with `AskUserQuestion` |
 
@@ -79,15 +80,15 @@ Then fetch by condition, again in one parallel batch:
 |---|---|
 | The skill's description is vague, or the user reports it never triggers | `https://agentskills.io/skill-creation/optimizing-descriptions.md` |
 | The skill bundles `scripts/` | `https://agentskills.io/skill-creation/using-scripts.md` |
-| The user asks how to prove the skill works | `https://agentskills.io/skill-creation/evaluating-skills.md` |
+| The user asks how to prove the skill works | `https://agentskills.io/skill-creation/evaluating-skills.md`, and `https://code.claude.com/docs/en/plugin-evals.md` when the skill ships in a plugin |
 | The skill names a Claude Code tool, or spells out a procedure that one named tool now performs | `https://code.claude.com/docs/en/tools-reference.md` |
 | The skill scans many files, sweeps an unknown number of items, or has phases that could run at once | `https://code.claude.com/docs/en/agents.md`, which compares subagents, agent teams, and dynamic workflows in 9 KB |
 | That comparison points at a scripted fan-out | `https://code.claude.com/docs/en/workflows.md` |
 | A tool or command name appears in neither `skills.md` nor `tools-reference.md` | `https://code.claude.com/docs/en/changelog.md` |
-| The skill uses `${CLAUDE_PLUGIN_ROOT}` or a plugin-only frontmatter field | `https://code.claude.com/docs/en/plugins-reference.md` |
+| The skill uses `CLAUDE_PLUGIN_ROOT` or a plugin-only frontmatter field | `https://code.claude.com/docs/en/plugins-reference.md` |
 | The skill is more than a month older than today | `https://code.claude.com/docs/en/whats-new/index.md` |
 
-`changelog.md` is around 500 KB. Fetch it only to settle a name that the two
+`changelog.md` is many times the size of the other docs. Fetch it only to settle a name that the two
 smaller docs do not carry, never as a background read.
 
 From `whats-new/index.md`, take the weeks dated after the skill's last change.
@@ -164,7 +165,7 @@ before applying any of this. The list moves.
   fan work out to parallel workers, gate on a plan, ask the user a
   multiple-choice question, react to a tool call, or locate its own bundled
   files, when Claude Code now does that through subagents, plan mode,
-  `AskUserQuestion`, hooks, or `${CLAUDE_PLUGIN_ROOT}`. Name the native feature
+  `AskUserQuestion`, hooks, or `CLAUDE_PLUGIN_ROOT`. Name the native feature
   and quote the doc line that introduces it.
 - **Native features that fit, where the skill hand-rolls nothing.** The check
   above needs the skill to have reinvented something. This one does not. Read
