@@ -3,10 +3,10 @@ name: import-skill
 description: >
   Import skills from GitHub repositories into the local toolkit. Supports copying a single skill
   from a GitHub directory URL or merging multiple skills into one. Also accepts pasted skill content.
-  Use when the user asks to: (1) import, add, or copy a skill from GitHub, (2) merge multiple skills
-  into one, (3) paste skill content to create a new local skill. Triggers on: "import skill",
-  "add skill from", "copy skill", "merge skills", "fetch skill", "grab skill", "skill from GitHub".
 disable-model-invocation: true
+allowed-tools: Bash(curl:*) Bash(mkdir:*) Bash(python3:*)
+license: MIT
+compatibility: Designed for Claude Code. Requires curl, python3, and network access to github.com
 ---
 
 # Import Skill
@@ -52,11 +52,9 @@ curl -s "https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch
 
 # 3. License check
 curl -s "https://api.github.com/repos/{owner}/{repo}/license" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('license',{}).get('spdx_id','unknown'))"
-```
 
-```
-# 4. Existing skills (Glob tool, parallel with the above)
-Glob: plugins/*/skills/*/SKILL.md
+# 4. Existing skills
+ls plugins/*/skills/*/SKILL.md
 ```
 
 If the directory listing contains subdirectories (`"type": "dir"`), list their contents too — add parallel curl calls for each subdirectory in the **same turn** or the next turn.
