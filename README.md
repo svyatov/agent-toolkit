@@ -60,7 +60,10 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 |-------|-------------|---------|
 | `astro` | Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@svyatov-agent-toolkit` |
 | `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@svyatov-agent-toolkit` |
+| `browser-qa` | Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off | `claude plugin install browser-qa@svyatov-agent-toolkit` |
 | `command-creator` | Create reusable slash commands | `claude plugin install command-creator@svyatov-agent-toolkit` |
+| `contribute` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install contribute@svyatov-agent-toolkit` |
+| `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit` |
 | `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@svyatov-agent-toolkit` |
 | `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@svyatov-agent-toolkit` |
@@ -70,7 +73,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@svyatov-agent-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@svyatov-agent-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@svyatov-agent-toolkit` |
-| `shortcuts` | Short slash commands for the commit, push, pull request, CI, and merge loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /wm, /ci, /fa | `claude plugin install shortcuts@svyatov-agent-toolkit` |
+| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps | `claude plugin install shortcuts@svyatov-agent-toolkit` |
 | `verify-skill` | Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@svyatov-agent-toolkit` |
 | `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@svyatov-agent-toolkit` |
 

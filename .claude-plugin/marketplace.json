@@ -34,6 +34,19 @@
       ]
     },
     {
+      "name": "browser-qa",
+      "source": "./plugins/browser-qa",
+      "description": "Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off.",
+      "category": "productivity",
+      "tags": [
+        "browser",
+        "qa",
+        "responsive",
+        "chrome",
+        "frontend"
+      ]
+    },
+    {
       "name": "command-creator",
       "source": "./plugins/command-creator",
       "description": "Create reusable slash commands.",
@@ -42,6 +55,32 @@
         "commands",
         "workflow",
         "automation"
+      ]
+    },
+    {
+      "name": "contribute",
+      "source": "./plugins/contribute",
+      "description": "Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation.",
+      "category": "productivity",
+      "tags": [
+        "open-source",
+        "upstream",
+        "pull-request",
+        "issue",
+        "github"
+      ]
+    },
+    {
+      "name": "cut-release",
+      "source": "./plugins/cut-release",
+      "description": "Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release.",
+      "category": "productivity",
+      "tags": [
+        "release",
+        "changelog",
+        "semver",
+        "github",
+        "tag"
       ]
     },
     {
@@ -152,7 +191,7 @@
     {
       "name": "shortcuts",
       "source": "./plugins/shortcuts",
-      "description": "Short slash commands for the commit, push, pull request, CI, and merge loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /wm, /ci, /fa.",
+      "description": "Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps.",
       "category": "productivity",
       "tags": [
         "git",

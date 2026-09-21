@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "shortcuts",
-  "description": "Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps.",
-  "version": "1.1.0",
+  "name": "contribute",
+  "description": "Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation.",
+  "version": "1.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

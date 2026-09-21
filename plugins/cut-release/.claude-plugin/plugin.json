@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "shortcuts",
-  "description": "Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps.",
-  "version": "1.1.0",
+  "name": "cut-release",
+  "description": "Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release.",
+  "version": "1.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
