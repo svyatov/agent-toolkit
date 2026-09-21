@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "leo-toolkit",
+  "name": "svyatov-agent-toolkit",
   "description": "Personal agent toolkit: individually installable skills for Claude Code",
   "owner": {
     "name": "Leonid Svyatov",

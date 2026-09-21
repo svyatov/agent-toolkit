@@ -1,7 +1,7 @@
 {
-  "name": "leo-toolkit",
+  "name": "svyatov-agent-toolkit",
   "interface": {
-    "displayName": "Leo Toolkit"
+    "displayName": "Svyatov Agent Toolkit"
   },
   "plugins": [
     {

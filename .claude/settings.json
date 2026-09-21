@@ -1,6 +1,6 @@
 {
   "extraKnownMarketplaces": {
-    "leo-toolkit": {
+    "svyatov-agent-toolkit": {
       "source": {
         "source": "directory",
         "path": "."
@@ -8,6 +8,6 @@
     }
   },
   "enabledPlugins": {
-    "import-skill@leo-toolkit": true
+    "import-skill@svyatov-agent-toolkit": true
   }
 }
