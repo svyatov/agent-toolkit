@@ -84,6 +84,19 @@
       ]
     },
     {
+      "name": "dep-review",
+      "source": "./plugins/dep-review",
+      "description": "Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table.",
+      "category": "productivity",
+      "tags": [
+        "dependabot",
+        "dependencies",
+        "pull-request",
+        "review",
+        "github"
+      ]
+    },
+    {
       "name": "generate-dockerfile",
       "source": "./plugins/generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",

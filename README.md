@@ -64,6 +64,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `command-creator` | Create reusable slash commands | `claude plugin install command-creator@svyatov-agent-toolkit` |
 | `contribute` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install contribute@svyatov-agent-toolkit` |
 | `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit` |
+| `dep-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dep-review@svyatov-agent-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit` |
 | `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@svyatov-agent-toolkit` |
 | `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@svyatov-agent-toolkit` |
