@@ -2,14 +2,10 @@
 name: generate-dockerfile
 description: >
   Generate optimized, secure, multi-stage Dockerfiles and .dockerignore files for any project.
-  Use when the user asks to: (1) containerize a project, (2) create or generate a Dockerfile,
-  (3) improve or optimize an existing Dockerfile, (4) add Docker support to a project,
-  (5) review a Dockerfile for best practices. Also use when the user wants to make something
-  deployable, set up containers, or ship an app — even without mentioning Docker explicitly.
-  Triggers on: "Dockerfile", "dockerize", "containerize", "Docker build", "docker image",
-  ".dockerignore", "make this deployable", "container setup", "production-ready setup",
-  "ship this app".
+  Analyzes the project, generates or improves the Dockerfile, then builds and runs it to validate.
 disable-model-invocation: true
+license: MIT
+compatibility: Requires docker for validation; hadolint and trivy optional
 ---
 
 # Generate Production-Ready Dockerfile
@@ -46,7 +42,7 @@ Investigate the actual project (do not pattern-match). For each item, search the
 4. **Application type** — Examine entry points: web server (HTTP/routes/port binding), CLI (arg parsing), worker (queue consumers), static site (build output, no server).
 5. **Port** — Search for `PORT` env var usage, hardcoded ports in server init, config files. Only add EXPOSE with concrete evidence.
 6. **Build requirements** — Read manifest for build scripts, identify build tool and outputs.
-7. **System dependencies** — Search for code executing external commands (shell exec, subprocess, system calls). For each binary, verify it's needed at runtime vs. build time. **Ask user when uncertain.**
+7. **System dependencies** — Search for code executing external commands (shell exec, subprocess, system calls). For each binary, verify it's needed at runtime vs. build time. **When uncertain, ask with `AskUserQuestion` (runtime / build only / not needed).**
 8. **Environment variables** — Search for env var access patterns, `.env.example`/`.env.sample` files, config/startup code. Determine required (no default) vs. optional (has default). Set sensible defaults for required vars.
 
 ### Step 2: Generate or Improve Dockerfile

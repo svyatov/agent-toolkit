@@ -7,7 +7,7 @@ Apply these when relevant to the project. The "verify everything" principle over
 | Practice | Description |
 |----------|-------------|
 | Non-root user | Create dedicated user (UID 10001+), never run as root |
-| Pin image versions | Use specific tags like `node:20-alpine`, never `:latest` |
+| Pin image versions | Use a specific tag like `<image>:<major>-<variant>`, never `:latest` |
 | Official images | Prefer Docker Official Images or Verified Publishers |
 | No secrets in image | Never embed credentials, API keys, or passwords |
 | No sudo | Switch USER explicitly when root access is needed |
