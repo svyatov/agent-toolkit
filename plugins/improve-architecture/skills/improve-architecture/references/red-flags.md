@@ -10,7 +10,7 @@ names, comments that repeat the code, nonobvious code) belong to the
 
 | Flag | What it looks like |
 |---|---|
-| **Shallow Module** | Interface complexity ≈ implementation complexity. Trivial wrapper methods, single-line classes, anything where the interface costs more to learn than it saves. |
+| **Shallow Module** | Interface complexity ≈ implementation complexity. Trivial wrapper methods, single-line classes, anything where the interface costs more to learn than it saves. Not the by-design cases Step 1c skips: adapters, DTOs, config loaders. |
 | **Information Leakage** | The same design decision encoded in two or more modules — a file format known to both reader and writer, a parameter shape duplicated across parser and serializer. The most expensive flag on this list. |
 | **Back-door Leakage** | Knowledge shared between modules without appearing in any interface. More dangerous than the visible kind, because nothing in the signatures reveals it. |
 | **Temporal Decomposition** | Modules carved by execution order ("first read, then parse, then write") instead of by knowledge, so the same knowledge lives in several stages. |

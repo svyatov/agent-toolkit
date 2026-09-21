@@ -2,6 +2,7 @@
 name: improve-architecture
 description: "Explore a codebase to find architectural improvement opportunities with an assessment gate that stops if architecture is already healthy. Prevents god objects through cohesion checks and includes mandatory test writing for new module boundaries. Use to improve architecture, consolidate tightly-coupled modules, simplify module boundaries, deepen shallow modules, or improve testability."
 license: MIT
+compatibility: Requires Claude Code (Agent tool, AskUserQuestion, plan mode)
 disable-model-invocation: true
 ---
 
@@ -45,7 +46,7 @@ Everything below operates on the scoped area, not necessarily the whole reposito
 
 #### 1b. Map the structure
 
-Before exploring for friction, produce a structural inventory of the scoped area:
+Before exploring for friction, have an Explore subagent (Agent tool, subagent_type=Explore) produce a structural inventory of the scoped area and return only the map:
 
 - List all modules/packages in scope with approximate size (file count, rough line count)
 - Trace the dependency graph: which modules import which
