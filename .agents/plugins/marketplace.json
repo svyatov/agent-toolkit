@@ -14,7 +14,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "web"
     },
     {
       "name": "atomic-commits",
@@ -26,7 +26,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "delivery"
     },
     {
       "name": "browser-bugs",
@@ -38,7 +38,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "web"
     },
     {
       "name": "browser-qa",
@@ -50,7 +50,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "web"
     },
     {
       "name": "contribute",
@@ -62,7 +62,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "delivery"
     },
     {
       "name": "cut-release",
@@ -74,7 +74,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "delivery"
     },
     {
       "name": "dep-review",
@@ -86,7 +86,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "delivery"
     },
     {
       "name": "generate-dockerfile",
@@ -98,7 +98,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "delivery"
     },
     {
       "name": "generate-favicon",
@@ -110,7 +110,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "web"
     },
     {
       "name": "grill-me",
@@ -122,7 +122,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "code-design"
     },
     {
       "name": "humanizer",
@@ -146,7 +146,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "skill-tooling"
     },
     {
       "name": "improve-architecture",
@@ -158,7 +158,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "code-design"
     },
     {
       "name": "llms-visibility",
@@ -170,7 +170,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "web"
     },
     {
       "name": "prior-art",
@@ -182,7 +182,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "code-design"
     },
     {
       "name": "refactor",
@@ -194,7 +194,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "code-design"
     },
     {
       "name": "shortcuts",
@@ -206,7 +206,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "delivery"
     },
     {
       "name": "verify-skill",
@@ -218,7 +218,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "skill-tooling"
     },
     {
       "name": "verify-marketplace",
@@ -230,7 +230,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "productivity"
+      "category": "skill-tooling"
     }
   ]
 }

@@ -12,7 +12,7 @@
       "name": "astro",
       "source": "./plugins/astro",
       "description": "Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions.",
-      "category": "productivity",
+      "category": "web",
       "tags": [
         "astro",
         "web",
@@ -24,7 +24,7 @@
       "name": "atomic-commits",
       "source": "./plugins/atomic-commits",
       "description": "Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that.",
-      "category": "productivity",
+      "category": "delivery",
       "tags": [
         "git",
         "commit",
@@ -37,7 +37,7 @@
       "name": "browser-bugs",
       "source": "./plugins/browser-bugs",
       "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",
-      "category": "productivity",
+      "category": "web",
       "tags": [
         "browser",
         "compatibility",
@@ -50,7 +50,7 @@
       "name": "browser-qa",
       "source": "./plugins/browser-qa",
       "description": "Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off.",
-      "category": "productivity",
+      "category": "web",
       "tags": [
         "browser",
         "qa",
@@ -63,7 +63,7 @@
       "name": "contribute",
       "source": "./plugins/contribute",
       "description": "Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation.",
-      "category": "productivity",
+      "category": "delivery",
       "tags": [
         "open-source",
         "upstream",
@@ -76,7 +76,7 @@
       "name": "cut-release",
       "source": "./plugins/cut-release",
       "description": "Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release.",
-      "category": "productivity",
+      "category": "delivery",
       "tags": [
         "release",
         "changelog",
@@ -89,7 +89,7 @@
       "name": "dep-review",
       "source": "./plugins/dep-review",
       "description": "Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table.",
-      "category": "productivity",
+      "category": "delivery",
       "tags": [
         "dependabot",
         "dependencies",
@@ -102,7 +102,7 @@
       "name": "generate-dockerfile",
       "source": "./plugins/generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",
-      "category": "productivity",
+      "category": "delivery",
       "tags": [
         "docker",
         "dockerfile",
@@ -113,7 +113,7 @@
       "name": "generate-favicon",
       "source": "./plugins/generate-favicon",
       "description": "Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
-      "category": "productivity",
+      "category": "web",
       "tags": [
         "favicon",
         "icons",
@@ -125,7 +125,7 @@
       "name": "grill-me",
       "source": "./plugins/grill-me",
       "description": "Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic.",
-      "category": "productivity",
+      "category": "code-design",
       "tags": [
         "planning",
         "review",
@@ -148,7 +148,7 @@
       "name": "import-skill",
       "source": "./plugins/import-skill",
       "description": "Import skills from GitHub repos (copy or merge).",
-      "category": "productivity",
+      "category": "skill-tooling",
       "tags": [
         "skills",
         "import",
@@ -159,7 +159,7 @@
       "name": "improve-architecture",
       "source": "./plugins/improve-architecture",
       "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
-      "category": "productivity",
+      "category": "code-design",
       "tags": [
         "architecture",
         "refactoring",
@@ -170,7 +170,7 @@
       "name": "llms-visibility",
       "source": "./plugins/llms-visibility",
       "description": "Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal.",
-      "category": "productivity",
+      "category": "web",
       "tags": [
         "llms-txt",
         "seo",
@@ -183,7 +183,7 @@
       "name": "prior-art",
       "source": "./plugins/prior-art",
       "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",
-      "category": "productivity",
+      "category": "code-design",
       "tags": [
         "arxiv",
         "research",
@@ -196,7 +196,7 @@
       "name": "refactor",
       "source": "./plugins/refactor",
       "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
-      "category": "productivity",
+      "category": "code-design",
       "tags": [
         "refactoring",
         "cleanup",
@@ -207,7 +207,7 @@
       "name": "shortcuts",
       "source": "./plugins/shortcuts",
       "description": "Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps.",
-      "category": "productivity",
+      "category": "delivery",
       "tags": [
         "git",
         "commit",
@@ -220,7 +220,7 @@
       "name": "verify-skill",
       "source": "./plugins/verify-skill",
       "description": "Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",
-      "category": "productivity",
+      "category": "skill-tooling",
       "tags": [
         "skills",
         "audit",
@@ -232,7 +232,7 @@
       "name": "verify-marketplace",
       "source": "./plugins/verify-marketplace",
       "description": "Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions.",
-      "category": "productivity",
+      "category": "skill-tooling",
       "tags": [
         "marketplace",
         "plugins",

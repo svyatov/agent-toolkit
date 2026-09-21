@@ -12,6 +12,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - Add a CI workflow that runs `claude plugin validate --strict` on the catalog and every plugin.
 - Rename the marketplace from `leo-toolkit` to `svyatov-agent-toolkit` in both catalogs. Existing registrations keep working under the old name; the README documents how to switch.
 - Remove `command-creator`. Claude Code merged custom commands into skills and its docs now call `.claude/commands/` the older format, so the skill taught a superseded layout and referenced tools that no longer exist under those names. The name is mapped to `null` in `renames`.
+- Group the README skills table into five sections (Delivery, Code and design, Web, Skills and marketplace, Writing) and set each catalog entry's `category` to the matching slug (`delivery`, `code-design`, `web`, `skill-tooling`, `writing`) in both catalogs.
 
 ### All plugins
 
@@ -43,6 +44,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.0: new skill imported from [thoughtbot/dependabot-review-skill-thoughtbot](https://github.com/thoughtbot/dependabot-review-skill-thoughtbot) (MIT). Reviews one Dependabot PR by URL or audits every open one: bump type, changelog and breaking changes, codebase impact, a Merge/Verify/Investigate/Hold verdict, and an opt-in PR comment.
 - 1.0.1: pre-approve `grep`, `find`, and `Write` so codebase searches and the comment temp file do not prompt on macOS and Linux, run each audited PR in its own subagent, and ask for posting consent through `AskUserQuestion` after the idempotency check.
+
+### import-skill
+
+- 1.0.6: the catalog entry template picks `category` from the five README groups instead of defaulting to `productivity`, and the README row goes under the matching group heading.
 
 ### shortcuts
 

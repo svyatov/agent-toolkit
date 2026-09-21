@@ -164,12 +164,12 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
   "name": "{name}",
   "source": "./plugins/{name}",
   "description": "{one-line description — same as plugin.json}",
-  "category": "productivity",
+  "category": "{group}",
   "tags": ["{relevant}", "{tags}"]
 }
 ```
 
-Schema requires the `./` prefix on relative sources, so use the full path `./plugins/{name}` (marketplace does not use `pluginRoot`). Pick 3–5 discovery tags that match the skill's domain; reuse `productivity` for most skills, `writing` for editing/copy skills.
+Schema requires the `./` prefix on relative sources, so use the full path `./plugins/{name}` (marketplace does not use `pluginRoot`). Pick 3–5 discovery tags that match the skill's domain. `category` is one of the README groups: `delivery` (git, releases, dependencies, shipping), `code-design` (refactoring, architecture, planning), `web` (frontend, sites), `skill-tooling` (skills and marketplaces), `writing` (prose). Add the README table row under the matching `###` heading in `README.md`.
 
 4. **Verify JSON** (Bash call, parallel with above):
    ```bash
