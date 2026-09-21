@@ -21,6 +21,19 @@
       ]
     },
     {
+      "name": "atomic-commits",
+      "source": "./plugins/atomic-commits",
+      "description": "Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that.",
+      "category": "productivity",
+      "tags": [
+        "git",
+        "commit",
+        "pull-request",
+        "workflow",
+        "hooks"
+      ]
+    },
+    {
       "name": "browser-bugs",
       "source": "./plugins/browser-bugs",
       "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",

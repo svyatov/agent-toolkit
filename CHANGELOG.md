@@ -18,6 +18,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - Every slash-only skill (all except astro) gains `agents/openai.yaml` with `allow_implicit_invocation: false`, so Codex also waits for an explicit `$skill` call instead of triggering on a matching prompt (patch bump on each).
 - astro 1.2.1, generate-favicon, grill-me, llms-visibility: manifest description now matches the catalog and README wording.
 
+### atomic-commits
+
+- 1.0.0: new skill imported from [thoughtbot/atomic-commits-plugin](https://github.com/thoughtbot/atomic-commits-plugin) (MIT). Guides work in atomic commits (pass CI, deployable, no dead code), one type of work per commit, PRs near 200 lines, and ships the upstream PostToolUse hook that nudges after Edit/Write when the uncommitted diff reaches 80 lines or the branch diff reaches 200. The hook also counts untracked files, and the staging step drops the interactive `git add --patch`.
+
 ### browser-bugs
 
 - 1.0.6: the scope step no longer names the `Glob` tool, which is absent by default on macOS, Linux, and WSL, and the scan step now tells each subagent what to carry: the file list, its pass's patterns, and the catalog path. Dropped a time-bound "now recommends" claim from the catalog.

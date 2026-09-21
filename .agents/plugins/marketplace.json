@@ -17,6 +17,18 @@
       "category": "productivity"
     },
     {
+      "name": "atomic-commits",
+      "source": {
+        "source": "local",
+        "path": "./plugins/atomic-commits"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "productivity"
+    },
+    {
       "name": "browser-bugs",
       "source": {
         "source": "local",

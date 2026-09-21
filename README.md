@@ -59,6 +59,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | Skill | Description | Install |
 |-------|-------------|---------|
 | `astro` | Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@svyatov-agent-toolkit` |
+| `atomic-commits` | Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that | `claude plugin install atomic-commits@svyatov-agent-toolkit` |
 | `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@svyatov-agent-toolkit` |
 | `browser-qa` | Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off | `claude plugin install browser-qa@svyatov-agent-toolkit` |
 | `command-creator` | Create reusable slash commands | `claude plugin install command-creator@svyatov-agent-toolkit` |
