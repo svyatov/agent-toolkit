@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "prior-art",
   "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

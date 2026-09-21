@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "grill-me",
-  "description": "Stress-test any plan, design, or idea through relentless interviewing — domain-agnostic.",
-  "version": "1.0.4",
+  "description": "Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic.",
+  "version": "1.0.6",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

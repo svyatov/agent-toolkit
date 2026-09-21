@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "generate-favicon",
-  "description": "Generate a minimal favicon set from SVG — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
-  "version": "1.0.4",
+  "description": "Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest.",
+  "version": "1.0.6",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

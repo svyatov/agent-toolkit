@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "improve-architecture",
   "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

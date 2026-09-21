@@ -11,3 +11,8 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - Point the catalog `$schema` at SchemaStore and move `description` to the top level.
 - Add a CI workflow that runs `claude plugin validate --strict` on the catalog and every plugin.
 
+### All plugins
+
+- Add `$schema` to every `plugin.json` (patch bump on each).
+- Every slash-only skill (all except astro) gains `agents/openai.yaml` with `allow_implicit_invocation: false`, so Codex also waits for an explicit `$skill` call instead of triggering on a matching prompt (patch bump on each).
+- astro 1.2.1, generate-favicon, grill-me, llms-visibility: manifest description now matches the catalog and README wording.

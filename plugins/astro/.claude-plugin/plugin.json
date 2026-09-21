@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "astro",
-  "description": "Build with the Astro web framework (v6 and v7) — islands, content collections, actions, SSR, view transitions.",
-  "version": "1.2.0",
+  "description": "Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions.",
+  "version": "1.2.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

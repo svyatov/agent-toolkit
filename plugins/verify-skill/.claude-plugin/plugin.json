@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "verify-skill",
   "description": "Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

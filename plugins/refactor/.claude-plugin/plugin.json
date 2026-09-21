@@ -1,7 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "refactor",
   "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
