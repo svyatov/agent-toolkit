@@ -1,7 +1,10 @@
 ---
 name: generate-favicon
 description: Generate a minimal, modern favicon set from an SVG source — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest, and HTML tags. Use when the user asks to create favicons, set up site icons, add a favicon to their project, generate PWA icons, or mentions needing apple-touch-icon, manifest icons, or favicon.ico files.
+license: MIT
+compatibility: Requires ImageMagick 7+ (magick). svgo via npx is optional.
 disable-model-invocation: true
+allowed-tools: Bash(magick *) Bash(npx svgo *)
 ---
 
 # Generate Favicon
@@ -41,11 +44,11 @@ Ask the user which SVG file to use as the source icon. Verify:
 
 If the SVG is not square, warn the user before proceeding.
 
-Detect the project's static/public directory by looking for `public/`, `static/`, `src/assets/`, or fall back to the project root. Ask the user to confirm the output location. All generated files go into this directory.
+Detect the project's static/public directory by looking for `public/`, `static/`, `src/assets/`, or fall back to the project root. Confirm the output location with `AskUserQuestion`, offering the detected directory first. All generated files go into this directory.
 
 ### Step 2: Add Dark Mode to SVG
 
-Read the SVG file. If it doesn't already have a `prefers-color-scheme: dark` media query, ask the user if they want dark mode support.
+Read the SVG file. If it doesn't already have a `prefers-color-scheme: dark` media query, ask with `AskUserQuestion` whether they want dark mode support.
 
 If yes:
 1. Identify the actual fill/stroke colors used in the SVG (inspect `<path>`, `<circle>`, `<rect>`, etc.)
@@ -71,28 +74,34 @@ Save the result as `icon.svg` in the output directory.
 Run SVGO before generating PNGs — optimized SVGs produce cleaner rasterizations:
 
 ```bash
-npx svgo --multipass icon.svg
+SVG=icon.svg
+npx svgo --multipass "$SVG"
 ```
 
 ### Step 4: Generate All Image Files
 
+ImageMagick rasterizes an SVG at its viewBox size (a `viewBox="0 0 16 16"` icon becomes 16 px) and then upscales, which blurs edges. Set `-density` from the viewBox width so the render is at least 512 px, and `-background none` so the transparent background survives. Both flags must come before the input file.
+
 Run these commands in parallel:
 
 ```bash
+W=<viewBox width, from Step 1>
+DENSITY=$(( (96 * 512 + W - 1) / W ))
+
 # favicon.ico (32x32)
-magick "$SVG" -resize 32x32 favicon.ico
+magick -background none -density "$DENSITY" "$SVG" -resize 32x32 favicon.ico
 
 # apple-touch-icon.png (180x180 with 20px padding)
-magick "$SVG" -resize 140x140 -gravity center -background white -extent 180x180 apple-touch-icon.png
+magick -background none -density "$DENSITY" "$SVG" -resize 140x140 -gravity center -background white -extent 180x180 apple-touch-icon.png
 
 # icon-192.png
-magick "$SVG" -resize 192x192 icon-192.png
+magick -background none -density "$DENSITY" "$SVG" -resize 192x192 icon-192.png
 
 # icon-512.png
-magick "$SVG" -resize 512x512 icon-512.png
+magick -background none -density "$DENSITY" "$SVG" -resize 512x512 icon-512.png
 
 # icon-mask.png (409x409 content in 512x512 canvas)
-magick "$SVG" -resize 409x409 -gravity center -background white -extent 512x512 icon-mask.png
+magick -background none -density "$DENSITY" "$SVG" -resize 409x409 -gravity center -background white -extent 512x512 icon-mask.png
 ```
 
 Adjust the `-background` color for `apple-touch-icon.png` and `icon-mask.png` to match the user's brand color if they specify one.
@@ -134,7 +143,7 @@ For frameworks using raw HTML tags in `<head>`:
 <link rel="manifest" href="/manifest.webmanifest">
 ```
 
-For Next.js App Router, use the metadata API instead of raw tags — either place icons in `app/` with [convention names](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons) or export an `icons` object from `layout.tsx`.
+For Next.js App Router, use the metadata API instead of raw tags — either place icons in `app/` with [convention names](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons.md) or export an `icons` object from `layout.tsx`.
 
 ### Step 7: Verify
 
