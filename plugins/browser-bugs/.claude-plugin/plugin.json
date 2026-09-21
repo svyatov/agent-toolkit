@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "browser-bugs",
   "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

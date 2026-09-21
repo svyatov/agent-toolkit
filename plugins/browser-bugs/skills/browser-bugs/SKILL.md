@@ -22,10 +22,12 @@ Infer the scope from context when you can:
 When no trigger fits, ask with `AskUserQuestion` and offer those three scopes as
 the options rather than a free-text question.
 
-For project-wide scans, find frontend files first:
+For project-wide scans, list the frontend files first: every tracked file with
+one of these extensions, skipping `node_modules`, build output, and anything
+gitignored:
 
 ```
-Glob: **/*.{html,css,scss,less,js,jsx,ts,tsx,vue,svelte}
+html css scss less js jsx ts tsx vue svelte
 ```
 
 ## Step 2: Scan for Bug Patterns
@@ -35,7 +37,10 @@ Read `references/bug-catalog.md` for the full catalog of 50 bugs with detection 
 Scan code in four passes, checking each file against the relevant patterns. The
 passes share no data, so for a project-wide scan dispatch all four as parallel
 subagents in one message and have each return only its findings. This keeps the
-file contents out of the context that writes the report.
+file contents out of the context that writes the report. A subagent starts
+without this skill in context, so put three things in each delegation message:
+the file list from Step 1, the pass's pattern list below, and the absolute path
+of `references/bug-catalog.md` with the instruction to read it before scanning.
 
 ### Pass 1: CSS / Styling
 

@@ -467,7 +467,7 @@ if (!isMobile) {
   font-feature-settings: "liga";
 }
 ```
-Modern alternative: Google now recommends **Material Symbols** (variable font, no ligatures needed) as the successor to Material Icons.
+Alternative: **Material Symbols** (variable font, no ligatures needed) is Google's successor to Material Icons.
 
 ### #38: Draggable Span That Wraps Lines
 
