@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires an authenticated gh CLI and a checkout of the repository under review
 disable-model-invocation: true
 argument-hint: '[Dependabot PR URL or number; empty means audit every open Dependabot PR]'
-allowed-tools: Bash(gh pr:*), Bash(gh repo view:*), Bash(gh api:*), Bash(curl:*), Read, Grep, Glob
+allowed-tools: Bash(gh pr:*), Bash(gh repo view:*), Bash(gh api:*), Bash(curl:*), Bash(grep:*), Bash(find:*), Read, Write, Grep, Glob
 ---
 
 # Dependabot Dependency Upgrade Review
@@ -35,9 +35,7 @@ Before analysis, state the scope in one line: "Found N open Dependabot PRs. Anal
 
 ### Step A2: Analyze each PR
 
-For every PR returned, run the **single-PR workflow** (Steps 1-4 below) to gather bump type, changelog highlights, codebase impact, and verdict. Keep each analysis tight; you are producing per-PR sections for a combined report.
-
-Fetch independent PRs in parallel where the tool call structure allows it.
+For every PR returned, dispatch one subagent that runs the **single-PR workflow** (Steps 1-4 below) and returns the condensed per-PR section (15-25 lines). Dispatch all of them in one message so they run in parallel and their diff, changelog, and search output stays out of this context.
 
 ### Step A3: Produce the consolidated report
 
@@ -179,15 +177,15 @@ This section applies to **both** single-PR mode (Step 5) and audit mode (Step A4
 
 ### Opt-in prompt
 
-Posting is a public-facing action, so always ask before posting; never post automatically. Ask once, and keep the prompt short:
+Posting is a public-facing action, so always ask before posting; never post automatically. Run the idempotency check below first, so the prompt can name any PR that already has a review comment. Then ask once with `AskUserQuestion`, one option per answer:
 
-- **Single-PR mode:** "Want me to post this review as a comment on PR #<number>? (yes / no)"
-- **Audit mode:** "Want me to post each PR's review as a comment on its PR? (yes / no / selective)"
+- **Single-PR mode:** "Want me to post this review as a comment on PR #<number>?" with options yes / no
+- **Audit mode:** "Want me to post each PR's review as a comment on its PR?" with options yes / no / selective
   - **yes**: post to every PR analyzed
   - **no**: stop; the report in chat is the only output
   - **selective**: ask which PR numbers to post on, then post to just those
 
-If the user answers "no", stop there. If "yes" or "selective", proceed to the idempotency check and then posting.
+If the user answers "no", stop there. If "yes" or "selective", post.
 
 ### Command
 
@@ -228,7 +226,7 @@ Before posting to any PR, run:
 gh pr view <NUMBER> --repo <OWNER/REPO> --json comments --jq '.comments[].body' | grep -q 'dependabot-audit:v1'
 ```
 
-If the marker is found, a prior review comment already exists. Mention it in the confirmation prompt ("PR #9170 already has a prior review comment; re-post anyway?") so the user can choose to skip, replace (delete the old comment via `gh api --method DELETE /repos/<owner>/<repo>/issues/comments/<id>` and post new), or leave it alone. Default to skipping if the user does not specify.
+If the marker is found, a prior review comment already exists. Say so in the opt-in prompt ("PR #9170 already has a prior review comment") and offer skip, replace (delete the old comment via `gh api --method DELETE /repos/<owner>/<repo>/issues/comments/<id>` and post new), or leave it alone as options. Default to skipping if the user does not specify.
 
 ### Failure handling
 
