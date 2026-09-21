@@ -7,10 +7,11 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### Marketplace
 
 - Add a native Codex catalog at `.agents/plugins/marketplace.json` and a Codex install section in the README.
-- Add `renames` for the nine plugin names removed since the `leo` bundle was split, so old installs migrate instead of failing.
+- Add `renames` for the ten plugin names removed since the `leo` bundle was split, so old installs migrate instead of failing.
 - Point the catalog `$schema` at SchemaStore and move `description` to the top level.
 - Add a CI workflow that runs `claude plugin validate --strict` on the catalog and every plugin.
 - Rename the marketplace from `leo-toolkit` to `svyatov-agent-toolkit` in both catalogs. Existing registrations keep working under the old name; the README documents how to switch.
+- Remove `command-creator`. Claude Code merged custom commands into skills and its docs now call `.claude/commands/` the older format, so the skill taught a superseded layout and referenced tools that no longer exist under those names. The name is mapped to `null` in `renames`.
 
 ### All plugins
 

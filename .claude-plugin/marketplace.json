@@ -60,17 +60,6 @@
       ]
     },
     {
-      "name": "command-creator",
-      "source": "./plugins/command-creator",
-      "description": "Create reusable slash commands.",
-      "category": "productivity",
-      "tags": [
-        "commands",
-        "workflow",
-        "automation"
-      ]
-    },
-    {
       "name": "contribute",
       "source": "./plugins/contribute",
       "description": "Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation.",
@@ -255,6 +244,7 @@
   ],
   "renames": {
     "leo": null,
+    "command-creator": null,
     "writing-clearly-and-concisely": null,
     "commit": null,
     "generate-cicd": null,
