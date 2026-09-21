@@ -2,15 +2,17 @@
 name: verify-skill
 description: >
   Verify that a skill follows the current Agent Skills specification and
-  Anthropic authoring guidance, uses current Claude Code features, and states
-  current information. Fetches the rules from agentskills.io and
-  code.claude.com at run time instead of checking against a stored copy, so the
-  verdict tracks upstream, and compares an imported skill against the source
-  repository its sources.json names. Use when the user asks to verify, audit,
-  review, check, lint, or grade a skill or a SKILL.md, asks whether a skill is
-  up to date or still correct, asks whether an imported skill has drifted from
-  its upstream or what is new upstream worth borrowing, asks why a skill never
-  triggers, or asks to bring an old or imported skill up to current practice.
+  Anthropic authoring guidance, uses current Claude Code features, keeps its
+  invocation policy in step between Claude Code and Codex, and states current
+  information. Fetches the rules from agentskills.io, code.claude.com, and
+  developers.openai.com at run time instead of checking against a stored copy,
+  so the verdict tracks upstream, and compares an imported skill against the
+  source repository its sources.json names. Use when the user asks to verify,
+  audit, review, check, lint, or grade a skill or a SKILL.md, asks whether a
+  skill is up to date or still correct, asks whether an imported skill has
+  drifted from its upstream or what is new upstream worth borrowing, asks why a
+  skill never triggers or triggers in Codex when it should not, or asks to
+  bring an old or imported skill up to current practice.
   Also use after writing or importing a skill, before publishing one, and when
   a skill mentions a model name, a version number, or a URL that may have
   moved. Do not use to write a new skill from scratch, or to check anything
@@ -18,7 +20,8 @@ description: >
 license: MIT
 compatibility: >
   Requires curl and network access to agentskills.io, code.claude.com,
-  docs.claude.com, api.github.com, and raw.githubusercontent.com. Read-only
+  docs.claude.com, developers.openai.com, api.github.com, and
+  raw.githubusercontent.com. Read-only
   until the user approves a fix. No install and no dependencies.
 allowed-tools: Bash Read Grep Glob Edit
 disable-model-invocation: true
@@ -62,6 +65,9 @@ Read the SKILL.md, then read every file it names: `references/`, `scripts/`,
 not exist is a Blocking finding, so resolve each path even when the file
 turns out to be missing.
 
+Also read `agents/openai.yaml` in the skill directory when it exists. Step 4
+compares it with the frontmatter.
+
 Also read `sources.json` in the skill directory when it exists. Keep its
 `sources[]` for Step 6. No `sources.json`, or no source that carries
 `repository`, `path`, `branch`, and `sha` (a pasted skill has none), means axis
@@ -94,6 +100,7 @@ Then fetch by condition, again in one parallel batch:
 | That comparison points at a scripted fan-out | `https://code.claude.com/docs/en/workflows.md` |
 | A tool or command name appears in neither `skills.md` nor `tools-reference.md` | `https://code.claude.com/docs/en/changelog.md` |
 | The skill uses `CLAUDE_PLUGIN_ROOT` or a plugin-only frontmatter field | `https://code.claude.com/docs/en/plugins-reference.md` |
+| The skill also ships to Codex: it has `agents/openai.yaml`, or its plugin sits in a repo with `.agents/plugins/marketplace.json` or a `.codex-plugin/` manifest | `https://developers.openai.com/codex/skills.md`, which carries the `agents/openai.yaml` fields and the invocation policy |
 | The skill is more than a month older than today | `https://code.claude.com/docs/en/whats-new/index.md` |
 
 `changelog.md` is many times the size of the other docs. Fetch it only to settle a name that the two
@@ -193,6 +200,25 @@ before applying any of this. The list moves.
 
 - **Stale tool and command names.** Check every tool name, slash command, and
   CLI invocation the skill names against the fetched docs and changelog.
+- **Host parity, when the skill also ships to Codex.** Codex reads the same
+  SKILL.md but takes only `name` and `description` from its frontmatter; the
+  Claude Code fields `disable-model-invocation` and `allowed-tools` have no
+  effect there. Codex keeps its own switch in `agents/openai.yaml`. Take the
+  field names, the default, and the file location from the fetched Codex doc,
+  then check the two sides agree:
+
+  | SKILL.md frontmatter | `agents/openai.yaml` | Verdict |
+  |---|---|---|
+  | `disable-model-invocation: true` | `policy.allow_implicit_invocation: false` | In sync |
+  | `disable-model-invocation: true` | file missing, or the key absent or `true` | Should fix: Codex triggers the skill from any matching prompt while Claude Code waits for the slash command |
+  | field absent or `false` | `policy.allow_implicit_invocation: false` | Should fix: the other direction |
+  | field absent or `false` | file missing | In sync |
+
+  Quote the fetched sentence that defines the default for
+  `allow_implicit_invocation` in every parity finding. `allowed-tools` has no
+  Codex counterpart, so note it under Checks that passed rather than reporting
+  it. When the fix adds or edits `agents/openai.yaml`, keep the file to the
+  keys the fetched doc lists.
 
 A skill that predates a feature is not wrong for missing it, and an author may
 have chosen the simpler shape on purpose. So grade every fit at **Consider**,
