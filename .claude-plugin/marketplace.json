@@ -162,6 +162,19 @@
         "review",
         "freshness"
       ]
+    },
+    {
+      "name": "verify-marketplace",
+      "source": "./plugins/verify-marketplace",
+      "description": "Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions.",
+      "category": "productivity",
+      "tags": [
+        "marketplace",
+        "plugins",
+        "codex",
+        "audit",
+        "review"
+      ]
     }
   ]
 }

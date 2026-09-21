@@ -54,6 +54,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@leo-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
 | `verify-skill` | Verify a skill against the current spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@leo-toolkit` |
+| `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@leo-toolkit` |
 
 ## License
 
