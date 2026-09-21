@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: "ALWAYS use this skill before refactoring any code. It prevents over-refactoring and wrong refactoring by requiring an assessment first — catching code that is already clean, problems that are architectural rather than code-level, and missing test coverage that must exist before touching business logic. Trigger on: refactor, clean up, simplify, reduce complexity, code smells, messy code, break up function, reduce nesting, remove dead code, file too big, extract method, too many parameters, duplicated code, cognitive complexity, god class, magic numbers. Also trigger when a linter or static analysis tool flags complexity issues. Language-agnostic."
+description: "Refactor code at method, file, or project scope. Assesses first and stops when the code is already clean, routes architecture problems elsewhere, and gates edits on test coverage. Language-agnostic."
 license: MIT
 disable-model-invocation: true
 ---
@@ -24,10 +24,10 @@ These principles calibrate what "good enough" means and guide every step below:
 
 Read a reference only when the assessment actually turns on it:
 
-- `simplicity-vs-easy.md`: when the choice is between a familiar approach and a simpler one
-- `data-over-abstractions.md`: when custom types could be plain data structures
-- `design-is-taking-apart.md`: when a coupled system needs decomposing
-- `expensive-to-add-later.md`: when deciding whether something missing is worth adding now
+- `references/simplicity-vs-easy.md`: when the choice is between a familiar approach and a simpler one
+- `references/data-over-abstractions.md`: when custom types could be plain data structures
+- `references/design-is-taking-apart.md`: when a coupled system needs decomposing
+- `references/expensive-to-add-later.md`: when deciding whether something missing is worth adding now
 
 ## Step 1: Determine Scope
 
@@ -92,7 +92,7 @@ Read the ranked candidates through subagents, one per area, each returning findi
 
 For **method** scope, skip to Step 3.5. Planning is unnecessary for single-symbol changes, but the test gate still applies.
 
-Do not edit files while planning. If the request is too ambiguous to plan safely, ask rather than start.
+Enter plan mode (`EnterPlanMode`) before planning, so no file changes while the plan is drafted. If the request is too ambiguous to plan safely, ask rather than start.
 
 For **file** scope with 1-3 changes, a bullet list is sufficient:
 ```
@@ -137,7 +137,7 @@ For the riskiest phase: [how to undo it]
 
 **Key principle:** The target state should have **less or equal** total code. If your plan adds net lines without removing complexity, reconsider. "Better organized but more code" is not a win — it's more entropy.
 
-Present the plan. Wait for user approval before proceeding.
+Present the plan through `ExitPlanMode` and proceed only after approval.
 
 ## Step 3.5: Verify Test Coverage
 

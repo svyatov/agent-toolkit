@@ -1,7 +1,7 @@
 {
   "name": "refactor",
   "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
