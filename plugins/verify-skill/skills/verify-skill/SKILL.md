@@ -5,19 +5,21 @@ description: >
   Anthropic authoring guidance, uses current Claude Code features, and states
   current information. Fetches the rules from agentskills.io and
   code.claude.com at run time instead of checking against a stored copy, so the
-  verdict tracks upstream. Use when the user asks to verify, audit, review,
-  check, lint, or grade a skill or a SKILL.md, asks whether a skill is
-  up to date or still correct, asks why a skill never triggers, or asks to
-  bring an old or imported skill up to current practice. Also use after
-  writing or importing a skill, before publishing one, and when a skill
-  mentions a model name, a version number, or a URL that may have moved.
-  Do not use to write a new skill from scratch, or to check anything that is
-  not a skill.
+  verdict tracks upstream, and compares an imported skill against the source
+  repository its sources.json names. Use when the user asks to verify, audit,
+  review, check, lint, or grade a skill or a SKILL.md, asks whether a skill is
+  up to date or still correct, asks whether an imported skill has drifted from
+  its upstream or what is new upstream worth borrowing, asks why a skill never
+  triggers, or asks to bring an old or imported skill up to current practice.
+  Also use after writing or importing a skill, before publishing one, and when
+  a skill mentions a model name, a version number, or a URL that may have
+  moved. Do not use to write a new skill from scratch, or to check anything
+  that is not a skill.
 license: MIT
 compatibility: >
-  Requires curl and network access to agentskills.io, code.claude.com, and
-  docs.claude.com. Read-only until the user approves a fix. No install and no
-  dependencies.
+  Requires curl and network access to agentskills.io, code.claude.com,
+  docs.claude.com, api.github.com, and raw.githubusercontent.com. Read-only
+  until the user approves a fix. No install and no dependencies.
 allowed-tools: Bash Read Grep Glob Edit
 disable-model-invocation: true
 argument-hint: "[skill path or name]"
@@ -29,11 +31,12 @@ Skill-authoring guidance changes faster than any skill that copies it. So this
 skill copies none of it. Every rule applied here is fetched from the upstream
 docs on each run, and every finding quotes the fetched line it came from.
 
-Three axes:
+Four axes:
 
 - **A. Conformance** to the current spec and authoring guidance.
 - **B. Currency** of the Claude Code features the skill uses.
 - **C. Freshness** of the information the skill states.
+- **D. Upstream drift** of an imported skill against the repository it came from.
 
 ## Step 1: Resolve the target
 
@@ -58,6 +61,11 @@ Read the SKILL.md, then read every file it names: `references/`, `scripts/`,
 `assets/`, and any bundled companion. A reference the body names but that does
 not exist is a Blocking finding, so resolve each path even when the file
 turns out to be missing.
+
+Also read `sources.json` in the skill directory when it exists. Keep its
+`sources[]` for Step 6. No `sources.json`, or no source that carries
+`repository`, `path`, `branch`, and `sha` (a pasted skill has none), means axis
+D is skipped and reported as one line under Checks that passed.
 
 Record the skill's last change date. `git log -1 --format=%cs -- <path>` inside
 a repository, the file mtime otherwise. Step 2 needs it.
@@ -228,7 +236,61 @@ and quote the doc line, or drop it.
   about a tool that the fetched docs now contradict. Quote both lines in the
   finding, the skill's and the upstream one.
 
-## Step 6: Report
+## Step 6: Axis D, upstream drift
+
+Skip this step when Step 1 found no comparable source.
+
+For each source that carries `repository`, `path`, `branch`, and `sha`, one
+call, all sources in one parallel batch:
+
+```bash
+curl -sS "https://api.github.com/repos/{repository}/compare/{sha}...{branch}"
+```
+
+Read `ahead_by`, `commits[].sha`, `commits[].commit.message`,
+`files[].filename`, and `files[].status`. Keep only the files under `path`:
+`path` may be a directory, one file, or `.` for a whole-repository fork.
+`ahead_by: 0`, or no kept file, means the source is in sync. Record that under
+Checks that passed and stop.
+
+A 404 means the stored `sha` is gone from the branch, after a force-push or a
+squash. Fall back to
+`https://api.github.com/repos/{repository}/commits?path={path}&sha={branch}&per_page=30`,
+read the messages, and say in each finding that the diff could not be
+anchored. Unauthenticated calls are limited to 60 per hour. A 403 whose body
+names the rate limit is a fetch failure: report it as **Not checked** like any
+other.
+
+For each kept file, fetch the current upstream text and diff it against the
+local counterpart, in one batch:
+
+```bash
+curl -sS "https://raw.githubusercontent.com/{repository}/{branch}/{filename}" | diff -u <local file> -
+```
+
+For `type: copy` the local counterpart is the same relative path under the
+skill. For `fork` and `merge` do not diff line by line: the local copy was
+rewritten on purpose. Read the upstream commit messages and the changed hunks
+as a list of ideas, and check each idea against the local body.
+
+Keep a hunk only when one of these holds, and drop it otherwise:
+
+- It fixes an error the local copy still carries.
+- It adds a case, a rule, or a reference the local body does not cover, and
+  that fits the local skill's scope.
+- It removes something the local copy still says.
+
+A hunk that only restyles is not a finding. A hunk that touches a part the
+local copy dropped or rewrote on purpose is not a finding either: `sources.json`
+says so in `modifications` and in a per-source `note` when it did.
+
+Grade every kept hunk at **Consider**. Borrowing is the author's call. Raise it
+to **Should fix** only when the upstream commit fixes something the local copy
+still says wrong, and quote both lines. Evidence is the short upstream commit
+SHA and message plus the quoted hunk. Fix is the hunk adapted to the local
+file, or "borrow nothing, advance the sha".
+
+## Step 7: Report
 
 | Level | Meaning |
 |---|---|
@@ -246,6 +308,7 @@ Verified against docs fetched <date>:
 - https://agentskills.io/skill-creation/best-practices.md
 - https://code.claude.com/docs/en/skills.md
 - <any conditional source>
+- <repository>@<short sha> compared to <branch>@<short head sha>
 
 Blocking: N · Should fix: N · Consider: N
 <Not checked: which checks, and which fetch failed>
@@ -253,7 +316,7 @@ Blocking: N · Should fix: N · Consider: N
 ## Blocking
 
 ### <one-line summary>
-**Axis**: A conformance | B features | C freshness
+**Axis**: A conformance | B features | C freshness | D upstream
 **Location**: `path/to/SKILL.md:LINE`
 **Problem**: what is wrong
 **Evidence**: the fetched doc line, the HTTP code, the two conflicting lines
@@ -271,18 +334,25 @@ One line per check, with the number or the rule it met.
 
 Repeat the findings section per severity, and omit a severity that has no
 findings. Always keep **Checks that passed**: without it the reader cannot tell
-a check that passed from one that never ran. When nothing at all is found, that
-section plus one line is the whole report.
+a check that passed from one that never ran. Axis D always leaves a line there:
+in sync, or skipped with the reason. When nothing at all is found, that section
+plus one line is the whole report.
 
-## Step 7: Offer to apply the fixes
+## Step 8: Offer to apply the fixes
 
 Present the changes and wait for explicit confirmation. Do not apply anything
 before that, and do not apply the **Consider** findings at all unless the user
 names them. Group the offer by severity so the user can take the Blocking
 findings alone.
 
-After applying, re-run Steps 3 to 5 on the changed file, reusing the docs
-already fetched. Expect an empty report. If a fix introduced a new finding, say
+After the user has taken or declined the axis D findings, offer one more edit:
+set each compared source's `sha` in `sources.json` to the head commit from its
+compare response, and `fetched_at` to today. The next run then starts from
+there, and a declined hunk is not reported again. Offer it only for sources
+that were actually compared, and only after the user has seen the findings.
+
+After applying, re-run Steps 3 to 6 on the changed file, reusing the docs and
+the compare responses already fetched. Expect an empty report. If a fix introduced a new finding, say
 so rather than closing out.
 
 ## Notes
@@ -301,5 +371,8 @@ so rather than closing out.
   quote it.
 - **Style is not a finding.** Report what the fetched guidance calls wrong.
   A skill that reads differently from your preference is not defective.
+- **Upstream is a source of ideas, not of authority.** The local copy may have
+  dropped, renamed, or rewritten upstream text on purpose, and `sources.json`
+  says so when it did. Do not report a deliberate divergence as drift.
 - **Verifying this skill.** It has the same expiry as any other. Run it on
   itself.

@@ -154,7 +154,7 @@
     {
       "name": "verify-skill",
       "source": "./plugins/verify-skill",
-      "description": "Verify a skill against the current spec, Claude Code features, and upstream docs fetched live.",
+      "description": "Verify a skill against the current spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",
       "category": "productivity",
       "tags": [
         "skills",
