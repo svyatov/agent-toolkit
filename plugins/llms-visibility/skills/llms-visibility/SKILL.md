@@ -2,11 +2,12 @@
 name: llms-visibility
 description: 'Make websites, docs, blogs, or landing pages visible and readable to LLMs and AI agents — ChatGPT, Claude, Perplexity, Cursor, Claude Code, and other coding agents that fetch URLs. Use this for any request involving llms.txt, llms-full.txt, serving .md/Markdown versions of pages, Accept text/markdown content negotiation, Link rel="alternate" headers, Cloudflare Content-Signal in robots.txt, GEO (generative engine optimization), AI-friendly / AI-readable / LLM-discoverable sites, getting cited in ChatGPT or Perplexity answers, or fixing pages where AI tools fetch JavaScript bundles or empty React roots instead of content. Also use to push back on debunked patterns: ai.txt, AI meta tags, hidden HTML comments, AI toggle buttons, User-Agent sniffing, JSON-LD aimed at LLMs. Do NOT use for traditional Google SEO, sitemap.xml, schema.org rich snippets for search engines, WCAG/accessibility audits, or CSP/security headers.'
 disable-model-invocation: true
+license: MIT
 ---
 
 # Make a website visible to LLMs
 
-Apply the techniques below to get a site's content to LLMs and AI agents in clean Markdown over standard HTTP. Companion to <https://evilmartians.com/chronicles/how-to-make-your-website-visible-to-llms>.
+Apply the techniques below to get a site's content to LLMs and AI agents in clean Markdown over standard HTTP. Companion to <https://evilmartians.com/chronicles/how-to-make-your-website-visible-to-llms.md>.
 
 Most of these are emerging conventions, not committed standards. No major provider has formally promised to read `llms.txt` or `.md` routes. Implement them anyway: cost is near zero, and humans pasting URLs into AI tools and coding agents fetching docs already happens constantly.
 
@@ -16,7 +17,7 @@ Each step is independently shippable.
 
 ### 1. Audit `robots.txt` and add `Content-Signal:`
 
-Confirm the site isn't blocking AI crawlers (`GPTBot`, `ClaudeBot`, `PerplexityBot`). Then add Cloudflare's emerging directive (CC0):
+Confirm the site isn't blocking AI crawlers (`GPTBot`, `ClaudeBot`, `PerplexityBot`). Then add Cloudflare's directive (CC0):
 
 ```
 User-agent: *
@@ -93,7 +94,7 @@ Targets the "human pastes URL into ChatGPT" flow. Hide visually and from screen 
 
 ### 6. Implement `Accept: text/markdown` content negotiation
 
-The standards-based version of all of the above. Same URL, different representation, selected by `Accept`. Coding agents (Claude Code, Cursor) already send this header.
+The standards-based version of all of the above. Same URL, different representation, selected by `Accept`. Coding agents such as Claude Code and Cursor send this header.
 
 Four non-negotiables:
 
