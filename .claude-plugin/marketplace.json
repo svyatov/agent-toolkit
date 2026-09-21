@@ -150,6 +150,19 @@
       ]
     },
     {
+      "name": "shortcuts",
+      "source": "./plugins/shortcuts",
+      "description": "Short slash commands for the commit, push, pull request, CI, and merge loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /wm, /ci, /fa.",
+      "category": "productivity",
+      "tags": [
+        "git",
+        "commit",
+        "pull-request",
+        "ci",
+        "workflow"
+      ]
+    },
+    {
       "name": "verify-skill",
       "source": "./plugins/verify-skill",
       "description": "Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",

@@ -70,6 +70,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@svyatov-agent-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@svyatov-agent-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@svyatov-agent-toolkit` |
+| `shortcuts` | Short slash commands for the commit, push, pull request, CI, and merge loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /wm, /ci, /fa | `claude plugin install shortcuts@svyatov-agent-toolkit` |
 | `verify-skill` | Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@svyatov-agent-toolkit` |
 | `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@svyatov-agent-toolkit` |
 
