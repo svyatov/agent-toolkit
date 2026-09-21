@@ -1,13 +1,11 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "leo-toolkit",
+  "description": "Personal agent toolkit: individually installable skills for Claude Code",
   "owner": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
     "url": "https://www.svyatov.com"
-  },
-  "metadata": {
-    "description": "Personal agent toolkit: individually installable skills for Claude Code"
   },
   "plugins": [
     {
@@ -154,7 +152,7 @@
     {
       "name": "verify-skill",
       "source": "./plugins/verify-skill",
-      "description": "Verify a skill against the current spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",
+      "description": "Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",
       "category": "productivity",
       "tags": [
         "skills",
@@ -176,5 +174,16 @@
         "review"
       ]
     }
-  ]
+  ],
+  "renames": {
+    "leo": null,
+    "writing-clearly-and-concisely": null,
+    "commit": null,
+    "generate-cicd": null,
+    "good-readme": null,
+    "repo-prose": null,
+    "secure-npm-package": null,
+    "secure-ruby-gem": null,
+    "taskwarrior": null
+  }
 }

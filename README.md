@@ -1,13 +1,14 @@
 # Agent Toolkit
 
-Personal agent toolkit: individually installable skills for Claude Code.
+Personal agent toolkit: individually installable skills for Claude Code and Codex.
 
 Each skill is an **individually installable plugin**. Install only what you need for a given project.
 
 ## Structure
 
 - **`plugins/<name>/`**: a self-contained plugin. Contains `.claude-plugin/plugin.json` and `skills/<name>/SKILL.md`, plus `references/` and `sources.json` where the skill has them.
-- **`.claude-plugin/marketplace.json`**: catalog that exposes every plugin in the repo.
+- **`.claude-plugin/marketplace.json`**: Claude Code catalog that exposes every plugin in the repo.
+- **`.agents/plugins/marketplace.json`**: Codex catalog with the same plugins.
 
 ## Claude Code Plugin Installation
 
@@ -23,6 +24,14 @@ Then install any skill on its own:
 claude plugin install astro@leo-toolkit
 claude plugin install prior-art@leo-toolkit
 claude plugin install generate-favicon@leo-toolkit
+```
+
+## Codex Plugin Installation
+
+Add the marketplace, then install plugins from the Plugins Directory in the ChatGPT desktop app or Codex:
+
+```bash
+codex plugin marketplace add svyatov/agent-toolkit
 ```
 
 ## Migrating from the `leo` plugin
@@ -53,7 +62,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@leo-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@leo-toolkit` |
 | `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@leo-toolkit` |
-| `verify-skill` | Verify a skill against the current spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@leo-toolkit` |
+| `verify-skill` | Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@leo-toolkit` |
 | `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@leo-toolkit` |
 
 ## License

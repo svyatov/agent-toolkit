@@ -5,7 +5,8 @@ A Claude Code marketplace of individually installable skill-plugins.
 ## Structure
 
 - `plugins/<name>/` — a self-contained plugin. Contains `.claude-plugin/plugin.json` (the plugin manifest) and `skills/<name>/` (the skill directory with `SKILL.md`, optional `references/`, and `sources.json` for imported skills).
-- `.claude-plugin/marketplace.json` — lists every plugin with `source: "./plugins/<name>"` (explicit path from marketplace root; schema requires the `./` prefix, so `pluginRoot` cannot be used with bare names).
+- `.claude-plugin/marketplace.json` — Claude Code catalog. Lists every plugin with `source: "./plugins/<name>"` (explicit path from marketplace root). Removed plugin names go into `renames` mapped to `null`, never deleted.
+- `.agents/plugins/marketplace.json` — Codex catalog. Same plugin set and order, with the `source`/`policy`/`category` shape Codex requires. Codex reads plugin versions and descriptions from each `plugin.json`.
 - No `skills` override in `plugin.json` — Claude Code auto-discovers `plugins/<name>/skills/<name>/SKILL.md` via default discovery. The skill's invocation name comes from the `name:` in `SKILL.md` frontmatter.
 
 There is no wrapper plugin — each skill ships independently.
@@ -21,12 +22,15 @@ Note: Claude Code ≥ 2.1.116 rejects `"skills": ["./"]` with `path escapes plug
 ## Checklist — After Any Skill Change
 
 - Bump the `version` in that skill's own `plugins/<name>/.claude-plugin/plugin.json` (not any shared file — there is no shared version).
-- If a skill was added, renamed, or removed: update both the `Skills` table in `README.md` and the `plugins[]` array in `.claude-plugin/marketplace.json`.
+- Keep `description` identical in `plugin.json`, the `marketplace.json` entry, and the `README.md` table row. The entry text is what Claude Code shows; the manifest text is what Codex shows.
+- If a skill was added, renamed, or removed: update the `Skills` table in `README.md` and the `plugins[]` array in both `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`. A removed or renamed name also gets a `renames` entry in `.claude-plugin/marketplace.json`.
+- Add a line under `Unreleased` in `CHANGELOG.md`.
+- Run `claude plugin validate --strict .` and the same for the changed `plugins/<name>`; CI runs both.
 
 ## Commands
 
 - `gh search code "<query>"` — useful for finding skill origins and upstream changes
-- Add a new skill manually: create `plugins/<name>/skills/<name>/SKILL.md` + `plugins/<name>/.claude-plugin/plugin.json`, then append a `plugins[]` entry to `.claude-plugin/marketplace.json`. (`/import-skill` does all of this automatically.)
+- Add a new skill manually: create `plugins/<name>/skills/<name>/SKILL.md` + `plugins/<name>/.claude-plugin/plugin.json`, then append a `plugins[]` entry to both catalogs. (`/import-skill` does all of this except the Codex catalog entry.)
 
 ## Gotchas
 
