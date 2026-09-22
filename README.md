@@ -74,6 +74,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 
 | Skill | Description | Install |
 |-------|-------------|---------|
+| `adopt-release` | Adopt a new release of a library, runtime, or tool: read every change since the version this project is on, match each one against what the project uses, and list what must change, what to adopt, and what to watch | `claude plugin install adopt-release@svyatov-agent-toolkit`<br>`codex plugin add adopt-release@svyatov-agent-toolkit` |
 | `atomic-commits` | Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that | `claude plugin install atomic-commits@svyatov-agent-toolkit`<br>`codex plugin add atomic-commits@svyatov-agent-toolkit` |
 | `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit`<br>`codex plugin add cut-release@svyatov-agent-toolkit` |
 | `dependabot-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dependabot-review@svyatov-agent-toolkit`<br>`codex plugin add dependabot-review@svyatov-agent-toolkit` |

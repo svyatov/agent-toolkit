@@ -9,6 +9,19 @@
   },
   "plugins": [
     {
+      "name": "adopt-release",
+      "source": "./plugins/adopt-release",
+      "description": "Adopt a new release of a library, runtime, or tool: read every change since the version this project is on, match each one against what the project uses, and list what must change, what to adopt, and what to watch.",
+      "category": "delivery",
+      "tags": [
+        "upgrade",
+        "changelog",
+        "release-notes",
+        "migration",
+        "dependencies"
+      ]
+    },
+    {
       "name": "astro",
       "source": "./plugins/astro",
       "description": "Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions.",
