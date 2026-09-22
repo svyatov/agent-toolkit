@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "verify-marketplace",
   "description": "Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

@@ -1,18 +1,6 @@
 ---
 name: verify-marketplace
-description: >
-  Verify that a plugin marketplace repository is organized the way Claude Code
-  and Codex expect: the marketplace catalog, every plugin manifest, the repo
-  layout, the README install path, and the versions. Fetches the rules from
-  code.claude.com and developers.openai.com at run time instead of checking
-  against a stored copy, so the verdict tracks upstream. Use when the user asks
-  to verify, audit, review, check, lint, or grade a marketplace, a
-  marketplace.json, a plugin.json, or a repository of plugins, asks whether a
-  marketplace is set up right or follows best practice, asks whether it will
-  install in Codex, or asks why a plugin install or marketplace add fails. Also
-  use after adding, renaming, or removing a plugin, and before publishing a
-  marketplace. Do not use to verify one SKILL.md body, that is verify-skill,
-  and do not use to create a marketplace from scratch.
+description: 'Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions'
 license: MIT
 compatibility: >
   Requires curl and network access to code.claude.com and developers.openai.com.

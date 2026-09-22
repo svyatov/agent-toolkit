@@ -1,16 +1,6 @@
 ---
 name: humanizer
-description: |
-  Remove signs of AI-generated writing from prose that carries a personal voice,
-  tuned for Claude output. Use when the user asks to humanize, de-AI, clean up,
-  or improve the tone of blog posts, essays, opinion pieces, launch
-  announcements, newsletters, emails, or long-form articles that read like an LLM
-  wrote them. Also use to judge whether a given text was AI-generated. Triggers
-  on AI patterns like markdown overuse, AI vocabulary, sycophantic openers, post
-  action summaries, standalone caveat lines, unsolicited safety disclaimers,
-  vague attributions, significance inflation, em dash overuse, or manufactured
-  drama. Not for prose that lives in a repository or on a forge: commits, PRs,
-  reviews, issues, READMEs, docs, changelogs, code comments, error messages.
+description: 'Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements'
 disable-model-invocation: true
 ---
 
