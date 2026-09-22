@@ -13,6 +13,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - Rename the marketplace from `leo-toolkit` to `svyatov-agent-toolkit` in both catalogs. Existing registrations keep working under the old name; the README documents how to switch.
 - Remove `command-creator`. Claude Code merged custom commands into skills and its docs now call `.claude/commands/` the older format, so the skill taught a superseded layout and referenced tools that no longer exist under those names. The name is mapped to `null` in `renames`.
 - Group the README skills table into five sections (Delivery, Code and design, Web, Skills and marketplace, Writing) and set each catalog entry's `category` to the matching slug (`delivery`, `code-design`, `web`, `skill-tooling`, `writing`) in both catalogs.
+- Rename `dep-review` to `dependabot-review`, `contribute` to `report-upstream`, and `browser-bugs` to `browser-compat`. Each old name maps to its new name in `renames`, so Claude Code moves existing installs over.
 
 ### All plugins
 
@@ -24,30 +25,37 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.0: new skill imported from [thoughtbot/atomic-commits-plugin](https://github.com/thoughtbot/atomic-commits-plugin) (MIT). Guides work in atomic commits (pass CI, deployable, no dead code), one type of work per commit, PRs near 200 lines, and ships the upstream PostToolUse hook that nudges after Edit/Write when the uncommitted diff reaches 80 lines or the branch diff reaches 200. The hook also counts untracked files, and the staging step drops the interactive `git add --patch`.
 
-### browser-bugs
+### browser-compat
 
 - 1.0.6: the scope step no longer names the `Glob` tool, which is absent by default on macOS, Linux, and WSL, and the scan step now tells each subagent what to carry: the file list, its pass's patterns, and the catalog path. Dropped a time-bound "now recommends" claim from the catalog.
+- 2.0.0: renamed from `browser-bugs` to `browser-compat`, so the name says it reads code for compatibility pitfalls and does not read like a second `browser-qa`. Invoke it as `/browser-compat`.
 
 ### browser-qa
 
 - 1.0.0: new skill that checks a page, or the pages this branch changed, in a real browser at 375, 768, and 1280 px, reads the console and network log, and fixes only when asked.
 
-### contribute
-
-- 1.0.0: new skill that takes a dependency bug upstream: repository from package metadata, existing-report search, reproduction on the default branch, CONTRIBUTING rules, and a drafted issue or PR that waits for confirmation before submission.
-
 ### cut-release
 
 - 1.0.0: new skill that turns the Unreleased changelog section into a tagged release: semver bump, `chore/release-X.Y.Z` branch, PR, squash merge, tag, and GitHub release, publishing only through the repository's own workflow.
 
-### dep-review
+### dependabot-review
 
 - 1.0.0: new skill imported from [thoughtbot/dependabot-review-skill-thoughtbot](https://github.com/thoughtbot/dependabot-review-skill-thoughtbot) (MIT). Reviews one Dependabot PR by URL or audits every open one: bump type, changelog and breaking changes, codebase impact, a Merge/Verify/Investigate/Hold verdict, and an opt-in PR comment.
 - 1.0.1: pre-approve `grep`, `find`, and `Write` so codebase searches and the comment temp file do not prompt on macOS and Linux, run each audited PR in its own subagent, and ask for posting consent through `AskUserQuestion` after the idempotency check.
+- 2.0.0: renamed from `dep-review` to `dependabot-review`, because it reviews Dependabot PRs only, not dependency changes in general. Invoke it as `/dependabot-review`.
+
+### dependency-vetting
+
+- 1.0.0: new skill, moved here from a personal dotfiles setup. Before a package or tool is installed, added, or recommended, it follows the upstream project's own docs to the published install command, uses the registry's own signals (`npm audit signatures`, PyPI attestations, `gh attestation verify`), and stops on any mismatch between the artifact and upstream.
 
 ### import-skill
 
 - 1.0.6: the catalog entry template picks `category` from the five README groups instead of defaulting to `productivity`, and the README row goes under the matching group heading.
+
+### report-upstream
+
+- 1.0.0: new skill that takes a dependency bug upstream: repository from package metadata, existing-report search, reproduction on the default branch, CONTRIBUTING rules, and a drafted issue or PR that waits for confirmation before submission.
+- 2.0.0: renamed from `contribute` to `report-upstream`, because `contribute` read as contributing to the current repository. Invoke it as `/report-upstream`.
 
 ### shortcuts
 

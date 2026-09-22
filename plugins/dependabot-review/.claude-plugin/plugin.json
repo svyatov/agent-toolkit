@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "dependabot-review",
+  "description": "Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}

@@ -1,5 +1,5 @@
 ---
-name: contribute
+name: report-upstream
 description: 'Take a bug or gap found in a third-party dependency upstream: locate the repository, check for an existing report, reproduce, follow its contributing rules, and draft the issue or pull request for confirmation before anything is submitted'
 license: MIT
 compatibility: Requires git, an authenticated gh CLI, and network access
@@ -8,7 +8,7 @@ argument-hint: '[package or repo, and what is wrong; empty means the problem dis
 allowed-tools: Bash(gh issue list:*), Bash(gh pr list:*), Bash(npm view:*), Bash(gem specification:*), Bash(bundle info:*), Bash(pip show:*), Bash(cargo metadata:*), Bash(brew info:*)
 ---
 
-# Contribute
+# Report upstream
 
 The finding comes from this session or from $ARGUMENTS. Nothing leaves the machine until the user
 has seen the exact text and code and said yes.

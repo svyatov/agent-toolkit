@@ -75,10 +75,11 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | Skill | Description | Install |
 |-------|-------------|---------|
 | `atomic-commits` | Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that | `claude plugin install atomic-commits@svyatov-agent-toolkit`<br>`codex plugin add atomic-commits@svyatov-agent-toolkit` |
-| `contribute` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install contribute@svyatov-agent-toolkit`<br>`codex plugin add contribute@svyatov-agent-toolkit` |
 | `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit`<br>`codex plugin add cut-release@svyatov-agent-toolkit` |
-| `dep-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dep-review@svyatov-agent-toolkit`<br>`codex plugin add dep-review@svyatov-agent-toolkit` |
+| `dependabot-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dependabot-review@svyatov-agent-toolkit`<br>`codex plugin add dependabot-review@svyatov-agent-toolkit` |
+| `dependency-vetting` | Verify a package or tool is authentic before installing, adding, or recommending it: follow the upstream project to its install command, never a registry page back to a project | `claude plugin install dependency-vetting@svyatov-agent-toolkit`<br>`codex plugin add dependency-vetting@svyatov-agent-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit`<br>`codex plugin add generate-dockerfile@svyatov-agent-toolkit` |
+| `report-upstream` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install report-upstream@svyatov-agent-toolkit`<br>`codex plugin add report-upstream@svyatov-agent-toolkit` |
 | `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
 
 ### Code and design
@@ -95,7 +96,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | Skill | Description | Install |
 |-------|-------------|---------|
 | `astro` | Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@svyatov-agent-toolkit`<br>`codex plugin add astro@svyatov-agent-toolkit` |
-| `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@svyatov-agent-toolkit`<br>`codex plugin add browser-bugs@svyatov-agent-toolkit` |
+| `browser-compat` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-compat@svyatov-agent-toolkit`<br>`codex plugin add browser-compat@svyatov-agent-toolkit` |
 | `browser-qa` | Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off | `claude plugin install browser-qa@svyatov-agent-toolkit`<br>`codex plugin add browser-qa@svyatov-agent-toolkit` |
 | `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@svyatov-agent-toolkit`<br>`codex plugin add generate-favicon@svyatov-agent-toolkit` |
 | `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@svyatov-agent-toolkit`<br>`codex plugin add llms-visibility@svyatov-agent-toolkit` |
