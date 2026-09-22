@@ -1,5 +1,5 @@
 ---
-name: dep-review
+name: dependabot-review
 description: 'Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table'
 license: MIT
 compatibility: Requires an authenticated gh CLI and a checkout of the repository under review
@@ -193,7 +193,7 @@ If the user answers "no", stop there. If "yes" or "selective", post.
 gh pr comment <NUMBER> --repo <OWNER/REPO> --body-file <path-to-tempfile>
 ```
 
-Use `--body-file` rather than `--body` so newlines, backticks, and markdown tables survive the shell. Write each comment to a temp file first (e.g., `/tmp/dep-review-<pr-number>.md`), then pass the path.
+Use `--body-file` rather than `--body` so newlines, backticks, and markdown tables survive the shell. Write each comment to a temp file first (e.g., `/tmp/dependabot-review-<pr-number>.md`), then pass the path.
 
 ### Comment template
 

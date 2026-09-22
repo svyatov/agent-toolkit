@@ -29,10 +29,10 @@
       "category": "delivery"
     },
     {
-      "name": "browser-bugs",
+      "name": "browser-compat",
       "source": {
         "source": "local",
-        "path": "./plugins/browser-bugs"
+        "path": "./plugins/browser-compat"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -53,18 +53,6 @@
       "category": "web"
     },
     {
-      "name": "contribute",
-      "source": {
-        "source": "local",
-        "path": "./plugins/contribute"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "delivery"
-    },
-    {
       "name": "cut-release",
       "source": {
         "source": "local",
@@ -77,10 +65,22 @@
       "category": "delivery"
     },
     {
-      "name": "dep-review",
+      "name": "dependabot-review",
       "source": {
         "source": "local",
-        "path": "./plugins/dep-review"
+        "path": "./plugins/dependabot-review"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "delivery"
+    },
+    {
+      "name": "dependency-vetting",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dependency-vetting"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -195,6 +195,18 @@
         "authentication": "ON_INSTALL"
       },
       "category": "code-design"
+    },
+    {
+      "name": "report-upstream",
+      "source": {
+        "source": "local",
+        "path": "./plugins/report-upstream"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "delivery"
     },
     {
       "name": "shortcuts",

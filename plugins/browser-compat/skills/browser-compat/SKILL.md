@@ -1,11 +1,11 @@
 ---
-name: browser-bugs
+name: browser-compat
 description: "Audit frontend code for 50 known cross-browser bugs and mobile compatibility pitfalls documented in 'Fifty Problems with Standard Web APIs in 2025.' Scans HTML, CSS, and JavaScript/TypeScript for patterns that break on Safari iOS, Firefox iOS, Chrome, and mobile browsers — then produces a severity-ranked report with specific fixes. Use this skill when the user asks to check for browser bugs, audit cross-browser compatibility, review mobile compatibility, check Safari issues, find iOS bugs in their code, or asks why something doesn't work on mobile/Safari/Firefox. Also trigger when the user mentions viewport units breaking, audio not playing on iOS, drag-and-drop not working on mobile, fullscreen issues, or touch interaction problems."
 license: MIT
 disable-model-invocation: true
 ---
 
-# Browser Bugs Audit
+# Browser Compatibility Audit
 
 Scan a frontend codebase for 50 documented cross-browser bugs and produce a prioritized fix report. Based on [Fifty Problems with Standard Web APIs in 2025](https://zerotrickpony.com/articles/browser-bugs/).
 

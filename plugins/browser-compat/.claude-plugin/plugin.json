@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "dep-review",
-  "description": "Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table.",
-  "version": "1.0.1",
+  "name": "browser-compat",
+  "description": "Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls.",
+  "version": "2.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
