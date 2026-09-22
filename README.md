@@ -28,23 +28,37 @@ claude plugin install generate-favicon@svyatov-agent-toolkit
 
 ## Codex Plugin Installation
 
-Add the marketplace, then install plugins from the Plugins Directory in the ChatGPT desktop app or Codex:
+Add the marketplace once:
 
 ```bash
 codex plugin marketplace add svyatov/agent-toolkit
 ```
 
-## Migrating from `leo-toolkit`
-
-The marketplace was previously named `leo-toolkit`. If you added it under that name, nothing breaks: Claude Code keeps the marketplace registered under the name you added it with, so `claude plugin marketplace update leo-toolkit`, `<skill>@leo-toolkit` installs, and plugin updates keep working. To switch to the new name, re-add the marketplace and reinstall your skills:
+Then install any skill on its own:
 
 ```bash
+codex plugin add astro@svyatov-agent-toolkit
+codex plugin add prior-art@svyatov-agent-toolkit
+codex plugin add generate-favicon@svyatov-agent-toolkit
+```
+
+## Migrating from `leo-toolkit`
+
+The marketplace was previously named `leo-toolkit`. If you added it under that name, nothing breaks: both harnesses keep the marketplace registered under the name you added it with, so `claude plugin marketplace update leo-toolkit`, `codex plugin marketplace upgrade leo-toolkit`, `<skill>@leo-toolkit` installs, and plugin updates keep working. To switch to the new name, re-add the marketplace and reinstall your skills:
+
+```bash
+# Claude Code
 claude plugin marketplace remove leo-toolkit
 claude plugin marketplace add svyatov/agent-toolkit
 claude plugin install <skill>@svyatov-agent-toolkit  # repeat for each skill you had
+
+# Codex
+codex plugin marketplace remove leo-toolkit
+codex plugin marketplace add svyatov/agent-toolkit
+codex plugin add <skill>@svyatov-agent-toolkit  # repeat for each skill you had
 ```
 
-If you previously installed the bundled `leo` plugin, it no longer exists. Switch to per-skill installs:
+If you previously installed the bundled `leo` plugin in Claude Code, it no longer exists (the Codex catalog never shipped it). Switch to per-skill installs:
 
 ```bash
 claude plugin uninstall leo@leo-toolkit
@@ -60,45 +74,45 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `atomic-commits` | Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that | `claude plugin install atomic-commits@svyatov-agent-toolkit` |
-| `contribute` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install contribute@svyatov-agent-toolkit` |
-| `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit` |
-| `dep-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dep-review@svyatov-agent-toolkit` |
-| `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit` |
-| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps | `claude plugin install shortcuts@svyatov-agent-toolkit` |
+| `atomic-commits` | Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that | `claude plugin install atomic-commits@svyatov-agent-toolkit`<br>`codex plugin add atomic-commits@svyatov-agent-toolkit` |
+| `contribute` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install contribute@svyatov-agent-toolkit`<br>`codex plugin add contribute@svyatov-agent-toolkit` |
+| `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit`<br>`codex plugin add cut-release@svyatov-agent-toolkit` |
+| `dep-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dep-review@svyatov-agent-toolkit`<br>`codex plugin add dep-review@svyatov-agent-toolkit` |
+| `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit`<br>`codex plugin add generate-dockerfile@svyatov-agent-toolkit` |
+| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
 
 ### Code and design
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@svyatov-agent-toolkit` |
-| `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing | `claude plugin install improve-architecture@svyatov-agent-toolkit` |
-| `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@svyatov-agent-toolkit` |
-| `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@svyatov-agent-toolkit` |
+| `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@svyatov-agent-toolkit`<br>`codex plugin add grill-me@svyatov-agent-toolkit` |
+| `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing | `claude plugin install improve-architecture@svyatov-agent-toolkit`<br>`codex plugin add improve-architecture@svyatov-agent-toolkit` |
+| `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@svyatov-agent-toolkit`<br>`codex plugin add prior-art@svyatov-agent-toolkit` |
+| `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@svyatov-agent-toolkit`<br>`codex plugin add refactor@svyatov-agent-toolkit` |
 
 ### Web
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `astro` | Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@svyatov-agent-toolkit` |
-| `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@svyatov-agent-toolkit` |
-| `browser-qa` | Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off | `claude plugin install browser-qa@svyatov-agent-toolkit` |
-| `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@svyatov-agent-toolkit` |
-| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@svyatov-agent-toolkit` |
+| `astro` | Build with the Astro web framework (v6 and v7): islands, content collections, actions, SSR, view transitions | `claude plugin install astro@svyatov-agent-toolkit`<br>`codex plugin add astro@svyatov-agent-toolkit` |
+| `browser-bugs` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-bugs@svyatov-agent-toolkit`<br>`codex plugin add browser-bugs@svyatov-agent-toolkit` |
+| `browser-qa` | Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off | `claude plugin install browser-qa@svyatov-agent-toolkit`<br>`codex plugin add browser-qa@svyatov-agent-toolkit` |
+| `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@svyatov-agent-toolkit`<br>`codex plugin add generate-favicon@svyatov-agent-toolkit` |
+| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@svyatov-agent-toolkit`<br>`codex plugin add llms-visibility@svyatov-agent-toolkit` |
 
 ### Skills and marketplace
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@svyatov-agent-toolkit` |
-| `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@svyatov-agent-toolkit` |
-| `verify-skill` | Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@svyatov-agent-toolkit` |
+| `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@svyatov-agent-toolkit`<br>`codex plugin add import-skill@svyatov-agent-toolkit` |
+| `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@svyatov-agent-toolkit`<br>`codex plugin add verify-marketplace@svyatov-agent-toolkit` |
+| `verify-skill` | Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing | `claude plugin install verify-skill@svyatov-agent-toolkit`<br>`codex plugin add verify-skill@svyatov-agent-toolkit` |
 
 ### Writing
 
 | Skill | Description | Install |
 |-------|-------------|---------|
-| `humanizer` | Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements | `claude plugin install humanizer@svyatov-agent-toolkit` |
+| `humanizer` | Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements | `claude plugin install humanizer@svyatov-agent-toolkit`<br>`codex plugin add humanizer@svyatov-agent-toolkit` |
 
 ## License
 
