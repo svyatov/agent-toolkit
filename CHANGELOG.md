@@ -22,6 +22,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - astro 1.2.1, generate-favicon, grill-me, llms-visibility: manifest description now matches the catalog and README wording.
 - browser-compat 2.0.1, generate-favicon 1.0.7, grill-me 1.0.7, humanizer 2.1.4, improve-architecture 1.1.4, llms-visibility 1.0.6, prior-art 1.0.4, verify-marketplace 1.0.3, verify-skill 1.2.1: the `SKILL.md` description is now the one-line catalog summary. These skills are slash-only, so Claude Code keeps the description out of context and Codex never matches on it, and the trigger lists they carried did nothing.
 
+### adopt-release
+
+- 1.0.0: new skill for adopting a new release of a library, runtime, or tool. It pins the version range, maps where the project touches the tool (pin sites, config, API, workarounds), reads upstream's release notes for every version in the range, sorts each change into Must, Adopt, Watch, or Skip, proves each kept item against a `path:line`, and applies the items the user picks.
+
 ### atomic-commits
 
 - 1.0.0: new skill imported from [thoughtbot/atomic-commits-plugin](https://github.com/thoughtbot/atomic-commits-plugin) (MIT). Guides work in atomic commits (pass CI, deployable, no dead code), one type of work per commit, PRs near 200 lines, and ships the upstream PostToolUse hook that nudges after Edit/Write when the uncommitted diff reaches 80 lines or the branch diff reaches 200. The hook also counts untracked files, and the staging step drops the interactive `git add --patch`.
