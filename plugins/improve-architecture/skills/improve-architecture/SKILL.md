@@ -1,6 +1,6 @@
 ---
 name: improve-architecture
-description: "Explore a codebase to find architectural improvement opportunities with an assessment gate that stops if architecture is already healthy. Prevents god objects through cohesion checks and includes mandatory test writing for new module boundaries. Use to improve architecture, consolidate tightly-coupled modules, simplify module boundaries, deepen shallow modules, or improve testability."
+description: Find architectural improvements with assessment gate, cohesion checks, and test writing
 license: MIT
 compatibility: Requires Claude Code (Agent tool, AskUserQuestion, plan mode)
 disable-model-invocation: true

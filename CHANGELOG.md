@@ -20,6 +20,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - Add `$schema` to every `plugin.json` (patch bump on each).
 - Every slash-only skill (all except astro) gains `agents/openai.yaml` with `allow_implicit_invocation: false`, so Codex also waits for an explicit `$skill` call instead of triggering on a matching prompt (patch bump on each).
 - astro 1.2.1, generate-favicon, grill-me, llms-visibility: manifest description now matches the catalog and README wording.
+- browser-compat 2.0.1, generate-favicon 1.0.7, grill-me 1.0.7, humanizer 2.1.4, improve-architecture 1.1.4, llms-visibility 1.0.6, prior-art 1.0.4, verify-marketplace 1.0.3, verify-skill 1.2.1: the `SKILL.md` description is now the one-line catalog summary. These skills are slash-only, so Claude Code keeps the description out of context and Codex never matches on it, and the trigger lists they carried did nothing.
 
 ### atomic-commits
 

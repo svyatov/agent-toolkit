@@ -1,6 +1,6 @@
 ---
 name: generate-favicon
-description: Generate a minimal, modern favicon set from an SVG source — ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest, and HTML tags. Use when the user asks to create favicons, set up site icons, add a favicon to their project, generate PWA icons, or mentions needing apple-touch-icon, manifest icons, or favicon.ico files.
+description: 'Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest'
 license: MIT
 compatibility: Requires ImageMagick 7+ (magick). svgo via npx is optional.
 disable-model-invocation: true

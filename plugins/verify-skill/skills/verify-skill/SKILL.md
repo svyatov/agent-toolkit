@@ -1,22 +1,6 @@
 ---
 name: verify-skill
-description: >
-  Verify that a skill follows the current Agent Skills specification and
-  Anthropic authoring guidance, uses current Claude Code features, keeps its
-  invocation policy in step between Claude Code and Codex, and states current
-  information. Fetches the rules from agentskills.io, code.claude.com, and
-  developers.openai.com at run time instead of checking against a stored copy,
-  so the verdict tracks upstream, and compares an imported skill against the
-  source repository its sources.json names. Use when the user asks to verify,
-  audit, review, check, lint, or grade a skill or a SKILL.md, asks whether a
-  skill is up to date or still correct, asks whether an imported skill has
-  drifted from its upstream or what is new upstream worth borrowing, asks why a
-  skill never triggers or triggers in Codex when it should not, or asks to
-  bring an old or imported skill up to current practice.
-  Also use after writing or importing a skill, before publishing one, and when
-  a skill mentions a model name, a version number, or a URL that may have
-  moved. Do not use to write a new skill from scratch, or to check anything
-  that is not a skill.
+description: Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing
 license: MIT
 compatibility: >
   Requires curl and network access to agentskills.io, code.claude.com,

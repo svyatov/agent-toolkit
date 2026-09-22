@@ -1,16 +1,6 @@
 ---
 name: prior-art
-description: >
-  Use when the user is about to design or build a non-trivial technical mechanism
-  (a caching or consistency strategy, a consensus or coordination scheme, a ranking,
-  retrieval, or ML technique, a scheduler, or a new protocol) and the approach is
-  still open. Searches arXiv for real prior art, reads each paper in isolation, and
-  returns ONE recommended path with citations, a first step, and the failure modes
-  the papers already name. Trigger even when the user never mentions papers,
-  research, or arXiv: "has anyone solved this", "what's the state of the art",
-  "how should I architect X", "am I about to rebuild something that already exists".
-  Do not use for CRUD, glue code, SDK wiring, one-off scripts,
-  or when the user already named the algorithm or said "just do it the simple way".
+description: Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols
 license: MIT
 compatibility: >
   Requires network access to export.arxiv.org, curl, and a host that can spawn
