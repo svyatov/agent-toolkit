@@ -119,6 +119,7 @@ text first:
 - `description` is inside the length limit, and names the situations that
   should trigger it rather than restating the title. Take the voice and
   phrasing rules from the fetched text. Do not apply one you cannot quote.
+  A user-invoked skill is the exception. Step 4 covers its description.
 - Body size is inside the limit, and what sits in the body earns its place
   there instead of belonging in a reference.
 - Progressive disclosure: references are loaded at the branch that needs them,
@@ -203,6 +204,15 @@ before applying any of this. The list moves.
   Codex counterpart, so note it under Checks that passed rather than reporting
   it. When the fix adds or edits `agents/openai.yaml`, keep the file to the
   keys the fetched doc lists.
+- **Trigger text in a user-invoked skill.** This applies when no host can
+  invoke the skill on its own. On Claude Code that is
+  `disable-model-invocation: true`. On Codex, when the skill ships there, it is
+  `allow_implicit_invocation: false`. Find the
+  fetched `skills.md` row on what `disable-model-invocation` does to the
+  description in context. When the row says the description is not in context,
+  trigger phrases, "Use when" clauses, and exclusions in it do no work. Grade
+  it **Consider** and quote that row. The fix is a one-line summary of what
+  the command does, for the person who reads it in the `/` menu.
 
 A skill that predates a feature is not wrong for missing it, and an author may
 have chosen the simpler shape on purpose. So grade every fit at **Consider**,

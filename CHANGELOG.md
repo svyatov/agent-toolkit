@@ -66,3 +66,4 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### verify-skill
 
 - 1.2.0: new host-parity check compares `disable-model-invocation` in the frontmatter with `allow_implicit_invocation` in `agents/openai.yaml`, fetching the rule from developers.openai.com. Catalog and README wording now match the manifest.
+- 1.3.0: new check for trigger text in the description of a user-invoked skill. The fetched `skills.md` says Claude Code keeps that description out of context, so the check grades it Consider and proposes a one-line summary. The Step 3 description check no longer asks such a skill for trigger situations.
