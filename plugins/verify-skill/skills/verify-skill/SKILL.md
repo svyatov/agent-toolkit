@@ -31,9 +31,11 @@ Four axes:
 |---|---|
 | A path to a SKILL.md or to a skill directory | That skill |
 | A skill or plugin name | Find it, then verify it |
-| "all skills in \<dir\>" or "all my skills" | Every SKILL.md below that root, one subagent and one report each, dispatched in one message |
+| "all skills in \<dir\>" or "all my skills" | Every SKILL.md below that root, one subagent and one report each, dispatched in one message. Claude Code runs up to 20 subagents at once (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`): with more skills than that, dispatch 20 and start the next one each time one finishes |
 | Pasted skill content, no file | Verify the text, skip the file-layout checks |
 | No target given | Ask which skill, with `AskUserQuestion` |
+
+For a fan-out, run Step 2's three fetches once yourself into a fresh `mktemp -d` directory. Give each subagent that directory and the URL behind each file in it, and have it run Steps 1 and 3 to 7, fetching into the same directory only the conditional docs its skill needs. Step 8 stays with you.
 
 To find a skill by name, Glob these roots in order and stop at the first hit:
 
@@ -82,6 +84,7 @@ Then fetch by condition, again in one parallel batch:
 | The skill names a Claude Code tool, or spells out a procedure that one named tool now performs | `https://code.claude.com/docs/en/tools-reference.md` |
 | The skill scans many files, sweeps an unknown number of items, or has phases that could run at once | `https://code.claude.com/docs/en/agents.md`, which compares subagents, agent teams, and dynamic workflows in 9 KB |
 | That comparison points at a scripted fan-out | `https://code.claude.com/docs/en/workflows.md` |
+| The skill names a `claude` CLI flag or subcommand, or a Claude Code environment variable | `https://code.claude.com/docs/en/cli-reference.md`, and `https://code.claude.com/docs/en/env-vars.md` for a variable |
 | A tool or command name appears in neither `skills.md` nor `tools-reference.md` | `https://code.claude.com/docs/en/changelog.md` |
 | The skill uses `CLAUDE_PLUGIN_ROOT` or a plugin-only frontmatter field | `https://code.claude.com/docs/en/plugins-reference.md` |
 | The skill also ships to Codex: it has `agents/openai.yaml`, or its plugin sits in a repo with `.agents/plugins/marketplace.json` or a `.codex-plugin/` manifest | `https://developers.openai.com/codex/skills.md`, which carries the `agents/openai.yaml` fields and the invocation policy |

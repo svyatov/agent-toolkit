@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "verify-skill",
-  "description": "Verify a skill against the current Agent Skills spec, Claude Code features, and upstream docs fetched live, and its own upstream repository for changes worth borrowing.",
-  "version": "1.4.0",
+  "name": "debrief-skill",
+  "description": "Debrief a skill's recent runs from the session transcripts, find the errors, retries, corrections, and dead ends the skill caused, and propose the edits that make the next run smooth.",
+  "version": "1.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

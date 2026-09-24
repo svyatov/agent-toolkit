@@ -77,6 +77,18 @@
       "category": "delivery"
     },
     {
+      "name": "debrief-skill",
+      "source": {
+        "source": "local",
+        "path": "./plugins/debrief-skill"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "skill-tooling"
+    },
+    {
       "name": "dependabot-review",
       "source": {
         "source": "local",
