@@ -14,7 +14,10 @@ means all of them, at every severity.
 2. Fix root causes, not the symptom each finding names. Grep every caller before editing a shared
    function: one guard where the callers converge beats a guard in each of them.
 3. Do not expand scope. A finding is a fix, not an invitation to refactor around it.
-4. Run whatever check the repository already has for the code you touched.
+4. For every repository you edited, this one or another, read its `AGENTS.md`, `CLAUDE.md` and
+   `CONTRIBUTING.md`. Run the checks they name, and make the other edits they require of a change (a
+   version bump, a changelog entry). Done when each edited repository has its checks run, or is
+   named in the report as having none after you read those files.
 5. Report one line per finding: fixed, or skipped and why. Say plainly when a finding was wrong.
 
 Do not commit. That is what /c, /cp, /cb and friends are for.
