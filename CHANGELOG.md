@@ -42,6 +42,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### cut-release
 
+- 1.1.0: a repository that a release bot (release-please, changesets) releases now goes through the bot's open release PR: watch its checks, squash-merge it, and watch the publish. The publish watch finds the run by workflow file, and stops at a job waiting on environment approval to report the run URL.
 - 1.0.0: new skill that turns the Unreleased changelog section into a tagged release: semver bump, `chore/release-X.Y.Z` branch, PR, squash merge, tag, and GitHub release, publishing only through the repository's own workflow.
 
 ### debrief-skill

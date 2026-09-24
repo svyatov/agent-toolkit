@@ -14,6 +14,12 @@ Branch and status: !`git status --short --branch`
 Last tags: !`git tag --sort=-v:refname | head -5`
 Release workflows: !`ls .github/workflows 2>/dev/null || true`
 
+A release bot in those workflows (release-please, changesets) owns the bump, the changelog, the tag,
+and the release. Its open PR is the release: list PRs with
+`gh pr list --json number,title,headRefName,url` and take the one whose head starts
+`release-please--` or `changeset-release/`. Run only Steps 5.2, 5.3, 6.3, and 7 on it. The invocation is
+the go-ahead to merge. With no open bot PR, nothing is releasable yet: say so and stop.
+
 Take everything under the Unreleased heading (`## Unreleased` or `## [Unreleased]`) in
 CHANGELOG.md to a tagged release. Version override: $ARGUMENTS.
 
@@ -71,9 +77,11 @@ Commit as `chore(release): X.Y.Z` following the `oss-writing` skill. Never hard-
 2. `gh release create vX.Y.Z --title "vX.Y.Z" --notes-file` with exactly the new changelog section.
    Skip this when a workflow in `.github/workflows` creates the release from the tag itself; say so.
 3. A workflow that publishes on tag or on release (trusted publishing, `gh release upload`): find
-   its run with `gh run list --limit 1 --json databaseId --jq '.[0].databaseId'`, then
-   `gh run watch <id> --exit-status` and report the outcome. No such workflow: report the publish
-   command the project documents and do not run it.
+   its run with `gh run list --workflow <file> --limit 1 --json databaseId --jq '.[0].databaseId'`,
+   then `gh run watch <id> --exit-status` and report the outcome. A job behind an environment with
+   a required reviewer parks the run at status `waiting`, where `gh run watch` blocks: poll
+   `gh run view <id> --json status` and, at `waiting`, report the run URL as awaiting approval.
+   No such workflow: report the publish command the project documents and do not run it.
 
 ## Step 7: Report
 
