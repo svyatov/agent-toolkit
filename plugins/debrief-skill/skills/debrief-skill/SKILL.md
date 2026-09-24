@@ -26,7 +26,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs runs [--session ID] [--days N] [
 
 | Arguments | Runs |
 |---|---|
-| Empty | The newest skill run in this session: `--session ${CLAUDE_SESSION_ID}`, first line |
+| Empty | The newest run the user invoked in this session: `--session ${CLAUDE_SESSION_ID}`. A skill that another run loaded through a Skill call belongs to that run: skip its line and take the run that loaded it |
 | A skill name | Its runs in this session. None there: its runs in every project over the last 30 days |
 | A skill name and a number | Its runs over that many days |
 | `self` | The runs of `debrief-skill`, found as a skill name, minus the first output line: that line is this run, still in progress. Apply the "None there" fallback after you remove that line |
@@ -76,7 +76,7 @@ Each line is `L<n> <KIND> <text>`, where `n` is the transcript line:
 | `SUB` | A subagent the run dispatched: its label, its transcript, and its counts |
 | `sub` | With `--subs`: an error, denial, or interrupt inside that subagent, with line numbers in its own transcript |
 
-The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next command or skill invocation, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. To see a line in full, Read the transcript at that line; for a `sub` line, the transcript on its `SUB` line.
+The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next command the user types, and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. To see a line in full, Read the transcript at that line; for a `sub` line, the transcript on its `SUB` line.
 
 Look for friction of these kinds:
 
