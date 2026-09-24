@@ -52,6 +52,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.0.2: `/debrief-skill` with no argument takes the newest run the user invoked, and a skill that another run loaded counts as part of that run. The skill now says a slice ends only at the next command the user types, which is what the script does.
 - 1.0.3: a skill that loads straight from its source, a user skill or a symlink into a checkout, gets `(loads from source)` in the report header instead of a version, and the run checks `git status` there, because uncommitted edits in the source are what ran.
 - 1.0.4: `/debrief-skill all in this session` reads every skill in the current session, and a skill that another run loaded is debriefed as its own skill, with the loading run's subagent told to attribute friction only to its own text. The combined `all` report renumbers findings and Watch items across skills, so every code is unique, and keeps each report's header and Smooth lines.
+- 1.0.5: a run reads a transcript line in full with `limit: 1`, one line per call, since one line can hold a whole tool result and a Read over a range of them passes the Read token limit.
 
 ### dependabot-review
 
