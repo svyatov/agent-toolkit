@@ -1,13 +1,14 @@
 {
+  "enabledPlugins": {
+    "import-skill@svyatov-agent-toolkit": true
+  },
   "extraKnownMarketplaces": {
     "svyatov-agent-toolkit": {
       "source": {
         "source": "directory",
         "path": "."
-      }
+      },
+      "autoUpdate": true
     }
-  },
-  "enabledPlugins": {
-    "import-skill@svyatov-agent-toolkit": true
   }
 }
