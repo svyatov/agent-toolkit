@@ -45,7 +45,7 @@ The directory from Step 1 is where the skill loaded from, and that is not always
 - `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/...` or `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/...` is an installed copy that the next update overwrites. Look `<marketplace>` up in `~/.claude/plugins/known_marketplaces.json`, or under `[marketplaces.<marketplace>]` in `~/.codex/config.toml`. A `directory` or `local` source is the local checkout: the same relative path under it is the source. A `github` or `git` source needs its local clone: it is the current repository when `git remote get-url origin` names the same repository, and otherwise ask the user for the path once.
 - A marketplace or skill the user does not maintain has no local source. Its findings become an upstream report.
 
-The `<version>` in a cache path is the version that ran, and `version` in the source plugin's `.claude-plugin/plugin.json` is the current one. When the source has moved past it, a friction the current text already fixes is not a finding.
+The `<version>` in a cache path is the version that ran, and `version` in the source plugin's `.claude-plugin/plugin.json` is the current one. When the source has moved past it, a friction the current text already fixes is not a finding. A skill that loads straight from its source (a user skill, or a symlink into a checkout) has no version: write `(loads from source)` in the header, and check `git status` there, since uncommitted edits in the source are what ran.
 
 Done when every skill has a source path, or is marked upstream.
 
