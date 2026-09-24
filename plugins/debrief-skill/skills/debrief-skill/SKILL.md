@@ -30,7 +30,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs runs [--session ID] [--days N] [
 | A skill name | Its runs in this session. None there: its runs in every project over the last 30 days |
 | A skill name and a number | Its runs over that many days |
 | `self` | The runs of `debrief-skill`, found as a skill name, minus the first output line: that line is this run, still in progress. Apply the "None there" fallback after you remove that line |
-| `all`, optionally a number | Every skill that ran over that many days (default 30). Keep the skills whose source the user maintains (Step 2) and name the rest in the header as skipped |
+| `all`, optionally a number or "in this session" | Every skill that ran over that many days (default 30), or with "in this session", every skill in `--session ${CLAUDE_SESSION_ID}`. A skill another run loaded is a skill of its own here: debrief it separately, and tell the loading run's subagent to attribute friction only to its own skill's text. Keep the skills whose source the user maintains (Step 2) and name the rest in the header as skipped |
 
 Take the five newest runs of each skill, and write in the header how many runs existed and how many you read.
 
@@ -145,7 +145,7 @@ Blocking: N · Should fix: N · Consider: N · Watch: N
 
 Number findings F1, F2, and so on across all levels, and omit a level that has none. **Smooth** lists every run with no finding, or reads `- None`: without it the reader cannot tell a clean run from one that was never read.
 
-For `all`, dispatch one subagent per skill in one message. Claude Code runs up to 20 subagents at once (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`): with more skills than that, dispatch 20 and start the next one each time one finishes. Give each the path of this file, the skill name, its source path, and its run references, and have it run Steps 3 to 5 and return the report. Then print one table first (skill, runs read, Blocking, Should fix, Consider, Watch) and the per-skill reports below it, skills with the most severe findings first.
+For `all`, dispatch one subagent per skill in one message. Claude Code runs up to 20 subagents at once (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`): with more skills than that, dispatch 20 and start the next one each time one finishes. Give each the path of this file, the skill name, its source path, and its run references, and have it run Steps 3 to 5 and return the report. Then print one table first (skill, runs read, Blocking, Should fix, Consider, Watch) and the per-skill reports below it, skills with the most severe findings first. Each subagent numbers from F1 and W1: renumber findings and Watch items across the whole printout, in print order, so every code is unique for Step 6, and keep each report's header and Smooth lines.
 
 ## Step 6: Apply
 

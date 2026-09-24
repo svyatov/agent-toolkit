@@ -50,6 +50,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.0.1: `compatibility` now asks for Node.js 18.17, the first 18.x release where `readdirSync` reads Codex session folders recursively. `allowed-tools` drops `Edit`, which pre-approved edits in the read-only turn, and `Grep` and `Glob`, which Claude Code leaves out by default on macOS and Linux. The arguments table header no longer contains `$ARGUMENTS`, which Claude Code replaced with the typed arguments. `self` now falls back to the last 30 days when the current run is the only one in the session.
 - 1.0.2: `/debrief-skill` with no argument takes the newest run the user invoked, and a skill that another run loaded counts as part of that run. The skill now says a slice ends only at the next command the user types, which is what the script does.
 - 1.0.3: a skill that loads straight from its source, a user skill or a symlink into a checkout, gets `(loads from source)` in the report header instead of a version, and the run checks `git status` there, because uncommitted edits in the source are what ran.
+- 1.0.4: `/debrief-skill all in this session` reads every skill in the current session, and a skill that another run loaded is debriefed as its own skill, with the loading run's subagent told to attribute friction only to its own text. The combined `all` report renumbers findings and Watch items across skills, so every code is unique, and keeps each report's header and Smooth lines.
 
 ### dependabot-review
 
