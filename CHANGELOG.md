@@ -29,6 +29,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### atomic-commits
 
 - 1.0.0: new skill imported from [thoughtbot/atomic-commits-plugin](https://github.com/thoughtbot/atomic-commits-plugin) (MIT). Guides work in atomic commits (pass CI, deployable, no dead code), one type of work per commit, PRs near 200 lines, and ships the upstream PostToolUse hook that nudges after Edit/Write when the uncommitted diff reaches 80 lines or the branch diff reaches 200. The hook also counts untracked files, and the staging step drops the interactive `git add --patch`.
+- 1.0.1: the hook command quotes `${CLAUDE_PLUGIN_ROOT}`, so a plugin path with a space no longer splits the command. `claude plugin validate --strict` fails on the unquoted form.
 
 ### browser-compat
 

@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "atomic-commits",
   "description": "Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
