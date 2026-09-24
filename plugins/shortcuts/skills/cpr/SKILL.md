@@ -10,12 +10,13 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git c
 
 Branch and status: !`git status --short --branch`
 Changed files: !`git diff HEAD --stat || true`
+Branch commits: !`git log --oneline origin/HEAD..HEAD || true`
 Recent subjects: !`git log --oneline -10 || true`
 
 Commit everything above, push, and open a pull request. Never commit onto the default branch.
 
-1. Read the full diff (`git diff HEAD`) and every untracked file `git status` lists before writing
-   anything.
+1. Read the full diff (`git diff HEAD`), every untracked file `git status` lists, and, when
+   `Branch commits` lists any, their diff (`git diff origin/HEAD...HEAD`) before writing anything.
 2. Scan it for credentials, tokens, private keys, and any value that does not belong in this
    repository. If you find one, stop, commit nothing, and report what you found.
 3. If the current branch is the repository's default branch, create and switch to a new one first:
@@ -26,9 +27,11 @@ Commit everything above, push, and open a pull request. Never commit onto the de
    `git log`. Follow the `oss-writing` skill for the wording. $ARGUMENTS is a hint at what the change
    is about, not the message itself.
 6. Commit, then `git push -u origin HEAD`.
-7. `gh pr create` with the commit subject as the title and a body covering what changed and why. Use
-   the repository's pull request template when it has one. If a PR for this branch already exists,
-   skip creation and say so.
+7. `gh pr create`. A squash merge makes the title the one commit on the default branch, so the
+   title and body cover the whole branch: your commit's subject when it is the branch's only
+   commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's
+   pull request template when it has one. If a PR for this branch already exists, skip creation
+   and say so.
 8. Report the PR URL.
 
 Split into several commits when the diff covers unrelated changes.
