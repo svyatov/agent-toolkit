@@ -185,6 +185,18 @@
       "category": "code-design"
     },
     {
+      "name": "jury",
+      "source": {
+        "source": "local",
+        "path": "./plugins/jury"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "code-design"
+    },
+    {
       "name": "llms-visibility",
       "source": {
         "source": "local",
