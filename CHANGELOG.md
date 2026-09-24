@@ -47,6 +47,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### debrief-skill
 
 - 1.0.0: new skill for debriefing a skill's runs from the Claude Code and Codex session transcripts. A bundled Node.js script lists the runs and prints each one as a timeline of user messages, tool calls, errors, denials, interrupts, and oversized results, with one summary line per subagent and its friction lines on request. The skill reads that timeline for friction, traces each item to a skill line, and proposes edits to the skill's source, not to the installed copy. `/debrief-skill` checks the newest run in this session; `/debrief-skill <name>` and `/debrief-skill all` read the runs of the last 30 days, and `/debrief-skill self` debriefs the previous debrief.
+- 1.0.1: `compatibility` now asks for Node.js 18.17, the first 18.x release where `readdirSync` reads Codex session folders recursively. `allowed-tools` drops `Edit`, which pre-approved edits in the read-only turn, and `Grep` and `Glob`, which Claude Code leaves out by default on macOS and Linux. The arguments table header no longer contains `$ARGUMENTS`, which Claude Code replaced with the typed arguments. `self` now falls back to the last 30 days when the current run is the only one in the session.
 
 ### dependabot-review
 

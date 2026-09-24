@@ -2,15 +2,12 @@
 name: debrief-skill
 description: Debrief a skill's recent runs from the session transcripts, find the errors, retries, corrections, and dead ends the skill caused, and propose the edits that make the next run smooth
 license: MIT
-compatibility: Requires Node.js 18 or later (built-in modules only) to read Claude Code and Codex session transcripts. Read-only until the user approves a fix.
+compatibility: Requires Node.js 18.17 or later (built-in modules only) to read Claude Code and Codex session transcripts. Read-only until the user approves a fix.
 disable-model-invocation: true
 argument-hint: "[skill name | self | all] [days]"
 allowed-tools:
   - Bash(node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs *)
   - Read
-  - Grep
-  - Glob
-  - Edit
 ---
 
 # Debrief Skill
@@ -27,12 +24,12 @@ List runs with the bundled script, which reads Claude Code sessions in `~/.claud
 node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs runs [--session ID] [--days N] [skill]
 ```
 
-| $ARGUMENTS | Runs |
+| Arguments | Runs |
 |---|---|
 | Empty | The newest skill run in this session: `--session ${CLAUDE_SESSION_ID}`, first line |
 | A skill name | Its runs in this session. None there: its runs in every project over the last 30 days |
 | A skill name and a number | Its runs over that many days |
-| `self` | The runs of `debrief-skill`, found as a skill name, minus the first output line: that line is this run, still in progress |
+| `self` | The runs of `debrief-skill`, found as a skill name, minus the first output line: that line is this run, still in progress. Apply the "None there" fallback after you remove that line |
 | `all`, optionally a number | Every skill that ran over that many days (default 30). Keep the skills whose source the user maintains (Step 2) and name the rest in the header as skipped |
 
 Take the five newest runs of each skill, and write in the header how many runs existed and how many you read.
