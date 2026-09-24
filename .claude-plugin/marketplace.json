@@ -190,6 +190,18 @@
       ]
     },
     {
+      "name": "jury",
+      "source": "./plugins/jury",
+      "description": "Put a question or decision to a jury of 3 or 5 subagents: blind independent votes, one anonymized review round, and one committed verdict with the vote, the dissent, and the first action.",
+      "category": "code-design",
+      "tags": [
+        "decision-making",
+        "subagents",
+        "review",
+        "planning"
+      ]
+    },
+    {
       "name": "llms-visibility",
       "source": "./plugins/llms-visibility",
       "description": "Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal.",

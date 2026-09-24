@@ -67,6 +67,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.6: the catalog entry template picks `category` from the five README groups instead of defaulting to `productivity`, and the README row goes under the matching group heading.
 
+### jury
+
+- 1.0.0: new skill that puts a question or decision to a jury of 3 or 5 subagents. Jurors vote blind with distinct lenses that steer where they look but not how they vote, fresh reviewers critique the anonymized positions in shuffled order for one round, the foreman checks the disputed facts, and a vote change counts only when it names its reason. One seat runs on the Codex CLI when it is installed. The verdict always commits and carries the vote, the dissent, the riskiest assumption with a test, and the first action.
+
 ### report-upstream
 
 - 1.0.0: new skill that takes a dependency bug upstream: repository from package metadata, existing-report search, reproduction on the default branch, CONTRIBUTING rules, and a drafted issue or PR that waits for confirmation before submission.
