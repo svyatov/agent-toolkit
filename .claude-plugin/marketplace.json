@@ -86,6 +86,17 @@
       ]
     },
     {
+      "name": "debrief-skill",
+      "source": "./plugins/debrief-skill",
+      "description": "Debrief a skill's recent runs from the session transcripts, find the errors, retries, corrections, and dead ends the skill caused, and propose the edits that make the next run smooth.",
+      "category": "skill-tooling",
+      "tags": [
+        "skills",
+        "transcripts",
+        "debugging"
+      ]
+    },
+    {
       "name": "dependabot-review",
       "source": "./plugins/dependabot-review",
       "description": "Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table.",

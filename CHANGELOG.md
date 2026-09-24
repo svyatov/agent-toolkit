@@ -29,6 +29,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### atomic-commits
 
 - 1.0.0: new skill imported from [thoughtbot/atomic-commits-plugin](https://github.com/thoughtbot/atomic-commits-plugin) (MIT). Guides work in atomic commits (pass CI, deployable, no dead code), one type of work per commit, PRs near 200 lines, and ships the upstream PostToolUse hook that nudges after Edit/Write when the uncommitted diff reaches 80 lines or the branch diff reaches 200. The hook also counts untracked files, and the staging step drops the interactive `git add --patch`.
+- 1.0.1: the hook command quotes `${CLAUDE_PLUGIN_ROOT}`, so a plugin path with a space no longer splits the command. `claude plugin validate --strict` fails on the unquoted form.
 
 ### browser-compat
 
@@ -42,6 +43,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### cut-release
 
 - 1.0.0: new skill that turns the Unreleased changelog section into a tagged release: semver bump, `chore/release-X.Y.Z` branch, PR, squash merge, tag, and GitHub release, publishing only through the repository's own workflow.
+
+### debrief-skill
+
+- 1.0.0: new skill for debriefing a skill's runs from the Claude Code and Codex session transcripts. A bundled Node.js script lists the runs and prints each one as a timeline of user messages, tool calls, errors, denials, interrupts, and oversized results, with one summary line per subagent and its friction lines on request. The skill reads that timeline for friction, traces each item to a skill line, and proposes edits to the skill's source, not to the installed copy. `/debrief-skill` checks the newest run in this session; `/debrief-skill <name>` and `/debrief-skill all` read the runs of the last 30 days, and `/debrief-skill self` debriefs the previous debrief.
 
 ### dependabot-review
 
@@ -71,3 +76,4 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.2.0: new host-parity check compares `disable-model-invocation` in the frontmatter with `allow_implicit_invocation` in `agents/openai.yaml`, fetching the rule from developers.openai.com. Catalog and README wording now match the manifest.
 - 1.3.0: new check for trigger text in the description of a user-invoked skill. The fetched `skills.md` says Claude Code keeps that description out of context, so the check grades it Consider and proposes a one-line summary. The Step 3 description check no longer asks such a skill for trigger situations.
+- 1.4.0: a fan-out over many skills dispatches at most 20 subagents at once, the limit Claude Code enforces, and starts the next as one finishes. It fetches the three core docs once into a fresh `mktemp -d` directory that every subagent reads, where runs used to improvise a shared directory and collide with a previous run's files. A new fetch row covers `claude` CLI flags and environment variables through `cli-reference.md` and `env-vars.md`, so a run no longer falls back to the changelog for them. `/debrief-skill` found all three in five recent runs.
