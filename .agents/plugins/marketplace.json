@@ -185,6 +185,18 @@
       "category": "code-design"
     },
     {
+      "name": "improve-tests",
+      "source": {
+        "source": "local",
+        "path": "./plugins/improve-tests"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "code-design"
+    },
+    {
       "name": "jury",
       "source": {
         "source": "local",

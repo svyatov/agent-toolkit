@@ -16,8 +16,9 @@ no recommendation, skip it as waiting on that choice.
 2. Fix root causes, not the symptom each finding names. Grep every caller before editing a shared
    function: one guard where the callers converge beats a guard in each of them.
 3. Do not expand scope. A finding is a fix, not an invitation to refactor around it. When the finding
-   proposes a fix, apply that fix. If it cannot work, skip the finding and say why instead of choosing
-   another.
+   proposes a fix, apply that fix, together with any change it cannot work without, and name that
+   change on the finding's report line. If it cannot work even so, skip the finding and say why
+   instead of choosing another.
 4. For every repository you edited, this one or another, read its `AGENTS.md`, `CLAUDE.md` and
    `CONTRIBUTING.md`. Run the checks they name, and make the other edits they require of a change (a
    version bump, a changelog entry). Done when each edited repository has its checks run, or is

@@ -54,6 +54,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.0.4: `/debrief-skill all in this session` reads every skill in the current session, and a skill that another run loaded is debriefed as its own skill, with the loading run's subagent told to attribute friction only to its own text. The combined `all` report renumbers findings and Watch items across skills, so every code is unique, and keeps each report's header and Smooth lines.
 - 1.0.5: a run reads a transcript line in full with `limit: 1`, one line per call, since one line can hold a whole tool result and a Read over a range of them passes the Read token limit.
 - 1.0.6: the bundled script gains `lines FILE LINE... [--max N]`, which prints several transcript lines in full in one call: each line's text, tool input, and tool result, capped at 4,000 characters each. The skill points there instead of one Read per line, so a subagent no longer writes its own reader.
+- 1.0.7: a finding whose fix belongs in a file the skill follows, such as the repository's `AGENTS.md` or `CLAUDE.md`, cites that file's line and gets a code like any other, so the apply step can offer it by code.
 
 ### dependabot-review
 
@@ -69,6 +70,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.6: the catalog entry template picks `category` from the five README groups instead of defaulting to `productivity`, and the README row goes under the matching group heading.
 
+### improve-tests
+
+- 1.0.0: new skill that cuts a test suite to the tests that catch real bugs and its run time to the minimum. It takes a timed baseline, maps each test file's claims, names the break each claim catches, and moves each one: delete, demote to the cheapest level, merge, rewrite, or fix the flake. Where code hands work to a library (PDF, email, images, HTTP), the tests move to the data we hand it plus one adapter smoke test. Speed levers (factory cascades, per-test setup, hashing cost, sleeps, isolation, parallelism) count only when the profile shows the time they recover. Every deletion names where its claim stays covered, and every batch is re-timed against the baseline.
+
 ### jury
 
 - 1.0.0: new skill that puts a question or decision to a jury of 3 or 5 subagents. Jurors vote blind with distinct lenses that steer where they look but not how they vote, fresh reviewers critique the anonymized positions in shuffled order for one round, the foreman checks the disputed facts, and a vote change counts only when it names its reason. One seat runs on the Codex CLI when it is installed. The verdict always commits and carries the vote, the dissent, the riskiest assumption with a test, and the first action.
@@ -80,6 +85,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.1.5: `/fa` applies a proposed fix together with any change the fix cannot work without, and names that change on the finding's report line, instead of choosing between skipping the finding and guessing.
 - 1.1.4: `/cprw` runs in the worktree that holds the session's work when the preamble's directory does not, and removes a clean worktree before `--delete-branch`. `/fa` applies the recommended option of a finding left as a choice, applies the fix a finding proposes rather than its own, and reports one line per finding.
 - 1.1.3: `/cp` on the default branch reads the branch's rulesets first. When they require a pull request, it stops before committing and names `/cprw`, so no commit is left stranded on a local `main` that cannot be pushed.
 - 1.1.2: `/cpr` and `/cprw` read every commit already on the branch, and title the pull request for the whole branch, since the squash merge makes that title the one commit on the default branch.

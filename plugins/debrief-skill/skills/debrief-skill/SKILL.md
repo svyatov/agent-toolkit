@@ -106,7 +106,7 @@ Give each friction item one cause:
 
 A **Skill** item is a finding from one run. A **Wording** or **Environment** item is a finding when it happens in two runs or more, and a Watch item when it happens in one. **Agent** and **User** items are not reported.
 
-Every finding cites the transcript line where the friction shows and the skill line that caused it, or where the missing text belongs. A finding without both citations is dropped. When the `writing-for-agents` skill is available, load it before drafting fixes to skill text.
+Every finding cites the transcript line where the friction shows and the skill line that caused it, or where the missing text belongs. A finding without both citations is dropped. When the fix belongs in a file the skill follows rather than in the skill, such as the repository's `AGENTS.md` or `CLAUDE.md`, the finding cites that file's line instead, and it gets a code like any other. When the `writing-for-agents` skill is available, load it before drafting fixes to skill text.
 
 Done when every friction item has a cause and each finding has both citations and a drafted fix.
 

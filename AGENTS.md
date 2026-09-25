@@ -21,7 +21,7 @@ Note: Claude Code ≥ 2.1.116 rejects `"skills": ["./"]` with `path escapes plug
 
 ## Checklist — After Any Skill Change
 
-- Bump the `version` in that skill's own `plugins/<name>/.claude-plugin/plugin.json` (not any shared file — there is no shared version).
+- Bump the `version` in that skill's own `plugins/<name>/.claude-plugin/plugin.json` (not any shared file — there is no shared version). A plugin that is not on the default branch yet keeps the version it was created with.
 - Keep `description` identical in `plugin.json`, the `marketplace.json` entry, and the `README.md` table row. The entry text is what Claude Code shows; the manifest text is what Codex shows.
 - Keep invocation policy in step across hosts: a skill with `disable-model-invocation: true` in `SKILL.md` also has `skills/<name>/agents/openai.yaml` with `policy.allow_implicit_invocation: false`. Codex ignores `disable-model-invocation` and `allowed-tools`. `/verify-skill` checks this.
 - A slash-only skill's `SKILL.md` description is its one-line catalog summary, without trigger lists. Claude Code keeps it out of context and Codex does not match on it, so it only has to tell a person what the command does. `/verify-skill` checks this.
