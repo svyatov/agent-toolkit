@@ -73,6 +73,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### improve-tests
 
 - 1.0.0: new skill that cuts a test suite to the tests that catch real bugs and its run time to the minimum. It takes a timed baseline, maps each test file's claims, names the break each claim catches, and moves each one: delete, demote to the cheapest level, merge, rewrite, or fix the flake. Where code hands work to a library (PDF, email, images, HTTP), the tests move to the data we hand it plus one adapter smoke test. Speed levers (factory cascades, per-test setup, hashing cost, sleeps, isolation, parallelism) count only when the profile shows the time they recover. Every deletion names where its claim stays covered, and every batch is re-timed against the baseline.
+- 1.0.1: timing happens on a quiet machine with the load average recorded and no other suite running, and the final report times the base commit and the branch back to back, because numbers taken under different loads do not compare. The speed levers gain a way to time a suspect without a profiler (a one-line runner override, or a prepended timer), a warning that a backtrace-sampling thread over-reports IO, a lever for side effects that fixture setup fires (callbacks, event subscribers, broadcasts), and a default fake at the rendering library's entry point for tests that render only as setup.
 
 ### jury
 
