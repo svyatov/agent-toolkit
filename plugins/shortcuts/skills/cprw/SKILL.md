@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires git and an authenticated gh CLI
 disable-model-invocation: true
 argument-hint: [message hint]
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git branch:*), Bash(git switch:*), Bash(git symbolic-ref:*), Bash(git push:*), Bash(gh pr:*), Bash(gh run:*)
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git branch:*), Bash(git switch:*), Bash(git symbolic-ref:*), Bash(git push:*), Bash(gh pr:*), Bash(gh run:*), Bash(git worktree:*)
 ---
 
 Branch and status: !`git status --short --branch`
@@ -14,7 +14,9 @@ Branch commits: !`git log --oneline origin/HEAD..HEAD || true`
 Recent subjects: !`git log --oneline -10 || true`
 
 Commit everything above, push, open a pull request, and merge it once CI is green. Never commit onto
-the default branch.
+the default branch. The lines above describe the session's working directory. When this session's
+work sits in another worktree (`git worktree list`), run every step there with `git -C <path>` and
+leave the changes above untouched.
 
 1. Read the full diff (`git diff HEAD`), every untracked file `git status` lists, and, when
    `Branch commits` lists any, their diff (`git diff origin/HEAD...HEAD`) before writing anything.
@@ -34,6 +36,8 @@ the default branch.
    pull request template when it has one.
 8. `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
    read the result rather than treating it as a crash.
-9. Green: `gh pr merge --squash --delete-branch`. Red: stop, name the failing check and the reason,
-   and merge nothing. Do not retry, do not fix, do not merge past a failure.
+9. Green: `gh pr merge --squash --delete-branch`. When the branch is checked out in a worktree,
+   `--delete-branch` cannot delete it: first confirm `git -C <worktree> status --short` is empty,
+   then `git worktree remove <worktree>` and merge from the main checkout. Red: stop, name the
+   failing check and the reason, and merge nothing. Do not retry, do not fix, do not merge past a failure.
 10. Report the PR URL and whether it merged.

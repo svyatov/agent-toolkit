@@ -53,6 +53,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.0.3: a skill that loads straight from its source, a user skill or a symlink into a checkout, gets `(loads from source)` in the report header instead of a version, and the run checks `git status` there, because uncommitted edits in the source are what ran.
 - 1.0.4: `/debrief-skill all in this session` reads every skill in the current session, and a skill that another run loaded is debriefed as its own skill, with the loading run's subagent told to attribute friction only to its own text. The combined `all` report renumbers findings and Watch items across skills, so every code is unique, and keeps each report's header and Smooth lines.
 - 1.0.5: a run reads a transcript line in full with `limit: 1`, one line per call, since one line can hold a whole tool result and a Read over a range of them passes the Read token limit.
+- 1.0.6: the bundled script gains `lines FILE LINE... [--max N]`, which prints several transcript lines in full in one call: each line's text, tool input, and tool result, capped at 4,000 characters each. The skill points there instead of one Read per line, so a subagent no longer writes its own reader.
 
 ### dependabot-review
 
@@ -79,6 +80,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.1.4: `/cprw` runs in the worktree that holds the session's work when the preamble's directory does not, and removes a clean worktree before `--delete-branch`. `/fa` applies the recommended option of a finding left as a choice, applies the fix a finding proposes rather than its own, and reports one line per finding.
 - 1.1.3: `/cp` on the default branch reads the branch's rulesets first. When they require a pull request, it stops before committing and names `/cprw`, so no commit is left stranded on a local `main` that cannot be pushed.
 - 1.1.2: `/cpr` and `/cprw` read every commit already on the branch, and title the pull request for the whole branch, since the squash merge makes that title the one commit on the default branch.
 - 1.1.1: `/fa` reads `AGENTS.md`, `CLAUDE.md` and `CONTRIBUTING.md` in every repository it edited, this one or another, and runs their checks and required edits (a version bump, a changelog entry), so a fix in a sibling repository no longer ships unreleased.

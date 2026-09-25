@@ -76,7 +76,7 @@ Each line is `L<n> <KIND> <text>`, where `n` is the transcript line:
 | `SUB` | A subagent the run dispatched: its label, its transcript, and its counts |
 | `sub` | With `--subs`: an error, denial, or interrupt inside that subagent, with line numbers in its own transcript |
 
-The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next command the user types, and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. To see a line in full, Read the transcript at that line with `limit: 1`, one line per call; for a `sub` line, the transcript on its `SUB` line. One transcript line can hold a whole tool result, so a Read over a range of them passes the Read token limit.
+The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next command the user types, and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. To see lines in full, run `node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs lines <transcript> <n>...` (for a `sub` line, the transcript on its `SUB` line): it prints each line's text, tool input, and tool result, each capped at 4,000 characters. Pass `--max N` to change the cap.
 
 Look for friction of these kinds:
 

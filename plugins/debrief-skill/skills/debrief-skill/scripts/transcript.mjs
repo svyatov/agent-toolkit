@@ -9,6 +9,9 @@
 //     last message before it, then every human message, tool call, error,
 //     denial, interrupt, and oversized result, and one summary line per
 //     subagent it dispatched. --subs adds each subagent's own friction lines.
+//   transcript.mjs lines FILE LINE... [--max N]
+//     Each LINE in full: its text, tool input, and tool result blocks, each cut
+//     at N characters (default 4000).
 import { closeSync, existsSync, openSync, readdirSync, readFileSync, readSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
@@ -232,10 +235,25 @@ function show(ref, subs) {
   console.log(`${Object.entries(counts).map(([k, v]) => `${k}=${v}`).join(" ")} sub_errors=${subTotal.errors} sub_denied=${subTotal.denied}`);
 }
 
+function lines(file, nums, max) {
+  const all = entries(file);
+  for (const n of nums) {
+    const e = all[n - 1]?.[1] ?? {};
+    const c = e.message?.content;
+    const blocks = typeof c === "string" ? [c] : parts(e).map((p) =>
+      p?.type === "tool_use" ? JSON.stringify(p.input) : p?.type === "tool_result" ? resultText(p) : p?.text ?? "");
+    console.log(`=== L${n}\n${blocks.map((b) => b.slice(0, max)).join("\n")}`);
+  }
+}
+
 const [mode, ...args] = process.argv.slice(2);
 if (mode === "runs") runs(args);
 else if (mode === "show" && args[0]) show(args[0], args.includes("--subs"));
-else {
-  console.error("usage: transcript.mjs runs [--session ID] [--days N] [SKILL] | show FILE:LINE [--subs]");
+else if (mode === "lines" && args[0]) {
+  const i = args.indexOf("--max");
+  const max = i >= 0 ? Number(args.splice(i, 2)[1]) : 4000;
+  lines(args[0], args.slice(1).map(Number), max);
+} else {
+  console.error("usage: transcript.mjs runs [--session ID] [--days N] [SKILL] | show FILE:LINE [--subs] | lines FILE LINE... [--max N]");
   process.exit(1);
 }
