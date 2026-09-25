@@ -190,6 +190,18 @@
       ]
     },
     {
+      "name": "improve-tests",
+      "source": "./plugins/improve-tests",
+      "description": "Cut a test suite to the tests that catch real bugs and its run time to the minimum: measure first, delete or demote low-value tests, fix slow setup, and prove every cut keeps the checks that matter.",
+      "category": "code-design",
+      "tags": [
+        "testing",
+        "performance",
+        "test-suite",
+        "audit"
+      ]
+    },
+    {
       "name": "jury",
       "source": "./plugins/jury",
       "description": "Put a question or decision to a jury of 3 or 5 subagents: blind independent votes, one anonymized review round, and one committed verdict with the vote, the dissent, and the first action.",
