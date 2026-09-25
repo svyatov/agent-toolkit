@@ -83,6 +83,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.0: new skill that takes a dependency bug upstream: repository from package metadata, existing-report search, reproduction on the default branch, CONTRIBUTING rules, and a drafted issue or PR that waits for confirmation before submission.
 - 2.0.0: renamed from `contribute` to `report-upstream`, because `contribute` read as contributing to the current repository. Invoke it as `/report-upstream`.
+- 2.0.1: for Homebrew, take the repository from the formula's `urls.stable.url` or `urls.head.url`. The `homepage` can be a product website.
 
 ### shortcuts
 

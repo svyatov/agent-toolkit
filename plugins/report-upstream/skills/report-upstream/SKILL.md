@@ -24,7 +24,7 @@ Take the repository URL from the package's own metadata, never from a search res
 | PyPI | `pip show <name>` or the `project.urls` in its metadata |
 | Cargo | `cargo metadata` `repository` field |
 | Go | the module path itself |
-| Homebrew | `brew info --json <name>` `homepage` |
+| Homebrew | `brew info --json=v2 <name>`: the repository in `urls.stable.url` or `urls.head.url`, else `homepage` |
 
 No metadata, or the URL is not the project's canonical repository: stop and ask.
 
