@@ -6,6 +6,8 @@ Timing commands for Step 1 and the levers that recover time for Step 3. Flags ch
 
 Split the run into phases before judging tests: boot (framework load, transpile), import (loading test files and what they import), setup (fixtures, factories, `before` blocks), and test bodies. A run dominated by boot or import gains little from deleting tests. A run dominated by setup gains most from levers 1 and 2.
 
+Without a profiler, time a suspect directly. Load a one-line override with the runner (`rspec -r ./tmp/quiet.rb` holding `Rails.logger.level = :fatal`) and run the same slice both ways, or prepend a module that times one method and prints the sum at exit. A sampler thread reading another thread's backtrace sees only calls that release the GVL (IO, database), so it over-reports them.
+
 | Runner | Slowest tests | Phases |
 |---|---|---|
 | RSpec | `rspec --profile 20` | test-prof: `TEST_STACK_PROF=boot rspec <one spec>` for boot, `RD_PROF=1` for `let`/`before` time against the example body, `TAG_PROF=type` for time per spec type |
@@ -30,7 +32,7 @@ Ordered by how often each is the top finding. The payoffs are the ones the sourc
 | 3 | **Password hashing cost** | `*crypt*` near the top of a sampled profile | Minimum cost in the test env. Rails `has_secure_password` already does it; Devise needs `config.stretches = Rails.env.test? ? 1 : 12`; check any other library by hand. | None. |
 | 4 | **Background jobs run inline** | `EVENT_PROF=sidekiq.inline` | Fake mode by default; inline only the tests that need job side effects. | Tests that relied on the side effects need the tag. |
 | 5 | **Browser, system, or e2e tests over logic** | Time by test type; system files top the slow list | Demote (Step 3). The Rails guide reserves system tests for critical user paths. | UI wiring loses cover: keep one happy path per critical flow. |
-| 6 | **Heavy rendering** | Renderer frames in the profile; tests calling PDF, image, spreadsheet, or chart libraries | **Rendered Output Test** (Step 3). | None while the adapter smoke test stays. |
+| 6 | **Heavy rendering** | Renderer frames in the profile; tests calling PDF, image, spreadsheet, or chart libraries | **Rendered Output Test** (Step 3) where the claim is the data. Where tests render only as setup, fake the library's own entry point by default in the test helper and tag the real smokes in, so our adapter and every hook on it still run. | None while the adapter smokes stay tagged real. |
 | 7 | **Real network** | Socket frames in the profile; tests slow or failing offline | The project's HTTP stubbing library with real connections blocked (WebMock `disable_net_connect!(allow_localhost: true)`), or a fake adapter. | API drift: keep one contract or recorded test per API. |
 | 8 | **Sleeps and real timers** | Slow tests with near-zero CPU; `sleep`, `setTimeout`, `waitForTimeout` in tests | Poll for the condition. Fake time: `vi.useFakeTimers`, `jest.useFakeTimers`, Bun `setSystemTime`, Go `testing/synctest`, Rails `travel_to` and `freeze_time`. | Fake timers can hide ordering bugs. |
 | 9 | **JS environment and isolation cost** | Large import, environment, or worker phase | `environment: 'node'` for tests that touch no DOM; happy-dom where a DOM is needed and jsdom is not required. Vitest `isolate: false` or `pool: 'threads'` (validate with shuffled files, which `vitest doctor` does); Bun `--parallel --no-isolate`. Vitest docs put jsdom at about 200-500 ms per file under isolation. | State leaks between files. |
@@ -39,6 +41,7 @@ Ordered by how often each is the top finding. The payoffs are the ones the sourc
 | 12 | **Boot** | `TEST_STACK_PROF=boot`, time of a one-test run | Bootsnap; `eager_load` on only in CI, as the Rails template sets it. | Without eager load, load errors show only in CI. |
 | 13 | **Database cleanup** | Truncation or deletion strategy for every test | Transactional tests; truncation only where another process reads the data (browser tests). | Code that manages its own transactions needs truncation. |
 | 14 | **Logging and coverage on every run** | Log writes or coverage instrumentation in the profile | Test logger at `:fatal` or to null; coverage behind an env var. | None. |
+| 15 | **Side effects of setup** | Count the calls to callbacks, event subscribers, and broadcasts during a run | Mute the subscriber only inside the seeding helper; the code under test still fires it. | An example that used setup's side effect as its arrange: make that step explicit. |
 
 ## Tiers and CI
 

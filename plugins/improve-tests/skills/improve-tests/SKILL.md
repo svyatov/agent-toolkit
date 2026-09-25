@@ -119,14 +119,14 @@ Per batch:
 1. Write replacement tests first (demotions and rewrites) and run them: they pass. Where a replacement needs a seam that is missing, extract the part that builds the data out of the code that calls the library, so the library call becomes a thin adapter with no decisions in it.
 2. Apply the edits and deletions.
 3. Run the full suite: green. Where the runner supports it, run it in random order too: shared setup and turned-off isolation can hide order dependence.
-4. Time it against the baseline. Revert a lever that saves nothing measurable.
+4. Time it against the baseline on a quiet machine: record the load average, and run no other suite meanwhile (subagents running tests count). Revert a lever that saves nothing measurable.
 5. Commit the batch on its own.
 
 When a batch goes red, revert it and diagnose from the reverted state, then retry a smaller batch.
 
 ### Step 8: Verify and report
 
-1. Run each suite with the baseline command and timing.
+1. Run each suite with the baseline command and timing, back to back with the base commit under the same load. Numbers taken under different loads do not compare.
 2. If coverage was recorded in Step 1, compare the changed areas. A line that lost its only test either belongs to library behavior or trivial code (say which), or its test comes back.
 3. Report:
    - per suite: wall time, test count, and file count, before and after
