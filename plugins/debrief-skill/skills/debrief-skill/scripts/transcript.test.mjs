@@ -136,6 +136,14 @@ test("show --subs adds each subagent's friction lines", () => {
   assert.match(out, /^ {2}sub L4 DENY Bash/m);
 });
 
+test("lines prints each line's text, tool input, and tool result in full, up to the cap", () => {
+  const out = run("lines", file, "4", "5", "8");
+  assert.match(out, /^=== L4\n\{"command":"cat missing.txt"\}$/m);
+  assert.match(out, /^=== L5\nExit code 1\ncat: missing.txt: No such file$/m);
+  assert.match(out, /^=== L8\nno, write it under docs\/$/m);
+  assert.match(run("lines", file, "5", "--max", "4"), /^=== L5\nExit$/m);
+});
+
 test("runs lists Codex $skill runs and skips subagent copies", () => {
   assert.equal(run("runs", "wayfinder"), `${NOW}\twayfinder\t${codexFile}:4\t/agents/skills/wayfinder\n`);
   assert.equal(run("runs", "--session", "c1").trim().split("\n").length, 2);
