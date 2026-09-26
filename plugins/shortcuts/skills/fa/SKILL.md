@@ -9,8 +9,9 @@ argument-hint: [which findings, e.g. 2-4 or S1 C1]
 Apply the findings from the most recent review, audit, verification, lint run, test run, or other
 check reported earlier in this session, whatever produced it. $ARGUMENTS narrows which ones; empty
 means all of them, at every severity. A finding the report left as a choice for the user: apply the
-option $ARGUMENTS names, else the one the report recommended, worded exactly as it was offered. With
-no recommendation, skip it as waiting on that choice.
+option $ARGUMENTS names, else the one the report recommended in so many words ("I recommend X"),
+worded exactly as it was offered. An option listed first or labelled "proposed" is not a
+recommendation. With none named, skip the finding as waiting on that choice.
 
 1. No such report in this session: say so and stop. Do not go looking for problems to invent.
 2. Fix root causes, not the symptom each finding names. Grep every caller before editing a shared
