@@ -266,7 +266,7 @@
     {
       "name": "shortcuts",
       "source": "./plugins/shortcuts",
-      "description": "Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps.",
+      "description": "Short slash commands for the git, pull request, CI, docs, and dependency loop, and for a question the agent asked: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps, /ww.",
       "category": "delivery",
       "tags": [
         "git",

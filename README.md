@@ -81,7 +81,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `dependency-vetting` | Verify a package or tool is authentic before installing, adding, or recommending it: follow the upstream project to its install command, never a registry page back to a project | `claude plugin install dependency-vetting@svyatov-agent-toolkit`<br>`codex plugin add dependency-vetting@svyatov-agent-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit`<br>`codex plugin add generate-dockerfile@svyatov-agent-toolkit` |
 | `report-upstream` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install report-upstream@svyatov-agent-toolkit`<br>`codex plugin add report-upstream@svyatov-agent-toolkit` |
-| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
+| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop, and for a question the agent asked: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps, /ww | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
 
 ### Code and design
 
