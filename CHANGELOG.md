@@ -87,6 +87,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.1.6: `/fa` counts an option as recommended only when the report says so in words. An option listed first or labelled "proposed" leaves the finding waiting on the user's choice.
 - 1.1.5: `/fa` applies a proposed fix together with any change the fix cannot work without, and names that change on the finding's report line, instead of choosing between skipping the finding and guessing.
 - 1.1.4: `/cprw` runs in the worktree that holds the session's work when the preamble's directory does not, and removes a clean worktree before `--delete-branch`. `/fa` applies the recommended option of a finding left as a choice, applies the fix a finding proposes rather than its own, and reports one line per finding.
 - 1.1.3: `/cp` on the default branch reads the branch's rulesets first. When they require a pull request, it stops before committing and names `/cprw`, so no commit is left stranded on a local `main` that cannot be pushed.
