@@ -88,6 +88,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.0: `/ww` ("what would you suggest?") answers the question the agent just asked: it explains the problem in plain words, weighs each option for and against, recommends one, and for a close, costly-to-reverse choice hands over a ready-to-run `/jury` line.
 - 1.1.6: `/fa` counts an option as recommended only when the report says so in words. An option listed first or labelled "proposed" leaves the finding waiting on the user's choice.
 - 1.1.5: `/fa` applies a proposed fix together with any change the fix cannot work without, and names that change on the finding's report line, instead of choosing between skipping the finding and guessing.
 - 1.1.4: `/cprw` runs in the worktree that holds the session's work when the preamble's directory does not, and removes a clean worktree before `--delete-branch`. `/fa` applies the recommended option of a finding left as a choice, applies the fix a finding proposes rather than its own, and reports one line per finding.
