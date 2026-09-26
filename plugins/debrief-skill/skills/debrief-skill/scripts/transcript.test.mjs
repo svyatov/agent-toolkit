@@ -130,18 +130,41 @@ test("show prints friction until the next command, one summary line per subagent
   assert.match(out, /calls=4 errors=1 denied=1 stops=1 you=1 sub_errors=1 sub_denied=1$/m);
 });
 
+test("show runs past a built-in command and ends at the next skill", () => {
+  const f = join(root, "projects", "-tmp-proj", "s2.jsonl");
+  writeFileSync(f, jsonl([
+    user("<command-name>/demo</command-name>"), // 1
+    user([{ type: "text", text: "Base directory for this skill: /skills/demo" }], true), // 2
+    user("<command-name>/reload-plugins</command-name>"), // 3
+    assistant(call("t1", "Bash", { command: "false" })), // 4
+    user([result("t1", "Exit code 1", true)]), // 5
+    user("<command-name>/other</command-name>"), // 6
+    user([{ type: "text", text: "Base directory for this skill: /skills/other" }], true), // 7
+  ]));
+  const out = run("show", `${f}:1`);
+  assert.match(out, /^L5 ERR Bash/m);
+  assert.doesNotMatch(out, /^L6/m);
+});
+
+test("show ends at the given line of a START-END range", () => {
+  const out = run("show", `${file}:2-7`);
+  assert.match(out, /^L7 DENY Write/m);
+  assert.doesNotMatch(out, /^L8/m);
+  assert.match(out, /calls=2 errors=1 denied=1 stops=0 you=0/m);
+});
+
 test("show --subs adds each subagent's friction lines", () => {
   const out = run("show", `${file}:2`, "--subs");
   assert.match(out, /^ {2}sub L2 ERR Grep grep: bad regex/m);
   assert.match(out, /^ {2}sub L4 DENY Bash/m);
 });
 
-test("lines prints each line's text, tool input, and tool result in full, up to the cap", () => {
+test("lines prints each line's timestamp, text, tool input, and tool result in full, up to the cap", () => {
   const out = run("lines", file, "4", "5", "8");
-  assert.match(out, /^=== L4\n\{"command":"cat missing.txt"\}$/m);
-  assert.match(out, /^=== L5\nExit code 1\ncat: missing.txt: No such file$/m);
-  assert.match(out, /^=== L8\nno, write it under docs\/$/m);
-  assert.match(run("lines", file, "5", "--max", "4"), /^=== L5\nExit$/m);
+  assert.match(out, new RegExp(`^=== L4 ${NOW}\\n\\{"command":"cat missing.txt"\\}$`, "m"));
+  assert.match(out, /^=== L5 \S+\nExit code 1\ncat: missing.txt: No such file$/m);
+  assert.match(out, /^=== L8 \S+\nno, write it under docs\/$/m);
+  assert.match(run("lines", file, "5", "--max", "4"), /^=== L5 \S+\nExit$/m);
 });
 
 test("runs lists Codex $skill runs and skips subagent copies", () => {

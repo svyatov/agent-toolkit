@@ -4,13 +4,13 @@
 //   transcript.mjs runs [--session ID] [--days N] [SKILL]
 //     One line per skill run, newest first: timestamp, skill, file:line, skill directory.
 //     Runs of debrief-skill itself are listed only when SKILL names it.
-//   transcript.mjs show FILE:LINE [--subs]
-//     The run that starts at LINE, up to the next skill invocation: the model's
+//   transcript.mjs show FILE:LINE[-END] [--subs]
+//     The run that starts at LINE, up to the next skill invocation or END: the model's
 //     last message before it, then every human message, tool call, error,
 //     denial, interrupt, and oversized result, and one summary line per
 //     subagent it dispatched. --subs adds each subagent's own friction lines.
 //   transcript.mjs lines FILE LINE... [--max N]
-//     Each LINE in full: its text, tool input, and tool result blocks, each cut
+//     Each LINE in full: its timestamp, text, tool input, and tool result blocks, each cut
 //     at N characters (default 4000).
 import { closeSync, existsSync, openSync, readdirSync, readFileSync, readSync, statSync } from "node:fs";
 import { homedir } from "node:os";
@@ -193,13 +193,13 @@ function timeline(list, prefix = "", { level = "all", onAgent } = {}) {
 }
 
 function show(ref, subs) {
-  const [, file, start] = ref.match(/^(.*):(\d+)$/);
+  const [, file, start, last] = ref.match(/^(.*):(\d+)(?:-(\d+))?$/);
   const all = entries(file);
   const said = ([, e]) => e.type === "assistant" && parts(e).some((p) => p?.type === "text");
   const prev = all.slice(0, Number(start) - 1).findLast(said);
   if (prev) console.log(`L${prev[0]} PREV ${squeeze(parts(prev[1]).map((p) => p?.text ?? "").join(" "), 240)}`);
-  let list = all.slice(Number(start) - 1);
-  const stop = list.slice(1).findIndex(([, e]) => command(e));
+  let list = all.slice(Number(start) - 1, last ? Number(last) : undefined);
+  const stop = list.slice(1).findIndex(([, e], i) => command(e) && loadedDir(list.slice(i + 2, i + 22)));
   const end = stop >= 0 ? list[stop + 1][1].timestamp : "9";
   if (stop >= 0) list = list.slice(0, stop + 1);
   const subDir = join(file.replace(/\.jsonl$/, ""), "subagents");
@@ -242,7 +242,7 @@ function lines(file, nums, max) {
     const c = e.message?.content;
     const blocks = typeof c === "string" ? [c] : parts(e).map((p) =>
       p?.type === "tool_use" ? JSON.stringify(p.input) : p?.type === "tool_result" ? resultText(p) : p?.text ?? "");
-    console.log(`=== L${n}\n${blocks.map((b) => b.slice(0, max)).join("\n")}`);
+    console.log(`=== L${n} ${e.timestamp ?? ""}\n${blocks.map((b) => b.slice(0, max)).join("\n")}`);
   }
 }
 
@@ -254,6 +254,6 @@ else if (mode === "lines" && args[0]) {
   const max = i >= 0 ? Number(args.splice(i, 2)[1]) : 4000;
   lines(args[0], args.slice(1).map(Number), max);
 } else {
-  console.error("usage: transcript.mjs runs [--session ID] [--days N] [SKILL] | show FILE:LINE [--subs] | lines FILE LINE... [--max N]");
+  console.error("usage: transcript.mjs runs [--session ID] [--days N] [SKILL] | show FILE:LINE[-END] [--subs] | lines FILE LINE... [--max N]");
   process.exit(1);
 }

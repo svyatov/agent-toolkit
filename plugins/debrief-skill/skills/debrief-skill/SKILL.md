@@ -32,7 +32,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs runs [--session ID] [--days N] [
 | `self` | The runs of `debrief-skill`, found as a skill name, minus the first output line: that line is this run, still in progress. Apply the "None there" fallback after you remove that line |
 | `all`, optionally a number or "in this session" | Every skill that ran over that many days (default 30), or with "in this session", every skill in `--session ${CLAUDE_SESSION_ID}`. A skill another run loaded is a skill of its own here: debrief it separately, and tell the loading run's subagent to attribute friction only to its own skill's text. Keep the skills whose source the user maintains (Step 2) and name the rest in the header as skipped |
 
-Take the five newest runs of each skill, and write in the header how many runs existed and how many you read.
+Take the five newest runs of each skill, and write in the header how many runs existed and how many you read. An invocation whose `show` has `calls=0` and no `SAY` line is not a run: leave it out, and count it in the header as empty.
 
 In Codex, `${CLAUDE_SKILL_DIR}` and `${CLAUDE_SESSION_ID}` reach you as literal text: use the directory of this `SKILL.md` and `$CODEX_THREAD_ID` instead. Codex lists a run when the user named the skill with `$name`. A skill Codex picked on its own leaves no marker, so say in the header that such runs are not covered.
 
@@ -42,10 +42,10 @@ The directory from Step 1 is where the skill loaded from, and that is not always
 
 - `~/.claude/skills/<name>/` or `<project>/.claude/skills/<name>/` is the source.
 - `~/.agents/skills/<name>/` is the source for a Codex user skill.
-- `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/...` or `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/...` is an installed copy that the next update overwrites. Look `<marketplace>` up in `~/.claude/plugins/known_marketplaces.json`, or under `[marketplaces.<marketplace>]` in `~/.codex/config.toml`. A `directory` or `local` source is the local checkout: the same relative path under it is the source. A `github` or `git` source needs its local clone: it is the current repository when `git remote get-url origin` names the same repository, and otherwise ask the user for the path once.
+- `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/...` or `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/...` is an installed copy that the next update overwrites. Look `<marketplace>` up in `~/.claude/plugins/known_marketplaces.json`, or under `[marketplaces.<marketplace>]` in `~/.codex/config.toml`. A `directory` or `local` source is the local checkout. A `github` or `git` source needs its local clone: the current repository when `git remote get-url origin` names it, else the hit of `find ~ -maxdepth 4 -type d -name <repo> -not -path '*/.claude/*' 2>/dev/null` whose origin names it, else ask the user once. In the checkout, the plugin root is the `source` of its entry in `.claude-plugin/marketplace.json` (such as `./plugins/<plugin>`): the cache path after `<version>/` sits under that root.
 - A marketplace or skill the user does not maintain has no local source. Its findings become an upstream report.
 
-The `<version>` in a cache path is the version that ran, and `version` in the source plugin's `.claude-plugin/plugin.json` is the current one. When the source has moved past it, a friction the current text already fixes is not a finding. A skill that loads straight from its source (a user skill, or a symlink into a checkout) has no version: write `(loads from source)` in the header, and check `git status` there, since uncommitted edits in the source are what ran.
+The `<version>` in a cache path is the version that ran, and `version` in the source plugin's `.claude-plugin/plugin.json` is the current one. When the source has moved past it, a friction the current text already fixes is not a finding. A skill that loads straight from its source (a user skill, or a symlink into a checkout) has no version: write `(loads from source)` in the header, and check `git status` there, since uncommitted edits in the source are what ran. For a symlink, `readlink <dir>` names the checkout.
 
 Done when every skill has a source path, or is marked upstream.
 
@@ -54,7 +54,7 @@ Done when every skill has a source path, or is marked upstream.
 Read the skill's `SKILL.md` and every file it names, so you know what the run was told to do. Then print each run:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs show <transcript:line> [--subs]
+node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs show <transcript:line>[-<end>] [--subs]
 ```
 
 Each line is `L<n> <KIND> <text>`, where `n` is the transcript line:
@@ -76,7 +76,7 @@ Each line is `L<n> <KIND> <text>`, where `n` is the transcript line:
 | `SUB` | A subagent the run dispatched: its label, its transcript, and its counts |
 | `sub` | With `--subs`: an error, denial, or interrupt inside that subagent, with line numbers in its own transcript |
 
-The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next command the user types, and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. To see lines in full, run `node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs lines <transcript> <n>...` (for a `sub` line, the transcript on its `SUB` line): it prints each line's text, tool input, and tool result, each capped at 4,000 characters. Pass `--max N` to change the cap.
+The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next skill the user invokes (a built-in command such as `/reload-plugins` does not end it), and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. A slice over the host's output limit comes back as a file: print it in windows with `<transcript:start>-<end>`. To see lines in full, run `node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs lines <transcript> <n>...` (for a `sub` line, the transcript on its `SUB` line): it prints each line's timestamp, text, tool input, and tool result, each capped at 4,000 characters. Pass `--max N` to change the cap.
 
 Look for friction of these kinds:
 
@@ -127,7 +127,7 @@ Blocking: N · Should fix: N · Consider: N · Watch: N
 ## Should fix
 
 ### F1 <one line>
-**Run**: `<transcript>:<line>`, "<the ERR or YOU line, quoted>"
+**Run**: `<transcript file name>:<line>`, "<the transcript line that shows the friction, quoted>"
 **Cause**: Skill | Wording | Environment
 **Skill line**: `<path>:<line>`
 **Fix**:
@@ -141,11 +141,13 @@ Blocking: N · Should fix: N · Consider: N · Watch: N
 
 ## Smooth
 - <date> `<transcript>:<line>`: <the counts line>
+
+Unrelated: <each ERR, DENY, STOP, and YOU line named unrelated, with its line and why>. Omit when none.
 ````
 
 Number findings F1, F2, and so on across all levels, and omit a level that has none. **Smooth** lists every run with no finding, or reads `- None`: without it the reader cannot tell a clean run from one that was never read.
 
-For `all`, dispatch one subagent per skill in one message. Claude Code runs up to 20 subagents at once (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`): with more skills than that, dispatch 20 and start the next one each time one finishes. Give each the path of this file, the skill name, its source path, and its run references, and have it run Steps 3 to 5 and return the report. Then print one table first (skill, runs read, Blocking, Should fix, Consider, Watch) and the per-skill reports below it, skills with the most severe findings first. Each subagent numbers from F1 and W1: renumber findings and Watch items across the whole printout, in print order, so every code is unique for Step 6, and keep each report's header and Smooth lines.
+For `all`, dispatch one subagent per skill in one message. Claude Code runs up to 20 subagents at once (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`): with more skills than that, dispatch 20 and start the next one each time one finishes. Give each the path of this file, the skill name, its source path, and its run references with their Step 1 timestamps, and have it run Steps 3 to 5 and return the report. Then print one table first (skill, runs read, Blocking, Should fix, Consider, Watch) and the per-skill reports below it, skills with the most severe findings first. Each subagent numbers from F1 and W1: renumber findings and Watch items across the whole printout, in print order, so every code is unique for Step 6. Change nothing else: each report's two header lines, its diffs, each Watch item's "what would make it a finding", and its `## Smooth` section stay as the subagent wrote them.
 
 ## Step 6: Apply
 

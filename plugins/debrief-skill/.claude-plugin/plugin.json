@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "debrief-skill",
   "description": "Debrief a skill's recent runs from the session transcripts, find the errors, retries, corrections, and dead ends the skill caused, and propose the edits that make the next run smooth.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
