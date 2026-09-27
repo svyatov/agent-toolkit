@@ -32,7 +32,7 @@ Note: Claude Code ≥ 2.1.116 rejects `"skills": ["./"]` with `path escapes plug
 ## Commands
 
 - `gh search code "<query>"` — useful for finding skill origins and upstream changes
-- Add a new skill manually: create `plugins/<name>/skills/<name>/SKILL.md` + `plugins/<name>/.claude-plugin/plugin.json`, then append a `plugins[]` entry to both catalogs. (`/import-skill` does all of this except the Codex catalog entry.)
+- Add a new skill manually: create `plugins/<name>/skills/<name>/SKILL.md` + `plugins/<name>/.claude-plugin/plugin.json`, then append a `plugins[]` entry to both catalogs. `/import-skill` does all of this.
 
 ## Gotchas
 

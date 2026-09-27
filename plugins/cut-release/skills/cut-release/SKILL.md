@@ -18,7 +18,12 @@ A release bot in those workflows (release-please, changesets) owns the bump, the
 and the release. Its open PR is the release: list PRs with
 `gh pr list --json number,title,headRefName,url` and take the one whose head starts
 `release-please--` or `changeset-release/`. Run only Steps 5.2, 5.3, 6.3, and 7 on it. The invocation is
-the go-ahead to merge. With no open bot PR, nothing is releasable yet: say so and stop.
+the go-ahead to merge. With no open bot PR, nothing is releasable yet: say so and stop. A bot that
+opens its PR with `GITHUB_TOKEN` starts no `pull_request` workflows, so required checks never
+appear, `gh pr checks --watch` passes without them, and `gh pr merge` fails with "the base branch
+policy prohibits the merge". Then run `gh pr close <n> && gh pr reopen <n>`, which starts them
+under your account, and go back to Step 5.2. Never merge with `--admin`. Name this in the Step 7
+report: every future bot PR will hit it until the repository gives the bot an App token.
 
 Take everything under the Unreleased heading (`## Unreleased` or `## [Unreleased]`) in
 CHANGELOG.md to a tagged release. Version override: $ARGUMENTS.

@@ -23,7 +23,7 @@ Take the repository URL from the package's own metadata, never from a search res
 | npm | `npm view <name> repository.url` |
 | PyPI | `pip show <name>` or the `project.urls` in its metadata |
 | Cargo | `cargo metadata` `repository` field |
-| Go | the module path itself |
+| Go | the module path when it starts with a forge host (`github.com/...`); a vanity path: the repository in the `go-import` meta tag of `curl -s 'https://<module>?go-get=1'` |
 | Homebrew | `brew info --json=v2 <name>`: the repository in `urls.stable.url` or `urls.head.url`, else `homepage` |
 
 No metadata, or the URL is not the project's canonical repository: stop and ask.

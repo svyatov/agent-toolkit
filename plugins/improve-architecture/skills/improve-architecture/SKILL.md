@@ -59,7 +59,7 @@ This map is your baseline. It prevents incomplete analysis across multiple sessi
 
 Read `references/red-flags.md` first — it gives each structural defect a name, and naming the flag is half the diagnosis.
 
-Use the Agent tool with subagent_type=Explore to navigate the codebase, guided by the map from 1b. Note where you experience friction:
+Read the scoped hot spots yourself, guided by the map from 1b: the verdict, the candidates, and the Step 5 briefs (paths + key line ranges) all rest on code you have seen. Read one file per call, so no result goes over the output limit and has to be read a second time from a saved file. Send an Explore subagent only for sweeps outside the hot spots. Note where you experience friction:
 
 - Where does understanding one concept require bouncing between many small files?
 - Where are modules so shallow that the interface is nearly as complex as the implementation?

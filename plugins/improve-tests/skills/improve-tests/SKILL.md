@@ -37,7 +37,7 @@ Every step applies these. Findings cite them by name.
 
 1. Find every suite: read the manifests and CI config (`package.json` scripts, `Gemfile`, `pyproject.toml`, `go.mod`, `.github/workflows/`). A project often has more than one (unit and browser, backend and frontend). The CI command is the one that counts.
 2. Check that the working tree is clean and the suite is green. If it is red, or flakes on this run, stop and report: a cut on a red suite cannot be verified.
-3. Run each suite with per-test and per-file timing. Read `references/speed-levers.md` for the timing command per runner and for splitting boot, import, and setup time from test time. If the project has coverage set up, record it in the same run.
+3. Run each suite with per-test and per-file timing. Read `references/speed-levers.md` for the timing command per runner and for splitting boot, import, and setup time from test time. If the project has coverage set up, record it in the same run. Time every run on a quiet machine: no other test suite running, counting your own subagents and other sessions. Record the load average just before the run. A suite that fills every core raises the load by itself, so quiet means nothing else is running, not a load threshold. When another suite is running, name it and ask the user once whether to wait.
 4. Record the baseline per suite: command, wall time, test count, file count, the share of time in boot, import, and setup, and the 20 slowest files and 20 slowest tests with their times.
 
 Scope: if the user named a path or area, scope to it. Otherwise take the whole suite, with the slowest files first: in most suites a few files hold most of the time.
@@ -119,7 +119,7 @@ Per batch:
 1. Write replacement tests first (demotions and rewrites) and run them: they pass. Where a replacement needs a seam that is missing, extract the part that builds the data out of the code that calls the library, so the library call becomes a thin adapter with no decisions in it.
 2. Apply the edits and deletions.
 3. Run the full suite: green. Where the runner supports it, run it in random order too: shared setup and turned-off isolation can hide order dependence.
-4. Time it against the baseline on a quiet machine: record the load average, and run no other suite meanwhile (subagents running tests count). Revert a lever that saves nothing measurable.
+4. Time it against the baseline on a quiet machine (Step 1). Revert a lever that saves nothing measurable.
 5. Commit the batch on its own.
 
 When a batch goes red, revert it and diagnose from the reverted state, then retry a smaller batch.

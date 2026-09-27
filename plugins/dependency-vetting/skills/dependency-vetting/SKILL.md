@@ -6,7 +6,7 @@ license: MIT
 
 # Dependency vetting
 
-The rule: never install, add, or recommend a package until you have opened the upstream project's own repo or docs and used the install command published there. The sections below are the full reasoning behind it.
+The rule: never install, add, or recommend a package until you have opened the upstream project's own repo or docs and used the install command or import path published there. The sections below are the full reasoning behind it.
 
 ## Direction of trust
 

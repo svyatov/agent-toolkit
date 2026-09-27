@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "jury",
   "description": "Put a question or decision to a jury of 3 or 5 subagents: blind independent votes, one anonymized review round, and one committed verdict with the vote, the dissent, and the first action.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

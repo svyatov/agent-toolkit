@@ -15,6 +15,10 @@ Most of these are emerging conventions, not committed standards. No major provid
 
 Each step is independently shippable.
 
+### 0. Map what the host lets you control
+
+Steps 3 (`Content-Type`), 4 (the `Link` header) and 6 need control over response headers. Before planning, find the host's config surface: a `_headers` file (Netlify, Cloudflare Pages), `vercel.json`, nginx or Caddy config, `.htaccess` when Apache actually serves the files, or a hosting control panel setting (such as a handler or PHP mode that puts Apache behind nginx). Confirm each conclusion with `curl -sI` against the live site and report it as measured. When the repository shows no surface, ask the user whether they have control panel or proxy access before marking a header step blocked, and name what would unblock it (for example Cloudflare in front of the site). On a static host, check the live `Content-Type` of a `.md` URL after deploy: many serve unknown extensions as `application/octet-stream`.
+
 ### 1. Audit `robots.txt` and add `Content-Signal:`
 
 Confirm the site isn't blocking AI crawlers (`GPTBot`, `ClaudeBot`, `PerplexityBot`). Then add Cloudflare's directive (CC0):

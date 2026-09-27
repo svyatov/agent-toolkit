@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires a host that can dispatch subagents. Uses the Codex CLI for one seat when `codex` is on PATH.
 disable-model-invocation: true
 argument-hint: '<question or decision> [5 for a five-seat panel]'
-allowed-tools: Bash(command -v codex) Bash(mktemp -d) Bash(codex exec *) Read Grep Glob
+allowed-tools: Bash(command -v codex) Bash(mktemp -d) Bash(codex exec *) Bash(tail -5 *) Read Grep Glob
 ---
 
 # Jury
@@ -52,12 +52,12 @@ When this host is not Codex, run `command -v codex`. If it prints a path, the la
 Dispatch every seat in one message, so no juror can see another's answer. A host seat is a fresh subagent, never a fork of this conversation, that gets only the juror prompt. The Codex seat is a Bash call in the same message, with a 600000 ms timeout. Make its directory first with `mktemp -d`:
 
 ```bash
-codex exec -s read-only --ephemeral --skip-git-repo-check -C <project root> -o <temp dir>/vote.md - <<'EOF'
+codex exec -s read-only --ephemeral --skip-git-repo-check -C <project root> -o <temp dir>/vote.md - > <temp dir>/codex.log 2>&1 <<'EOF'
 <juror prompt>
 EOF
 ```
 
-Read its answer from `vote.md`. If the command exits non-zero or the file is empty, dispatch a host subagent with the same lens, and record the swap for the Panel line.
+Read its answer from `vote.md`, never from the command output. If the command exits non-zero or the file is empty, read the reason from `tail -5 <temp dir>/codex.log`, dispatch a host subagent with the same lens, and record the swap and its reason for the Panel line.
 
 The juror prompt:
 
@@ -76,7 +76,7 @@ WOULD CHANGE MY MIND: <the one finding that would flip your choice>
 RISKIEST ASSUMPTION: <the assumption your choice depends on most>
 ```
 
-Retry a seat that fails or returns no `CHOICE` once, then drop it and note the drop. Tally the choices. This is the **blind vote**.
+Seats may return one at a time as background notifications. Wait for every seat without writing a message for each arrival, and treat a completion notice for a seat you already have as nothing to answer. Retry a seat that fails or returns no `CHOICE` once, then drop it and note the drop. Tally the choices. This is the **blind vote**.
 
 If the blind vote is unanimous and every confidence is 70 or higher, go to Step 6.
 
@@ -86,7 +86,7 @@ Run one review round, never more. More rounds make jurors agree with each other,
 
 1. **Check facts.** Find the factual claims the jurors disagree on that could change the vote. Check each against its source yourself, and mark it verified, contradicted, or unverifiable.
 2. **Anonymize.** Remove the lens names from the juror blocks. Label them Position A, B, C, and give each reviewer its own shuffled order.
-3. **Dispatch fresh reviewers**, one per seat, in one message, never forks. The Codex seat reviews through `codex exec` with `-o <temp dir>/review.md`, unless it failed in Step 4. If that call fails, dispatch a host reviewer and record the swap. A fresh reviewer wrote none of the positions, so it has no answer of its own to protect.
+3. **Dispatch fresh reviewers**, one per seat, in one message, never forks. The Codex seat reviews through `codex exec` with `-o <temp dir>/review.md` and the same log redirect, unless it failed in Step 4. If that call fails, dispatch a host reviewer and record the swap. A fresh reviewer wrote none of the positions, so it has no answer of its own to protect.
 
 The reviewer prompt:
 
@@ -128,7 +128,7 @@ A "none" verdict is valid: give the better framing as the verdict and the first 
 
 ## Step 7: Report
 
-Output only this block. Show the brief, juror blocks, and reviews only if the user asks for them.
+Output only this block. The brief was already shown in Step 2. Show the juror blocks and reviews only if the user asks for them.
 
 ```markdown
 ## Verdict: <option, or "Reframe: <better framing>">

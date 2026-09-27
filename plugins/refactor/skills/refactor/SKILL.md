@@ -71,13 +71,13 @@ All file-level checks, plus:
 
 A whole codebase always offers more findings than are worth acting on. Read `references/hotspots.md` and rank by change frequency crossed with complexity before listing anything. It decides what to look at first, not what is wrong.
 
-Read the ranked candidates through subagents, one per area, each returning findings rather than file contents. A project-scope assessment reads far more code than it reports on, and most of it comes back Clean. Step 4 reads what it actually edits.
+Read the ranked candidates through subagents, one per area, each returning findings rather than file contents. A project-scope assessment reads far more code than it reports on, and most of it comes back Clean. Step 4 reads what it actually edits. A project under about 1,000 source lines is the exception: read it directly, a few files per call, so each output stays under the 30,000-character limit that moves a result to a file.
 
 ### The Verdict
 
 | Rating | Meaning | Action |
 |--------|---------|--------|
-| **Clean** | No meaningful improvements available | Tell the user the code looks good. **Stop here** unless they provide a specific reason to continue. |
+| **Clean** | No meaningful improvements available | Tell the user the code looks good and end the run there. **Stop here** unless they provide a specific reason to continue. An item worth offering the user makes the verdict Minor. |
 | **Minor** | Small improvements possible (naming, minor duplication) | List findings. Ask if the user wants to proceed — these are optional. |
 | **Significant** | Clear code smells or structural issues | List findings with priorities. Proceed to Step 3. |
 | **Critical** | Major structural problems blocking maintainability | List findings urgently. Proceed to Step 3. |
