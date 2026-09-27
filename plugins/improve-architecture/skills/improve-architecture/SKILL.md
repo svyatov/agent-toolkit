@@ -51,7 +51,7 @@ Before exploring for friction, have an Explore subagent (Agent tool, subagent_ty
 - List all modules/packages in scope with approximate size (file count, rough line count)
 - Trace the dependency graph: which modules import which
 - Flag circular dependencies
-- For each module: number of exported symbols, number of callers
+- For each module: number of exported symbols, number of callers, found with a symbol-aware search (LSP find references, CodeGraph) where available; mark grep-based counts `grep-only`
 
 This map is your baseline. It prevents incomplete analysis across multiple sessions. Record the scope you chose in 1a alongside it.
 
