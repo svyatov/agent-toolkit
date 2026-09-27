@@ -4,7 +4,7 @@ description: >
   Import skills from GitHub repositories into the local toolkit. Supports copying a single skill
   from a GitHub directory URL or merging multiple skills into one. Also accepts pasted skill content.
 disable-model-invocation: true
-allowed-tools: Bash(curl:*) Bash(mkdir:*) Bash(python3:*)
+allowed-tools: Bash(curl:*) Bash(mkdir:*) Bash(python3:*) Bash(claude plugin validate:*)
 license: MIT
 compatibility: Designed for Claude Code. Requires curl, python3, and network access to github.com
 ---
@@ -33,7 +33,7 @@ Accept one of:
 2. **Multiple GitHub directory URLs** — multi-skill merge
 3. **Pasted content** — user pastes SKILL.md content (and optionally other files) directly
 
-Expected URL format: `https://github.com/{owner}/{repo}/tree/{branch}/{path}`
+Accepted URL formats: `https://github.com/{owner}/{repo}/tree/{branch}/{path}` (the skill directory), or `https://github.com/{owner}/{repo}/blob/{branch}/{path}/SKILL.md` (take its parent directory as `path`, which is empty when `SKILL.md` sits at the repo root).
 
 Parse to extract `owner`, `repo`, `branch`, and `path`. If the format doesn't match, ask for clarification.
 
@@ -55,6 +55,9 @@ curl -s "https://api.github.com/repos/{owner}/{repo}/license" | python3 -c "impo
 
 # 4. Existing skills
 ls plugins/*/skills/*/SKILL.md
+
+# 5. SKILL.md frontmatter (name and license)
+curl -sL "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{path}/SKILL.md" | head -20
 ```
 
 If the directory listing contains subdirectories (`"type": "dir"`), list their contents too — add parallel curl calls for each subdirectory in the **same turn** or the next turn.
@@ -69,6 +72,8 @@ If the directory listing contains subdirectories (`"type": "dir"`), list their c
 
 Compatible: `MIT`, `ISC`, `BSD-2-Clause`, `BSD-3-Clause`, `Apache-2.0`, `0BSD`, `Unlicense`, `CC0-1.0`, `WTFPL`, `Zlib`, `BSL-1.0`
 
+A `license:` field in the SKILL.md frontmatter (Step 2, call 5) governs that file and overrides the repo result. On `NOASSERTION`, read the repo `LICENSE` text before stopping: a dual license can put skill files under a different term than the code.
+
 | Result | Action |
 |--------|--------|
 | SPDX ID is in the compatible list | Proceed. Record the license. |
@@ -77,7 +82,7 @@ Compatible: `MIT`, `ISC`, `BSD-2-Clause`, `BSD-3-Clause`, `Apache-2.0`, `0BSD`, 
 
 If the user explicitly overrides (e.g., "I have permission from the author"), proceed but record `"license_override": true` and the user's reason in `sources.json`.
 
-**Name resolution** — always ask the user for the skill name via AskUserQuestion. Offer the original name (extracted from the URL path) as the recommended option. Validate: lowercase kebab-case, no conflict with existing skills, not empty.
+**Name resolution**: always ask the user for the skill name via AskUserQuestion. Offer the `name:` from the SKILL.md frontmatter (Step 2, call 5) as the recommended option. Validate: lowercase kebab-case, no conflict with existing skills, not empty.
 
 ### Step 4: Download & Write Files
 
@@ -105,7 +110,7 @@ Use `download_url` values from the directory listing (these point to `raw.github
 
 ### Step 5: Finalize
 
-Each skill is its own installable plugin. Finalizing writes three things: `sources.json` (provenance), `.claude-plugin/plugin.json` (plugin manifest), and a new entry in the top-level `.claude-plugin/marketplace.json`.
+Each skill is its own installable plugin. Finalizing writes `sources.json` (provenance), `.claude-plugin/plugin.json` (plugin manifest), an entry in both catalogs (`.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`), a `README.md` table row, and a `CHANGELOG.md` line. Together these cover the "skill added" items of the `AGENTS.md` checklist.
 
 **Do ALL of these in a single turn using parallel tool calls:**
 
@@ -140,6 +145,7 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
 
 ```json
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "{name}",
   "description": "{one-line description taken from SKILL.md frontmatter}",
   "version": "1.0.0",
@@ -171,10 +177,20 @@ Each skill is its own installable plugin. Finalizing writes three things: `sourc
 
 Schema requires the `./` prefix on relative sources, so use the full path `./plugins/{name}` (marketplace does not use `pluginRoot`). Pick 3–5 discovery tags that match the skill's domain. `category` is one of the README groups: `delivery` (git, releases, dependencies, shipping), `code-design` (refactoring, architecture, planning), `web` (frontend, sites), `skill-tooling` (skills and marketplaces), `writing` (prose). Add the README table row under the matching `###` heading in `README.md`.
 
-4. **Verify JSON** (Bash call, parallel with above):
-   ```bash
-   python3 -c "import json; json.load(open('plugins/{name}/skills/{name}/sources.json')); json.load(open('plugins/{name}/.claude-plugin/plugin.json')); json.load(open('.claude-plugin/marketplace.json')); print('all JSON valid')"
-   ```
+3b. **Append the same plugin to `.agents/plugins/marketplace.json`** at the same position it has in the Claude catalog:
+
+```json
+{
+  "name": "{name}",
+  "source": { "source": "local", "path": "./plugins/{name}" },
+  "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+  "category": "{group}"
+}
+```
+
+Under `## Unreleased` in `CHANGELOG.md`, add `### {name}` followed by `- 1.0.0: new skill imported from [{owner}/{repo}](https://github.com/{owner}/{repo}) ({spdx-id}). <what it does>`.
+
+4. **Validate** once the writes land: `claude plugin validate --strict . && claude plugin validate --strict plugins/{name}`. CI runs both.
 
 Present a summary: skill name, source(s), files created, license, plugin manifest path, marketplace entry added.
 
@@ -190,3 +206,4 @@ Review the imported skill and suggest improvements — simplifications, better s
 - **Large files (>1MB)** — warn and ask whether to include.
 - **Binary files** — detect by extension, warn, and ask whether to include.
 - **Nested subdirectories** — recurse: list contents via API, then download all files in parallel.
+- **Files outside the skill directory**: when SKILL.md refers to plugin-level files (`hooks/`, `.mcp.json`, `.claude-plugin/plugin.json`), list the repo root in the Step 2 turn. Ask whether to copy them to `plugins/{name}/`, and record them as extra `sources` paths in `sources.json`.

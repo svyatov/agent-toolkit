@@ -24,12 +24,15 @@ leave the changes above untouched.
    repository. If you find one, stop, commit nothing, and report what you found.
 3. If the current branch is the repository's default branch, create and switch to a new one first:
    `type/kebab-description`, where `type` matches the Conventional Commit type you are about to use
-   and the description comes from the change itself.
+   and the description comes from the change itself. Any `Branch commits` move to the new branch with
+   it: then run `git branch -f <default> origin/<default>` so the default branch matches its remote
+   and the merge can fast-forward it.
 4. Stage the changes. Prefer explicit paths over `git add -A`.
 5. Write a Conventional Commit `type(scope): description`, matching the subject style already in
    `git log`. Follow the `oss-writing` skill for the wording. $ARGUMENTS is a hint at what the change
    is about, not the message itself.
-6. Commit, then `git push -u origin HEAD`.
+6. Commit, then `git push -u origin HEAD` with a 600000 ms Bash timeout: a pre-push hook can run the
+   whole test suite.
 7. `gh pr create`. The squash merge makes the title the one commit on the default branch, so the
    title and body cover the whole branch: your commit's subject when it is the branch's only
    commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's

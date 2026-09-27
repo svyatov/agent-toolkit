@@ -37,6 +37,8 @@ Four axes:
 
 For a fan-out, run Step 2's three fetches once yourself into a fresh `mktemp -d` directory. Give each subagent that directory and the URL behind each file in it, and have it run Steps 1 and 3 to 7, fetching into the same directory only the conditional docs its skill needs. Step 8 stays with you.
 
+When every report is in, print one table (skill, Blocking, Should fix, Consider), then every finding grouped by severity and tagged with its skill, then the clean skills on one line. Number the findings F1, F2, and so on across the whole printout, so Step 8 can take them by code.
+
 To find a skill by name, Glob these roots in order and stop at the first hit:
 
 ```

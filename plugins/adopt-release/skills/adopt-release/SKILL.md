@@ -35,7 +35,7 @@ When the project does not make the tool's config locations obvious, take them fr
 
 Read upstream's own record of every release in the range, most trusted first: the migration or upgrade guide (a major usually has one), `CHANGELOG.md` in the repository, GitHub releases (`gh release view <tag> --repo <owner/repo>`), then the docs' what's-new page. Fetch raw text with `curl` or `gh api`, because WebFetch summarizes and drops lines. A version whose notes you cannot find goes in the report as unread; memory is not a source.
 
-Done when every version after the start, up to and including the target, has its notes in hand or is named as unread.
+Done when every version after the start, up to and including the target, has its notes in hand or is named as unread, and each version's entry count is taken once, from the fetched text (`grep -c '^- '` on its section), for the report's `E`.
 
 ## Step 4: Triage against the surface
 
@@ -54,7 +54,7 @@ Done when every entry sits in one bucket.
 
 ## Step 5: Prove each item
 
-For every Must and Adopt item, open the project file it touches and confirm the match: the release note says X, and `path:line` does X. An item that fails the check moves to Skip; one the file cannot settle moves to Watch. Then check the target's own requirements (runtime minimum, peer dependencies, OS support) against the project.
+For every Must and Adopt item, open the project file it touches and confirm the match: the release note says X, and `path:line` does X. An item that fails the check moves to Checked; one the file cannot settle moves to Watch. Then check the target's own requirements (runtime minimum, peer dependencies, OS support) against the project.
 
 Done when every Must and Adopt item carries a quote, its version, and a `path:line`.
 
@@ -74,6 +74,9 @@ Read R releases, E entries, skipped S. Unread: <versions or none>.
 
 ### Watch
 - W1 <what, and what turns it into a Must>. <version>: "<quote>"
+
+### Checked
+- <surface item>: <why the entry needs no change>. <version>
 
 ### Pin sites
 - `path`: <old> → <target>

@@ -19,12 +19,14 @@ recommendation. With none named, skip the finding as waiting on that choice.
 3. Do not expand scope. A finding is a fix, not an invitation to refactor around it. When the finding
    proposes a fix, apply that fix, together with any change it cannot work without, and name that
    change on the finding's report line. If it cannot work even so, skip the finding and say why
-   instead of choosing another.
+   instead of choosing another. If it works at only some of the places the finding names, apply it
+   there and report the finding as partly fixed.
 4. For every repository you edited, this one or another, read its `AGENTS.md`, `CLAUDE.md` and
    `CONTRIBUTING.md`. Run the checks they name, and make the other edits they require of a change (a
    version bump, a changelog entry). Done when each edited repository has its checks run, or is
    named in the report as having none after you read those files.
-5. Report one line per finding, `<code>: fixed` or `<code>: skipped, <why>`, then one line per edited
-   repository with the checks run. Say plainly when a finding was wrong.
+5. Report one line per finding: `<code>: fixed`, `<code>: partly fixed, <what is left and why>`, or
+   `<code>: skipped, <why>`. Then one line per edited repository with the checks run. Say plainly
+   when a finding was wrong.
 
 Do not commit. That is what /c, /cp, /cb and friends are for.

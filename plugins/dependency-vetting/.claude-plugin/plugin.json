@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "dependency-vetting",
   "description": "Verify a package or tool is authentic before installing, adding, or recommending it: follow the upstream project to its install command, never a registry page back to a project.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

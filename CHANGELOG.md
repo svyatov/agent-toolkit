@@ -25,6 +25,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### adopt-release
 
 - 1.0.0: new skill for adopting a new release of a library, runtime, or tool. It pins the version range, maps where the project touches the tool (pin sites, config, API, workarounds), reads upstream's release notes for every version in the range, sorts each change into Must, Adopt, Watch, or Skip, proves each kept item against a `path:line`, and applies the items the user picks.
+- 1.0.1: an item that fails the `path:line` check goes to a new Checked section of the report with the reason it needs no change, so a "nothing to change" verdict shows what was checked. Each version's entry count is taken once from the fetched notes with `grep -c '^- '`, instead of estimated and recounted.
 
 ### atomic-commits
 
@@ -42,6 +43,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### cut-release
 
+- 1.1.1: a bot release PR opened with `GITHUB_TOKEN` starts no required checks, so the merge is refused. The run now closes and reopens the PR to start them, never merges with `--admin`, and names the problem in the report.
 - 1.1.0: a repository that a release bot (release-please, changesets) releases now goes through the bot's open release PR: watch its checks, squash-merge it, and watch the publish. The publish watch finds the run by workflow file, and stops at a job waiting on environment approval to report the run URL.
 - 1.0.0: new skill that turns the Unreleased changelog section into a tagged release: semver bump, `chore/release-X.Y.Z` branch, PR, squash merge, tag, and GitHub release, publishing only through the repository's own workflow.
 
@@ -67,32 +69,47 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### dependency-vetting
 
 - 1.0.0: new skill, moved here from a personal dotfiles setup. Before a package or tool is installed, added, or recommended, it follows the upstream project's own docs to the published install command, uses the registry's own signals (`npm audit signatures`, PyPI attestations, `gh attestation verify`), and stops on any mismatch between the artifact and upstream.
+- 1.0.1: the rule names the published import path next to the install command, so vetting a library dependency looks for the import line in the upstream README. `/debrief-skill` found this in a recent run.
 
 ### import-skill
 
 - 1.0.6: the catalog entry template picks `category` from the five README groups instead of defaulting to `productivity`, and the README row goes under the matching group heading.
+- 1.1.0: finalizing also writes the Codex catalog entry and the `CHANGELOG.md` line, and validates with `claude plugin validate --strict` in place of a JSON parse check. It accepts a `blob/.../SKILL.md` URL, reads the upstream SKILL.md frontmatter for the recommended name and a per-file `license:` that overrides the repo license, and asks before copying plugin-level files such as `hooks/` from outside the skill directory. The `plugin.json` template carries `$schema`. `/debrief-skill` found all of these in three recent runs.
 
 ### improve-architecture
 
 - 1.1.5: the structural map counts callers with a symbol-aware search (LSP find references, CodeGraph) where one is available, and marks grep-based counts `grep-only`. A grep count misses a method used as a value and counts matches inside comments, so a symbol it reports as unused may still have callers.
+- 1.1.6: the friction step reads the scoped hot spots in the main context, one file per call, since the verdict and the Step 5 briefs rest on code the run has seen. An Explore subagent handles only sweeps outside the hot spots.
 
 ### improve-tests
 
 - 1.0.0: new skill that cuts a test suite to the tests that catch real bugs and its run time to the minimum. It takes a timed baseline, maps each test file's claims, names the break each claim catches, and moves each one: delete, demote to the cheapest level, merge, rewrite, or fix the flake. Where code hands work to a library (PDF, email, images, HTTP), the tests move to the data we hand it plus one adapter smoke test. Speed levers (factory cascades, per-test setup, hashing cost, sleeps, isolation, parallelism) count only when the profile shows the time they recover. Every deletion names where its claim stays covered, and every batch is re-timed against the baseline.
 - 1.0.1: timing happens on a quiet machine with the load average recorded and no other suite running, and the final report times the base commit and the branch back to back, because numbers taken under different loads do not compare. The speed levers gain a way to time a suspect without a profiler (a one-line runner override, or a prepended timer), a warning that a backtrace-sampling thread over-reports IO, a lever for side effects that fixture setup fires (callbacks, event subscribers, broadcasts), and a default fake at the rendering library's entry point for tests that render only as setup.
+- 1.0.2: the baseline step defines a quiet machine as no other test suite running, not a load threshold, and asks the user once when another suite is running. The speed levers say how to find waits a CPU profile cannot show, write timing sums from an after-all hook because `bun test` drops output printed at exit, and count a fixed poll interval in production code as a sleep.
 
 ### jury
 
 - 1.0.0: new skill that puts a question or decision to a jury of 3 or 5 subagents. Jurors vote blind with distinct lenses that steer where they look but not how they vote, fresh reviewers critique the anonymized positions in shuffled order for one round, the foreman checks the disputed facts, and a vote change counts only when it names its reason. One seat runs on the Codex CLI when it is installed. The verdict always commits and carries the vote, the dissent, the riskiest assumption with a test, and the first action.
+- 1.0.1: the Codex seat's terminal output goes to a log file, and the run reads the reason for a failure from its last lines instead of taking the whole echo into context. The foreman waits for every seat without a message per arrival, and the report no longer repeats the brief shown in Step 2.
+
+### llms-visibility
+
+- 1.0.7: a new Step 0 maps which response headers the host lets the run set, confirms each conclusion with `curl -sI`, and asks the user about control panel or proxy access before calling a header step blocked.
+
+### refactor
+
+- 1.2.5: a project under about 1,000 source lines is read directly, a few files per call, instead of through subagents. A Clean verdict ends the run without offering optional items; an item worth offering makes the verdict Minor.
 
 ### report-upstream
 
 - 1.0.0: new skill that takes a dependency bug upstream: repository from package metadata, existing-report search, reproduction on the default branch, CONTRIBUTING rules, and a drafted issue or PR that waits for confirmation before submission.
 - 2.0.0: renamed from `contribute` to `report-upstream`, because `contribute` read as contributing to the current repository. Invoke it as `/report-upstream`.
 - 2.0.1: for Homebrew, take the repository from the formula's `urls.stable.url` or `urls.head.url`. The `homepage` can be a product website.
+- 2.0.2: for a Go module on a vanity import path, take the repository from the `go-import` meta tag of `https://<module>?go-get=1`. The module path names the repository only when it starts with a forge host. `/debrief-skill` found this in a recent run.
 
 ### shortcuts
 
+- 1.2.1: `/c` adds an untracked local-tool directory such as `.codegraph/` to the root `.gitignore` and says so, instead of committing part of it or leaving it out. `/cprw` resets the local default branch to its remote after moving its commits to the new branch, and gives the push a 600000 ms timeout for long pre-push hooks. `/p` reads unpushed commits with `git log HEAD --not --remotes`, which the host injects where `@{upstream}` was refused, and reports the remote's reason for a rejected push instead of assuming the remote moved. `/fa` reports a finding fixed at only some of its sites as partly fixed. `/fci` drops the `Recent runs` line the host never ran and takes run IDs from the PR checks links. `/debrief-skill` found all of these in recent runs.
 - 1.2.0: `/ww` ("what would you suggest?") answers the question the agent just asked: it explains the problem in plain words, weighs each option for and against, recommends one, and for a close, costly-to-reverse choice hands over a ready-to-run `/jury` line.
 - 1.1.6: `/fa` counts an option as recommended only when the report says so in words. An option listed first or labelled "proposed" leaves the finding waiting on the user's choice.
 - 1.1.5: `/fa` applies a proposed fix together with any change the fix cannot work without, and names that change on the finding's report line, instead of choosing between skipping the finding and guessing.
@@ -103,8 +120,13 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.1.0: nine more commands. `/p` push, `/m` squash merge now, `/fci` fix the failing CI run, `/prd` rewrite the PR title and body from the diff, `/cl` close the issues the PR resolved, `/deps` update outdated dependencies, `/docs` sync docs with the change, `/rule` add a rule to CLAUDE.md or AGENTS.md, `/lint` run every linter to zero.
 - 1.0.0: new plugin bundling nine slash-only commands for the commit, push, pull request, CI, and merge loop: `/c`, `/cp`, `/cb`, `/cbp`, `/cpr`, `/cprw`, `/wm`, `/ci`, `/fa`.
 
+### verify-marketplace
+
+- 1.1.0: a cwd with a plugin manifest and no catalog is verified as that plugin instead of prompting for a repo. A plugin whose `source` is the marketplace root gets its component directories validated, since the validator opens no skill file on that root, and the CI check reports a workflow that skips them. Version drift uses `git log -G`, because `-S` returned the commit that added the `version` key rather than the last bump. The SchemaStore lookup gets a `curl -sSL` command on the `www` host the old URL redirects to, and doc sections are located with one anchored grep per file. `/debrief-skill` found all of these in four recent runs.
+
 ### verify-skill
 
 - 1.2.0: new host-parity check compares `disable-model-invocation` in the frontmatter with `allow_implicit_invocation` in `agents/openai.yaml`, fetching the rule from developers.openai.com. Catalog and README wording now match the manifest.
 - 1.3.0: new check for trigger text in the description of a user-invoked skill. The fetched `skills.md` says Claude Code keeps that description out of context, so the check grades it Consider and proposes a one-line summary. The Step 3 description check no longer asks such a skill for trigger situations.
 - 1.4.0: a fan-out over many skills dispatches at most 20 subagents at once, the limit Claude Code enforces, and starts the next as one finishes. It fetches the three core docs once into a fresh `mktemp -d` directory that every subagent reads, where runs used to improvise a shared directory and collide with a previous run's files. A new fetch row covers `claude` CLI flags and environment variables through `cli-reference.md` and `env-vars.md`, so a run no longer falls back to the changelog for them. `/debrief-skill` found all three in five recent runs.
+- 1.4.1: a fan-out merges the per-skill reports into one printout: a count table, every finding grouped by severity and tagged with its skill, then the clean skills, with findings numbered F1, F2 across the whole printout so Step 8 can take them by code. Runs used to invent their own merged format and codes. `/debrief-skill` found this in three recent runs.

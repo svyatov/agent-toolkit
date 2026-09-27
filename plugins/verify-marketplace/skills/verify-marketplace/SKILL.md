@@ -35,7 +35,8 @@ to it.
 | A repo path, or no argument and the cwd holds a catalog | That repo |
 | A path to a `marketplace.json` | The marketplace root is the directory that holds `.claude-plugin/` or `.agents/` |
 | `owner/repo` | `git clone --depth 1` into a temp dir, verify, delete the clone |
-| No argument and no catalog in the cwd | Ask which repo, with `AskUserQuestion` |
+| No argument, no catalog, and a plugin manifest in the cwd | That plugin: Axes B to D, and Axis A reports the catalog it needs before anyone can install it |
+| No argument, no catalog, and no plugin manifest in the cwd | Ask which repo, with `AskUserQuestion` |
 
 Inventory the repo by Glob, all in one turn:
 
@@ -76,7 +77,10 @@ curl -sSL -o "$T/codex-errors.md"    https://developers.openai.com/plugins/deplo
 ```
 
 The two Claude Code pages are well over 100 KB each. Never read them whole.
-Grep for the section heading you need and read that section:
+Locate the sections with one anchored grep per file over the headings in this
+table, such as
+`grep -n -E '^#+ (Required fields|Optional fields|Plugin entries)' "$T/cc-marketplaces.md"`,
+then read each section from its line to the next heading's line:
 
 | File | Sections to grep for |
 |---|---|
@@ -117,6 +121,12 @@ was skipped.
 claude plugin validate --strict --json <marketplace root>   # catalog, every local plugin.json, entry-vs-manifest version
 claude plugin validate --strict --json <plugin dir>          # one per plugin, one batch: opens skills, agents, commands, hooks
 ```
+
+A plugin whose `source` is the marketplace root (`"./"`) has no plugin run of
+its own: the validator treats that directory as the marketplace and opens no
+component file. Validate its component directories instead, such as
+`claude plugin validate --strict --json ./skills`, with the path rule from
+the fetched "Validate a plugin or a directory without a manifest" section.
 
 Take the exit code meanings and the JSON shape from the fetched reference and
 quote them. `contents` lists only the files that had a problem, so an empty
@@ -198,7 +208,8 @@ with quotes, and merge. Per plugin:
   its `interface` fields and `category` value are checked against the
   fetched lists.
 - Version drift: when the last commit that changed the manifest `version`
-  (`git log -1 --format=%ct -S'"version"' -- <manifest>`) is older than the
+  (`git log -1 --format=%ct -G'"version"' -- <manifest>`: `-G` matches a
+  changed value, `-S` only a changed count) is older than the
   newest commit under the plugin (`git log -1 --format=%ct -- <plugin>`),
   edits shipped without a bump. Should fix, quoting the fetched line that
   says users get updates only on a bump. Skip this for a plugin whose docs
@@ -218,8 +229,9 @@ it lists for itself and offer to dispatch it, one subagent per skill.
 - `LICENSE` at the root, and every manifest `license` agrees with it. When at
   least one plugin carries a `sources.json`, every plugin copied from another
   repository does. A skill that only cites an article is authored, not copied.
-- A CI workflow runs the validator with `--strict`. Consider when absent,
-  quoting the fetched line that recommends it.
+- A CI workflow runs the validator with `--strict` on every target Step 3
+  ran, including a root plugin's component directories. Consider when absent
+  or partial, quoting the fetched line that recommends it.
 - `CHANGELOG.md` when versions are explicit. Consider, with the quote.
 - Content the install path copies but should not ship: `.claude/*.local.md`,
   plan files, scratch, LFS-tracked files.
@@ -243,7 +255,8 @@ it lists for itself and offer to dispatch it, one subagent per skill.
   Report each non-2xx with its code. A 404 on a `$schema`, a `homepage`, or an
   install source is Should fix. For a dead `$schema`, take the replacement URL
   from the fetched docs; when they give none for that file, look it up in the
-  SchemaStore catalog, `https://json.schemastore.org/api/json/catalog.json`,
+  SchemaStore catalog with
+  `curl -sSL https://www.schemastore.org/api/json/catalog.json | grep -io '"url": *"[^"]*<name>[^"]*"'`,
   and when that has none either the fix is to drop the field.
 - **Stale commands.** Every CLI command the README quotes exists in the
   fetched docs with those flags.
