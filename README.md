@@ -125,7 +125,12 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 Git hooks run through [lefthook](https://lefthook.dev): a secret scan, plugin validation, a whitespace check, and a Conventional Commits check on the message. Install them once per clone:
 
 ```sh
+# with Homebrew
 brew install lefthook betterleaks
+
+# or with mise
+mise use -g lefthook betterleaks
+
 lefthook install
 ```
 
