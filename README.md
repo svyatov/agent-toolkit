@@ -120,6 +120,15 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 |-------|-------------|---------|
 | `humanizer` | Remove signs of AI-generated writing from voiced prose: blog posts, essays, announcements | `claude plugin install humanizer@svyatov-agent-toolkit`<br>`codex plugin add humanizer@svyatov-agent-toolkit` |
 
+## Development
+
+Git hooks run through [lefthook](https://lefthook.dev): a secret scan, plugin validation, a whitespace check, and a Conventional Commits check on the message. Install them once per clone:
+
+```sh
+brew install lefthook betterleaks
+lefthook install
+```
+
 ## License
 
 MIT
