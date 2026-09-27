@@ -90,10 +90,10 @@ Done when every tool from step 2 and every piece of evidence from steps 3 and 4 
 
 ## 6. Propose
 
-Show one table: code, hook, job name, command, evidence, grade. Then ask, with `AskUserQuestion`:
+Write one table as message text: code, hook, job name, command, evidence, grade, and one row for each item covered or dropped in step 5, with its reason. Send the table in the same message, before the `AskUserQuestion` call. The option descriptions do not replace it: the user approves from the table. Then ask:
 
 1. The secret scanner, once: betterleaks (recommended) or gitleaks, with the one-line reason `recipes.md` gives for each. Skip the question when the repository already runs one and the user has not asked to switch.
-2. Per grade, a multiSelect of its proposals, Must first. Split a grade over several questions when it has more than four.
+2. Per grade, a multiSelect of its proposals, Must first. Each question holds two to four options: split a grade over several questions when it has more than four, and put a grade with one proposal in the question of the next grade. Do not add a "None" option. With only one proposal in total, ask a single-select: Add or Skip.
 
 Nothing is written without its own approval. Zero proposals is a valid result: say what already covers the repository, and stop.
 
@@ -105,10 +105,12 @@ Nothing is written without its own approval. Zero proposals is a valid result: s
 4. **Prove each job.** Start from a clean working tree: stash or commit first, with the user's consent. Run each new job and time it:
 
    ```sh
-   time lefthook run pre-commit --all-files --job <name>
+   time lefthook run pre-commit --all-files --no-stage-fixed --job <name>
    ```
 
    A job that fails on the current code shows real findings: report them, and ask whether the job lands as is or waits for a fix. A pre-commit job over a few seconds on `--all-files` is a candidate for pre-push; say so with its time. Any file a fixer changed is shown with `git diff --stat` and left for the user.
+
+   For a job with a `glob` or `file_types`, prove the filter with `lefthook run <hook> --job <name> --file <path>`, once on a file that must match and once on a file that must not. `-v` does not list the matched files.
 5. **Scan the history once** with the chosen scanner (`recipes.md` gives the command), redacted. Report the count and the files; a secret in history needs rotation, which the hook cannot do.
 6. **Install.** `lefthook install`, then `lefthook check-install`. On a `core.hooksPath` or `.old` error, show it and ask before passing `--reset-hooks-path` or `--force`.
 

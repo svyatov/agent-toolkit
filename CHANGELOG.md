@@ -95,6 +95,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 ### lefthook
 
 - 1.0.0: new skill that proposes lefthook git hooks for a repository. It reads the configured linters and every check CI runs, mines git history and failed CI runs for what a hook would have caught, and audits an existing lefthook config against a checklist. Each proposal cites its evidence, uses the repository's own tools and runner, and sits at the right stage: staged-file fixers in pre-commit, whole-project checks in pre-push, a message check only where history shows a convention. Secret scanning is the one must-have, with betterleaks as the default and gitleaks where a verified org or a frozen config matters. Nothing lands without approval, and every approved job is run and timed before `lefthook install`.
+- 1.0.1: the proposal table is sent as text before the approval questions, with a row for each covered or dropped item. Each question holds two to four options, so a grade with one proposal no longer makes a question the tool rejects. The job proof runs with `--no-stage-fixed` and checks each `glob` with `--file`. The history scan writes its report to a file and lists each finding's file. The JS install notes say the postinstall writes an example `lefthook.yml` and renames another manager's hooks to `.old`.
 
 ### llms-visibility
 

@@ -23,7 +23,13 @@ For gitleaks, the same flags: `gitleaks git --pre-commit --staged --redact --ver
 - Leave betterleaks `--validation` off: it calls provider APIs over the network on every commit.
 - betterleaks defaults to deeper decoding than gitleaks and finds more. When its generic rules are noisy on a repository, add `--confidence medium`.
 - A false positive gets a `betterleaks:allow` (or `gitleaks:allow`) comment on its line, or a fingerprint in `.betterleaksignore`.
-- One-time history scan for step 7: `betterleaks git . --redact` (or `gitleaks git . --redact`). A secret found there is already exposed: it needs rotation, and rewriting history does not undo that.
+- One-time history scan for step 7. The plain command prints only a count, and `--report-path /dev/stdout` comes back empty, so write the report to a file. gitleaks takes the same flags. The scan exits 1 when it finds anything:
+
+  ```sh
+  d=$(mktemp -d); betterleaks git . --redact --no-banner --log-level error --report-format json --report-path "$d/r.json"; jq -r '.[] | "\(.RuleID) \(.File):\(.StartLine) \(.Commit[:7])"' "$d/r.json"; rm -r "$d"
+  ```
+
+  A secret found there is already exposed: it needs rotation, and rewriting history does not undo that.
 
 Install commands published upstream:
 
@@ -83,7 +89,7 @@ Only where step 3 found a convention:
 
 Hooks only reach teammates when installing the project installs lefthook. Propose the manifest entry that matches the repository:
 
-- JS: `lefthook` as a devDependency (`bun add -d lefthook`, `npm i -D lefthook`); its postinstall runs `lefthook install`. pnpm runs it only when `lefthook` is in `onlyBuiltDependencies` (`pnpm-workspace.yaml` or `package.json`).
+- JS: `lefthook` as a devDependency (`bun add -d lefthook`, `npm i -D lefthook`); its postinstall runs `lefthook install`. With no config, that writes a `lefthook.yml` of commented examples: replace it in step 7.2. It also renames another manager's hooks to `<hook>.old`, so remove the other manager before you add lefthook. pnpm runs it only when `lefthook` is in `onlyBuiltDependencies` (`pnpm-workspace.yaml` or `package.json`).
 - Ruby: `gem "lefthook", require: false` in the development group, plus `lefthook install` in `bin/setup`.
 - Python: `uv add --dev lefthook`, plus `lefthook install` in the setup script.
 - mise: `mise use lefthook@latest` (community plugin, per the lefthook docs), plus a setup task that runs `lefthook install`.
