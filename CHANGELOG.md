@@ -92,6 +92,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.0.0: new skill that puts a question or decision to a jury of 3 or 5 subagents. Jurors vote blind with distinct lenses that steer where they look but not how they vote, fresh reviewers critique the anonymized positions in shuffled order for one round, the foreman checks the disputed facts, and a vote change counts only when it names its reason. One seat runs on the Codex CLI when it is installed. The verdict always commits and carries the vote, the dissent, the riskiest assumption with a test, and the first action.
 - 1.0.1: the Codex seat's terminal output goes to a log file, and the run reads the reason for a failure from its last lines instead of taking the whole echo into context. The foreman waits for every seat without a message per arrival, and the report no longer repeats the brief shown in Step 2.
 
+### lefthook
+
+- 1.0.0: new skill that proposes lefthook git hooks for a repository. It reads the configured linters and every check CI runs, mines git history and failed CI runs for what a hook would have caught, and audits an existing lefthook config against a checklist. Each proposal cites its evidence, uses the repository's own tools and runner, and sits at the right stage: staged-file fixers in pre-commit, whole-project checks in pre-push, a message check only where history shows a convention. Secret scanning is the one must-have, with betterleaks as the default and gitleaks where a verified org or a frozen config matters. Nothing lands without approval, and every approved job is run and timed before `lefthook install`.
+
 ### llms-visibility
 
 - 1.0.7: a new Step 0 maps which response headers the host lets the run set, confirms each conclusion with `curl -sI`, and asks the user about control panel or proxy access before calling a header step blocked.
