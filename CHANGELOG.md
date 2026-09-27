@@ -72,6 +72,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.6: the catalog entry template picks `category` from the five README groups instead of defaulting to `productivity`, and the README row goes under the matching group heading.
 
+### improve-architecture
+
+- 1.1.5: the structural map counts callers with a symbol-aware search (LSP find references, CodeGraph) where one is available, and marks grep-based counts `grep-only`. A grep count misses a method used as a value and counts matches inside comments, so a symbol it reports as unused may still have callers.
+
 ### improve-tests
 
 - 1.0.0: new skill that cuts a test suite to the tests that catch real bugs and its run time to the minimum. It takes a timed baseline, maps each test file's claims, names the break each claim catches, and moves each one: delete, demote to the cheapest level, merge, rewrite, or fix the flake. Where code hands work to a library (PDF, email, images, HTTP), the tests move to the data we hand it plus one adapter smoke test. Speed levers (factory cascades, per-test setup, hashing cost, sleeps, isolation, parallelism) count only when the profile shows the time they recover. Every deletion names where its claim stays covered, and every batch is re-timed against the baseline.
