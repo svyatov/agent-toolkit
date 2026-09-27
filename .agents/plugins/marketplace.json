@@ -209,6 +209,18 @@
       "category": "code-design"
     },
     {
+      "name": "lefthook",
+      "source": {
+        "source": "local",
+        "path": "./plugins/lefthook"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "delivery"
+    },
+    {
       "name": "llms-visibility",
       "source": {
         "source": "local",
