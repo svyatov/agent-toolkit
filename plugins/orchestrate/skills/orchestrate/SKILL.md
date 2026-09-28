@@ -2,9 +2,11 @@
 name: orchestrate
 description: Work through a repository's GitHub issues unattended, driving worker Claude Code sessions in herdr panes to verify specs, triage bugs, implement, refactor, and merge each issue, and store the lessons of each run in the repo
 license: MIT
-compatibility: Requires herdr, gh, and Node.js 18.17 or later (built-in modules only). Workers call /triage, /implement, /qa, /code-review, and /retro from other plugins, and /refactor, /cprw, /fa, /c, and /ww from this marketplace.
+compatibility: Designed for Claude Code. Requires herdr, gh, and Node.js 18.17 or later (built-in modules only). Workers call /triage, /implement, /qa, /code-review, and /retro from github.com/svyatov/supermatt, and /refactor, /cprw, /fa, /c, and /ww from this marketplace.
 argument-hint: "[max issues]"
 disable-model-invocation: true
+disallowed-tools: AskUserQuestion
+allowed-tools: Bash(herdr:*), Bash(gh:*), Bash(git:*), Bash(node ${CLAUDE_SKILL_DIR}/scripts/next-issue.mjs:*), Bash(sleep:*), Bash(osascript:*)
 ---
 
 # orchestrate
