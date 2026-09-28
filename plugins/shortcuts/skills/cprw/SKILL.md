@@ -38,7 +38,8 @@ leave the changes above untouched.
    commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's
    pull request template when it has one.
 8. `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
-   read the result rather than treating it as a crash.
+   read the result rather than treating it as a crash. When it reports no checks, the branch runs no
+   CI: treat it as green.
 9. Green: `gh pr merge --squash --delete-branch`. When the branch is checked out in a worktree,
    `--delete-branch` cannot delete it: first confirm `git -C <worktree> status --short` is empty,
    then `git worktree remove <worktree>` and merge from the main checkout. Red: stop, name the

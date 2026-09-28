@@ -114,6 +114,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.2: `/cprw` and `/wm` treat a pull request with no checks as green. Before, a repository without CI left the merge decision undefined.
 - 1.2.1: `/c` adds an untracked local-tool directory such as `.codegraph/` to the root `.gitignore` and says so, instead of committing part of it or leaving it out. `/cprw` resets the local default branch to its remote after moving its commits to the new branch, and gives the push a 600000 ms timeout for long pre-push hooks. `/p` reads unpushed commits with `git log HEAD --not --remotes`, which the host injects where `@{upstream}` was refused, and reports the remote's reason for a rejected push instead of assuming the remote moved. `/fa` reports a finding fixed at only some of its sites as partly fixed. `/fci` drops the `Recent runs` line the host never ran and takes run IDs from the PR checks links. `/debrief-skill` found all of these in recent runs.
 - 1.2.0: `/ww` ("what would you suggest?") answers the question the agent just asked: it explains the problem in plain words, weighs each option for and against, recommends one, and for a close, costly-to-reverse choice hands over a ready-to-run `/jury` line.
 - 1.1.6: `/fa` counts an option as recommended only when the report says so in words. An option listed first or labelled "proposed" leaves the finding waiting on the user's choice.
