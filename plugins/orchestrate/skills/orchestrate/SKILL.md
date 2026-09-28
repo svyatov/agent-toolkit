@@ -31,7 +31,17 @@ Repeat until a stop condition is met.
 
 ## Worker
 
-- **Open the worker**: `herdr pane split "$HERDR_PANE_ID" --direction right --no-focus --cwd "$PWD"`. Save `.result.pane.pane_id` as PANE. Then `herdr agent start WORKER --kind claude --pane PANE` and `herdr pane report-metadata PANE --source orchestrate --display-agent worker`. A new pane's shell can still be starting: if `agent start` returns `agent_pane_busy`, run `sleep 3` and start it once more.
+Each session runs its own model and effort:
+
+| Session | Phases | Model | Effort |
+|---|---|---|---|
+| V | verify | `opus` | `xhigh` |
+| T | triage | `opus` | `high` |
+| A | implement, the QA and review restarts in step 3, fix | `sonnet` | `xhigh` |
+| B | refactor, ship | `opus` | `high` |
+| C | retro, lessons | `opus` | `high` |
+
+- **Open the worker**: `herdr pane split "$HERDR_PANE_ID" --direction right --no-focus --cwd "$PWD"`. Save `.result.pane.pane_id` as PANE. Then `herdr agent start WORKER --kind claude --pane PANE -- --model MODEL --effort EFFORT`, with MODEL and EFFORT from the current session's row, and `herdr pane report-metadata PANE --source orchestrate --display-agent worker`. A new pane's shell can still be starting: if `agent start` returns `agent_pane_busy`, run `sleep 3` and start it once more.
 - **Close the worker**: add `herdr agent get WORKER` `.result.agent.agent_session.value` to SESSIONS (the issue's list of worker session IDs, for the retro), then `herdr pane close PANE`.
 - **Restart the worker**: close it, then open it.
 - **Show phase P**: `herdr tab rename "$HERDR_TAB_ID" "#N P"`. Do this at the start of each phase below.
