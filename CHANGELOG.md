@@ -31,6 +31,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.0: new skill imported from [thoughtbot/atomic-commits-plugin](https://github.com/thoughtbot/atomic-commits-plugin) (MIT). Guides work in atomic commits (pass CI, deployable, no dead code), one type of work per commit, PRs near 200 lines, and ships the upstream PostToolUse hook that nudges after Edit/Write when the uncommitted diff reaches 80 lines or the branch diff reaches 200. The hook also counts untracked files, and the staging step drops the interactive `git add --patch`.
 - 1.0.1: the hook command quotes `${CLAUDE_PLUGIN_ROOT}`, so a plugin path with a space no longer splits the command. `claude plugin validate --strict` fails on the unquoted form.
+- 1.0.2: the hook nudges once per 100-line step instead of after every Edit/Write past the threshold: the uncommitted diff at 80, 180, 280 lines, and the branch diff at 200, 300, 400 once the branch has commits. The last step is stored in `.git/atomic-commits-step` and follows the diff down, so a commit resets it and the next crossing nudges again. One session had drawn 156 nudges.
 
 ### browser-compat
 
@@ -101,8 +102,13 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.7: a new Step 0 maps which response headers the host lets the run set, confirms each conclusion with `curl -sI`, and asks the user about control panel or proxy access before calling a header step blocked.
 
+### orchestrate
+
+- 1.0.0: new skill that works through a repository's GitHub issues one at a time, unattended. It drives worker Claude Code sessions in a herdr pane: it verifies a spec once its last ticket closes, triages untriaged bugs, then implements, refactors, and merges each issue, and merges the lessons of each run into the repo. It answers worker dialogs and questions itself, stops on any unsafe action, and prints a friction log when it stops. The bundled `scripts/next-issue.mjs` picks the next issue: specs first, then bugs, then the rest, with blocked and assigned issues dropped.
+
 ### refactor
 
+- 1.2.6: a Minor verdict recommends applying the findings or leaving the code as is, with the deciding reason, before it asks.
 - 1.2.5: a project under about 1,000 source lines is read directly, a few files per call, instead of through subagents. A Clean verdict ends the run without offering optional items; an item worth offering makes the verdict Minor.
 
 ### report-upstream
@@ -114,6 +120,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.3: `/cprw` and `/wm` wait 20 seconds and watch again when a pull request reports no checks, and treat it as green only if the second watch finds none too. CI registers a new pull request a few seconds late, so 1.2.2 could merge before CI started.
 - 1.2.2: `/cprw` and `/wm` treat a pull request with no checks as green. Before, a repository without CI left the merge decision undefined.
 - 1.2.1: `/c` adds an untracked local-tool directory such as `.codegraph/` to the root `.gitignore` and says so, instead of committing part of it or leaving it out. `/cprw` resets the local default branch to its remote after moving its commits to the new branch, and gives the push a 600000 ms timeout for long pre-push hooks. `/p` reads unpushed commits with `git log HEAD --not --remotes`, which the host injects where `@{upstream}` was refused, and reports the remote's reason for a rejected push instead of assuming the remote moved. `/fa` reports a finding fixed at only some of its sites as partly fixed. `/fci` drops the `Recent runs` line the host never ran and takes run IDs from the PR checks links. `/debrief-skill` found all of these in recent runs.
 - 1.2.0: `/ww` ("what would you suggest?") answers the question the agent just asked: it explains the problem in plain words, weighs each option for and against, recommends one, and for a close, costly-to-reverse choice hands over a ready-to-run `/jury` line.

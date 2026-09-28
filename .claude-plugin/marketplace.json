@@ -239,6 +239,18 @@
       ]
     },
     {
+      "name": "orchestrate",
+      "source": "./plugins/orchestrate",
+      "description": "Work through a repository's GitHub issues unattended, driving worker Claude Code sessions in herdr panes to verify specs, triage bugs, implement, refactor, and merge each issue, and store the lessons of each run in the repo.",
+      "category": "delivery",
+      "tags": [
+        "github-issues",
+        "herdr",
+        "automation",
+        "orchestration"
+      ]
+    },
+    {
       "name": "prior-art",
       "source": "./plugins/prior-art",
       "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",

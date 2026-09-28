@@ -38,8 +38,23 @@ fi
 # Total = branch diff + uncommitted
 TOTAL=$((BRANCH_DIFF + UNCOMMITTED))
 
-# Nudge thresholds
-if [ "$UNCOMMITTED" -ge 80 ]; then
+# Step of a diff size: 0 below the first threshold, then one more every 100 lines past it
+step() { if [ "$1" -ge "$2" ]; then echo $((($1 - $2) / 100 + 1)); else echo 0; fi; }
+UNCOMMITTED_STEP=$(step "$UNCOMMITTED" 80)
+# With nothing committed on the branch, TOTAL equals UNCOMMITTED, which its own steps already cover
+TOTAL_STEP=0
+if [ "$BRANCH_DIFF" -gt 0 ]; then
+  TOTAL_STEP=$(step "$TOTAL" 200)
+fi
+
+# Nudge only when a diff reaches a step it was not on at the last run. The current
+# steps are always stored, so a shrinking diff (a commit) lowers them and the next
+# crossing nudges again.
+STATE=$(git rev-parse --git-path atomic-commits-step)
+read -r LAST_UNCOMMITTED_STEP LAST_TOTAL_STEP 2>/dev/null < "$STATE"
+echo "$UNCOMMITTED_STEP $TOTAL_STEP" > "$STATE"
+
+if [ "$UNCOMMITTED_STEP" -gt "${LAST_UNCOMMITTED_STEP:-0}" ]; then
   echo "<atomic-commits-nudge>"
   echo "Your uncommitted diff is ~${UNCOMMITTED} lines. Consider whether you have a complete atomic unit to commit:"
   echo "- Does it pass CI on its own?"
@@ -47,7 +62,7 @@ if [ "$UNCOMMITTED" -ge 80 ]; then
   echo "- Does it introduce dead code?"
   echo "If yes to the first two and no to the third, commit it now before continuing."
   echo "</atomic-commits-nudge>"
-elif [ "$TOTAL" -ge 200 ]; then
+elif [ "$TOTAL_STEP" -gt "${LAST_TOTAL_STEP:-0}" ]; then
   echo "<atomic-commits-nudge>"
   if [ "$ON_DEFAULT" -eq 1 ]; then
     echo "You have ~${UNCOMMITTED} uncommitted lines on ${DEFAULT_BRANCH}. You should be working on a feature branch."
