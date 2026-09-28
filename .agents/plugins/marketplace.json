@@ -233,6 +233,18 @@
       "category": "web"
     },
     {
+      "name": "orchestrate",
+      "source": {
+        "source": "local",
+        "path": "./plugins/orchestrate"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "delivery"
+    },
+    {
       "name": "prior-art",
       "source": {
         "source": "local",

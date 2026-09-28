@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "refactor",
-  "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
-  "version": "1.2.6",
+  "name": "orchestrate",
+  "description": "Work through a repository's GitHub issues unattended, driving worker Claude Code sessions in herdr panes to verify specs, triage bugs, implement, refactor, and merge each issue, and store the lessons of each run in the repo.",
+  "version": "1.0.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

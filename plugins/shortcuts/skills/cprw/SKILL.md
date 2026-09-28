@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires git and an authenticated gh CLI
 disable-model-invocation: true
 argument-hint: [message hint]
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git branch:*), Bash(git switch:*), Bash(git symbolic-ref:*), Bash(git push:*), Bash(gh pr:*), Bash(gh run:*), Bash(git worktree:*)
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git branch:*), Bash(git switch:*), Bash(git symbolic-ref:*), Bash(git push:*), Bash(gh pr:*), Bash(gh run:*), Bash(git worktree:*), Bash(sleep:*)
 ---
 
 Branch and status: !`git status --short --branch`
@@ -38,8 +38,9 @@ leave the changes above untouched.
    commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's
    pull request template when it has one.
 8. `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
-   read the result rather than treating it as a crash. When it reports no checks, the branch runs no
-   CI: treat it as green.
+   read the result rather than treating it as a crash. CI takes a few seconds to register a new pull
+   request, so when it reports no checks, `sleep 20` and watch again. No checks the second time
+   means the branch runs no CI: treat it as green.
 9. Green: `gh pr merge --squash --delete-branch`. When the branch is checked out in a worktree,
    `--delete-branch` cannot delete it: first confirm `git -C <worktree> status --short` is empty,
    then `git worktree remove <worktree>` and merge from the main checkout. Red: stop, name the

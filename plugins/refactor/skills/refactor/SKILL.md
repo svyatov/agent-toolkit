@@ -78,7 +78,7 @@ Read the ranked candidates through subagents, one per area, each returning findi
 | Rating | Meaning | Action |
 |--------|---------|--------|
 | **Clean** | No meaningful improvements available | Tell the user the code looks good and end the run there. **Stop here** unless they provide a specific reason to continue. An item worth offering the user makes the verdict Minor. |
-| **Minor** | Small improvements possible (naming, minor duplication) | List findings. Ask if the user wants to proceed — these are optional. |
+| **Minor** | Small improvements possible (naming, minor duplication) | List findings. Recommend applying them or leaving the code as is, give the deciding reason, then ask. These are optional. |
 | **Significant** | Clear code smells or structural issues | List findings with priorities. Proceed to Step 3. |
 | **Critical** | Major structural problems blocking maintainability | List findings urgently. Proceed to Step 3. |
 
