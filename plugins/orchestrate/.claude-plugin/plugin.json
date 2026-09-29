@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "orchestrate",
   "description": "Work through a repository's GitHub issues unattended, driving worker Claude Code sessions in herdr panes to verify specs, triage bugs, implement, refactor, and merge each issue, and store the lessons of each run in the repo.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

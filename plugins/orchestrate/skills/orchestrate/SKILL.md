@@ -53,6 +53,7 @@ Each session runs its own model and effort:
 An action is safe when everything it deletes, overwrites, or rewrites is inside the repo checkout, or it is one of these:
 
 - Clear a cache that rebuilds itself: a subfolder of `~/.cache`, or a package manager's own clean command (`bun pm cache rm`, `npm cache clean`).
+- Remove a `mktemp -d` directory that the worker made in this run, under `$TMPDIR` or `/tmp`. Before you answer, read the path it names and list the directory.
 - Remove a git worktree of this repo whose tree is clean (`git -C <path> status --porcelain` prints nothing).
 - Push the issue branch or the lessons branch, `--force-with-lease` included, and delete it locally or on the remote after its PR merged.
 - In the retro phase, edit a file outside the checkout that a retro candidate names as its source (a skill, a global steering file such as `~/.claude/CLAUDE.md`), left uncommitted for the operator.
