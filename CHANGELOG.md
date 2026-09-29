@@ -106,6 +106,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 - 1.0.0: new skill that works through a repository's GitHub issues one at a time, unattended. It drives worker Claude Code sessions in a herdr pane: it verifies a spec once its last ticket closes, triages untriaged bugs, then implements, refactors, and merges each issue, and merges the lessons of each run into the repo. It answers worker dialogs and questions itself, stops on any unsafe action, and prints a friction log when it stops. The bundled `scripts/next-issue.mjs` picks the next issue: specs first, then bugs, then the rest, with blocked and assigned issues dropped.
 - 1.1.0: each worker session starts with its own model and effort: Sonnet at `xhigh` implements and fixes, Opus at `xhigh` verifies a spec, and Opus at `high` triages, refactors and ships, and runs the retro. A different model from the implementer refactors the branch.
+- 1.1.1: session A, which implements and fixes, runs Sonnet at `medium` effort instead of `xhigh`.
 
 ### refactor
 
@@ -121,6 +122,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.4: `/cprw` and `/wm` read whether the repository has GitHub Actions turned on, and skip the checks watch when it is off, instead of waiting 20 seconds for checks that never register.
 - 1.2.3: `/cprw` and `/wm` wait 20 seconds and watch again when a pull request reports no checks, and treat it as green only if the second watch finds none too. CI registers a new pull request a few seconds late, so 1.2.2 could merge before CI started.
 - 1.2.2: `/cprw` and `/wm` treat a pull request with no checks as green. Before, a repository without CI left the merge decision undefined.
 - 1.2.1: `/c` adds an untracked local-tool directory such as `.codegraph/` to the root `.gitignore` and says so, instead of committing part of it or leaving it out. `/cprw` resets the local default branch to its remote after moving its commits to the new branch, and gives the push a 600000 ms timeout for long pre-push hooks. `/p` reads unpushed commits with `git log HEAD --not --remotes`, which the host injects where `@{upstream}` was refused, and reports the remote's reason for a rejected push instead of assuming the remote moved. `/fa` reports a finding fixed at only some of its sites as partly fixed. `/fci` drops the `Recent runs` line the host never ran and takes run IDs from the PR checks links. `/debrief-skill` found all of these in recent runs.

@@ -37,7 +37,7 @@ Each session runs its own model and effort:
 |---|---|---|---|
 | V | verify | `opus` | `xhigh` |
 | T | triage | `opus` | `high` |
-| A | implement, the QA and review restarts in step 3, fix | `sonnet` | `xhigh` |
+| A | implement, the QA and review restarts in step 3, fix | `sonnet` | `medium` |
 | B | refactor, ship | `opus` | `high` |
 | C | retro, lessons | `opus` | `high` |
 
