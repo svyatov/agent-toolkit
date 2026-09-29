@@ -107,6 +107,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.0.0: new skill that works through a repository's GitHub issues one at a time, unattended. It drives worker Claude Code sessions in a herdr pane: it verifies a spec once its last ticket closes, triages untriaged bugs, then implements, refactors, and merges each issue, and merges the lessons of each run into the repo. It answers worker dialogs and questions itself, stops on any unsafe action, and prints a friction log when it stops. The bundled `scripts/next-issue.mjs` picks the next issue: specs first, then bugs, then the rest, with blocked and assigned issues dropped.
 - 1.1.0: each worker session starts with its own model and effort: Sonnet at `xhigh` implements and fixes, Opus at `xhigh` verifies a spec, and Opus at `high` triages, refactors and ships, and runs the retro. A different model from the implementer refactors the branch.
 - 1.1.1: session A, which implements and fixes, runs Sonnet at `medium` effort instead of `xhigh`. The status question's `UNFIXED` line leaves out a finding that an answer to the worker's question settled, so `/fa` is not sent findings that are already decided.
+- 1.1.2: removing a `mktemp -d` directory that the worker made in this run is a safe action, so the orchestrator approves the worker's cleanup of its scratch files once it has listed the directory.
 
 ### refactor
 
