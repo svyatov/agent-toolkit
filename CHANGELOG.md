@@ -108,6 +108,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.1.0: each worker session starts with its own model and effort: Sonnet at `xhigh` implements and fixes, Opus at `xhigh` verifies a spec, and Opus at `high` triages, refactors and ships, and runs the retro. A different model from the implementer refactors the branch.
 - 1.1.1: session A, which implements and fixes, runs Sonnet at `medium` effort instead of `xhigh`. The status question's `UNFIXED` line leaves out a finding that an answer to the worker's question settled, so `/fa` is not sent findings that are already decided.
 - 1.1.2: removing a `mktemp -d` directory that the worker made in this run is a safe action, so the orchestrator approves the worker's cleanup of its scratch files once it has listed the directory.
+- 1.1.3: session A, which implements and fixes, runs Sonnet at `high` effort instead of `medium`.
 
 ### refactor
 
@@ -123,6 +124,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.5: `/fa` takes a finding's own text as its arguments and applies it, even when the finding came from another session, instead of stopping because this session holds no report. The arguments appear once in the skill, so long finding text no longer garbles its instructions.
 - 1.2.4: `/cprw` and `/wm` read whether the repository has GitHub Actions turned on, and skip the checks watch when it is off, instead of waiting 20 seconds for checks that never register.
 - 1.2.3: `/cprw` and `/wm` wait 20 seconds and watch again when a pull request reports no checks, and treat it as green only if the second watch finds none too. CI registers a new pull request a few seconds late, so 1.2.2 could merge before CI started.
 - 1.2.2: `/cprw` and `/wm` treat a pull request with no checks as green. Before, a repository without CI left the merge decision undefined.
