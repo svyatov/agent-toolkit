@@ -8,9 +8,11 @@ allowed-tools: Bash(gh pr:*), Bash(gh run:*), Bash(git status:*), Bash(git branc
 ---
 
 Pull request: !`gh pr view --json number,title,url,isDraft,mergeable,mergeStateStatus 2>&1 || true`
+Actions enabled: !`gh api 'repos/{owner}/{repo}/actions/permissions' --jq .enabled 2>&1 || true`
 
 1. No open pull request for this branch: say so and stop.
-2. `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
+2. Actions enabled `false` above means the repository runs no CI: skip the watch and treat it as
+   green. Otherwise, `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
    read the result rather than treating it as a crash. CI takes a few seconds to register a new pull
    request, so when it reports no checks, `sleep 20` and watch again. No checks the second time
    means the branch runs no CI: treat it as green.

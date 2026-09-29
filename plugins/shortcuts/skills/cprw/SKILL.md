@@ -12,6 +12,7 @@ Branch and status: !`git status --short --branch`
 Changed files: !`git diff HEAD --stat || true`
 Branch commits: !`git log --oneline origin/HEAD..HEAD || true`
 Recent subjects: !`git log --oneline -10 || true`
+Actions enabled: !`gh api 'repos/{owner}/{repo}/actions/permissions' --jq .enabled 2>&1 || true`
 
 Commit everything above, push, open a pull request, and merge it once CI is green. Never commit onto
 the default branch. The lines above describe the session's working directory. When this session's
@@ -37,7 +38,8 @@ leave the changes above untouched.
    title and body cover the whole branch: your commit's subject when it is the branch's only
    commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's
    pull request template when it has one.
-8. `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
+8. Actions enabled `false` above means the repository runs no CI: skip the watch and treat it as
+   green. Otherwise, `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
    read the result rather than treating it as a crash. CI takes a few seconds to register a new pull
    request, so when it reports no checks, `sleep 20` and watch again. No checks the second time
    means the branch runs no CI: treat it as green.
