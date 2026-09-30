@@ -37,7 +37,9 @@ leave the changes above untouched.
 7. `gh pr create`. The squash merge makes the title the one commit on the default branch, so the
    title and body cover the whole branch: your commit's subject when it is the branch's only
    commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's
-   pull request template when it has one.
+   pull request template when it has one. Otherwise, call the Skill tool with `pr` for the body when
+   it is installed, and with `oss-writing` for the wording either way, even when no commit was written
+   in step 5.
 8. Actions enabled `false` above means the repository runs no CI: skip the watch and treat it as
    green. Otherwise, `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
    read the result rather than treating it as a crash. CI takes a few seconds to register a new pull
@@ -47,4 +49,5 @@ leave the changes above untouched.
    `--delete-branch` cannot delete it: first confirm `git -C <worktree> status --short` is empty,
    then `git worktree remove <worktree>` and merge from the main checkout. Red: stop, name the
    failing check and the reason, and merge nothing. Do not retry, do not fix, do not merge past a failure.
-10. Report the PR URL and whether it merged.
+10. Report the PR URL and whether it merged. GitHub closes an issue the body names with `Closes #N`
+    up to a minute after the merge, so report it as closing and leave the close to GitHub.

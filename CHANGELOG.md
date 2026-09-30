@@ -13,6 +13,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - Rename the marketplace from `leo-toolkit` to `svyatov-agent-toolkit` in both catalogs. Existing registrations keep working under the old name; the README documents how to switch.
 - Remove `command-creator`. Claude Code merged custom commands into skills and its docs now call `.claude/commands/` the older format, so the skill taught a superseded layout and referenced tools that no longer exist under those names. The name is mapped to `null` in `renames`.
 - Group the README skills table into five sections (Delivery, Code and design, Web, Skills and marketplace, Writing) and set each catalog entry's `category` to the matching slug (`delivery`, `code-design`, `web`, `skill-tooling`, `writing`) in both catalogs.
+- Remove `orchestrate`, `refactor`, `improve-architecture`, `improve-tests`, `jury`, and `dependency-vetting`: they moved to [SuperMatt](https://github.com/svyatov/supermatt) 0.9.0, where `improve-architecture` replaces SuperMatt's `architecture-review` and orchestrate's workers call SuperMatt's `commit`, `ship-pr`, `fix-findings`, and `what-would-you-do` in place of `/c`, `/cprw`, `/fa`, and `/ww`. Each name is mapped to `null` in `renames`. The shortcuts plugin stays here.
 - Rename `dep-review` to `dependabot-review`, `contribute` to `report-upstream`, and `browser-bugs` to `browser-compat`. Each old name maps to its new name in `renames`, so Claude Code moves existing installs over.
 
 ### All plugins
@@ -124,6 +125,8 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.7: `/cprw` leaves an issue named by `Closes #N` for GitHub to close after the merge, since a run closed one by hand 25 seconds after the merge and reported that GitHub had not closed it.
+- 1.2.6: `/cprw` writes the pull request body with the `pr` skill when it is installed and with `oss-writing` for the wording, also when the branch was already committed, instead of copying an earlier pull request's style. `/ww` names SuperMatt as the home of `/jury`, which moved there, and leaves the jury line out when SuperMatt is not installed.
 - 1.2.5: `/fa` takes a finding's own text as its arguments and applies it, even when the finding came from another session, instead of stopping because this session holds no report. The arguments appear once in the skill, so long finding text no longer garbles its instructions.
 - 1.2.4: `/cprw` and `/wm` read whether the repository has GitHub Actions turned on, and skip the checks watch when it is off, instead of waiting 20 seconds for checks that never register.
 - 1.2.3: `/cprw` and `/wm` wait 20 seconds and watch again when a pull request reports no checks, and treat it as green only if the second watch finds none too. CI registers a new pull request a few seconds late, so 1.2.2 could merge before CI started.

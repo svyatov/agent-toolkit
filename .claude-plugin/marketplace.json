@@ -110,18 +110,6 @@
       ]
     },
     {
-      "name": "dependency-vetting",
-      "source": "./plugins/dependency-vetting",
-      "description": "Verify a package or tool is authentic before installing, adding, or recommending it: follow the upstream project to its install command, never a registry page back to a project.",
-      "category": "delivery",
-      "tags": [
-        "dependencies",
-        "supply-chain",
-        "security",
-        "packages"
-      ]
-    },
-    {
       "name": "generate-dockerfile",
       "source": "./plugins/generate-dockerfile",
       "description": "Generate optimized, multi-stage Dockerfiles.",
@@ -179,41 +167,6 @@
       ]
     },
     {
-      "name": "improve-architecture",
-      "source": "./plugins/improve-architecture",
-      "description": "Find architectural improvements with assessment gate, cohesion checks, and test writing.",
-      "category": "code-design",
-      "tags": [
-        "architecture",
-        "refactoring",
-        "testing"
-      ]
-    },
-    {
-      "name": "improve-tests",
-      "source": "./plugins/improve-tests",
-      "description": "Cut a test suite to the tests that catch real bugs and its run time to the minimum: measure first, delete or demote low-value tests, fix slow setup, and prove every cut keeps the checks that matter.",
-      "category": "code-design",
-      "tags": [
-        "testing",
-        "performance",
-        "test-suite",
-        "audit"
-      ]
-    },
-    {
-      "name": "jury",
-      "source": "./plugins/jury",
-      "description": "Put a question or decision to a jury of 3 or 5 subagents: blind independent votes, one anonymized review round, and one committed verdict with the vote, the dissent, and the first action.",
-      "category": "code-design",
-      "tags": [
-        "decision-making",
-        "subagents",
-        "review",
-        "planning"
-      ]
-    },
-    {
       "name": "lefthook",
       "source": "./plugins/lefthook",
       "description": "Propose lefthook git hooks for a repository from its linters, CI checks, and git history: secret scanning, staged-file fixers, pre-push checks, and commit message rules, each approved and proven before it lands.",
@@ -239,18 +192,6 @@
       ]
     },
     {
-      "name": "orchestrate",
-      "source": "./plugins/orchestrate",
-      "description": "Work through a repository's GitHub issues unattended, driving worker Claude Code sessions in herdr panes to verify specs, triage bugs, implement, refactor, and merge each issue, and store the lessons of each run in the repo.",
-      "category": "delivery",
-      "tags": [
-        "github-issues",
-        "herdr",
-        "automation",
-        "orchestration"
-      ]
-    },
-    {
       "name": "prior-art",
       "source": "./plugins/prior-art",
       "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",
@@ -261,17 +202,6 @@
         "architecture",
         "prior-art",
         "design"
-      ]
-    },
-    {
-      "name": "refactor",
-      "source": "./plugins/refactor",
-      "description": "Refactor code at any scope (project/file/method) with idempotent assessment gate.",
-      "category": "code-design",
-      "tags": [
-        "refactoring",
-        "cleanup",
-        "code-quality"
       ]
     },
     {
@@ -339,6 +269,12 @@
     "taskwarrior": null,
     "dep-review": "dependabot-review",
     "contribute": "report-upstream",
-    "browser-bugs": "browser-compat"
+    "browser-bugs": "browser-compat",
+    "orchestrate": null,
+    "refactor": null,
+    "improve-architecture": null,
+    "improve-tests": null,
+    "jury": null,
+    "dependency-vetting": null
   }
 }
