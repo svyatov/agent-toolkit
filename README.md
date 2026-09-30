@@ -70,6 +70,8 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 
 ## Skills
 
+`orchestrate`, `refactor`, `improve-architecture`, `improve-tests`, `jury`, and `dependency-vetting` moved to [SuperMatt](https://github.com/svyatov/supermatt). Install them from there.
+
 ### Delivery
 
 | Skill | Description | Install |
@@ -78,10 +80,8 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `atomic-commits` | Commit early and often in atomic increments: separate refactor, feature, and cleanup work, keep PRs near 200 lines, and get a hook nudge when the diff grows past that | `claude plugin install atomic-commits@svyatov-agent-toolkit`<br>`codex plugin add atomic-commits@svyatov-agent-toolkit` |
 | `cut-release` | Cut a release from the Unreleased changelog section: version bump, release branch, PR, squash merge, tag, GitHub release | `claude plugin install cut-release@svyatov-agent-toolkit`<br>`codex plugin add cut-release@svyatov-agent-toolkit` |
 | `dependabot-review` | Review Dependabot PRs for breaking changes, codebase impact, and merge readiness: one PR by URL, or an audit of every open one with a triage table | `claude plugin install dependabot-review@svyatov-agent-toolkit`<br>`codex plugin add dependabot-review@svyatov-agent-toolkit` |
-| `dependency-vetting` | Verify a package or tool is authentic before installing, adding, or recommending it: follow the upstream project to its install command, never a registry page back to a project | `claude plugin install dependency-vetting@svyatov-agent-toolkit`<br>`codex plugin add dependency-vetting@svyatov-agent-toolkit` |
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit`<br>`codex plugin add generate-dockerfile@svyatov-agent-toolkit` |
 | `lefthook` | Propose lefthook git hooks for a repository from its linters, CI checks, and git history: secret scanning, staged-file fixers, pre-push checks, and commit message rules, each approved and proven before it lands | `claude plugin install lefthook@svyatov-agent-toolkit`<br>`codex plugin add lefthook@svyatov-agent-toolkit` |
-| `orchestrate` | Work through a repository's GitHub issues unattended, driving worker Claude Code sessions in herdr panes to verify specs, triage bugs, implement, refactor, and merge each issue, and store the lessons of each run in the repo | `claude plugin install orchestrate@svyatov-agent-toolkit`<br>`codex plugin add orchestrate@svyatov-agent-toolkit` |
 | `report-upstream` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install report-upstream@svyatov-agent-toolkit`<br>`codex plugin add report-upstream@svyatov-agent-toolkit` |
 | `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop, and for a question the agent asked: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps, /ww | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
 
@@ -90,11 +90,7 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | Skill | Description | Install |
 |-------|-------------|---------|
 | `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@svyatov-agent-toolkit`<br>`codex plugin add grill-me@svyatov-agent-toolkit` |
-| `improve-architecture` | Find architectural improvements with assessment gate, cohesion checks, and test writing | `claude plugin install improve-architecture@svyatov-agent-toolkit`<br>`codex plugin add improve-architecture@svyatov-agent-toolkit` |
-| `improve-tests` | Cut a test suite to the tests that catch real bugs and its run time to the minimum: measure first, delete or demote low-value tests, fix slow setup, and prove every cut keeps the checks that matter | `claude plugin install improve-tests@svyatov-agent-toolkit`<br>`codex plugin add improve-tests@svyatov-agent-toolkit` |
-| `jury` | Put a question or decision to a jury of 3 or 5 subagents: blind independent votes, one anonymized review round, and one committed verdict with the vote, the dissent, and the first action | `claude plugin install jury@svyatov-agent-toolkit`<br>`codex plugin add jury@svyatov-agent-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@svyatov-agent-toolkit`<br>`codex plugin add prior-art@svyatov-agent-toolkit` |
-| `refactor` | Refactor code at any scope (project/file/method) with idempotent assessment gate | `claude plugin install refactor@svyatov-agent-toolkit`<br>`codex plugin add refactor@svyatov-agent-toolkit` |
 
 ### Web
 

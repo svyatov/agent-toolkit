@@ -26,5 +26,6 @@ follow.
 6. Hard question: the options stay close after the legwork and a wrong pick is costly to reverse.
    Give your lean anyway, then offer a jury: one ready-to-run `/jury <question>` line that states the
    question, the options, and the constraints in full, so the panel needs nothing from this session.
-   `/jury` is slash-only, so the user runs it.
+   `/jury` is slash-only, so the user runs it. It ships in SuperMatt (`/supermatt:jury` from the
+   installed plugin); when SuperMatt is not installed, skip the jury line.
 7. End on the recommendation. The user decides; act only on their answer.
