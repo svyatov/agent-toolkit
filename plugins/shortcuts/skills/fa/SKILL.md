@@ -27,7 +27,9 @@ that choice.
    instead of choosing another. If it works at only some of the places the finding names, apply it
    there and report the finding as partly fixed.
 4. For every repository you edited, this one or another, read its `AGENTS.md`, `CLAUDE.md` and
-   `CONTRIBUTING.md`. Run the checks they name, and make the other edits they require of a change (a
+   `CONTRIBUTING.md`. Before verification, identify checks that start services or create local
+   sockets. Use an execution context that permits those capabilities, obtaining host permission
+   when required. Run the checks they name, and make the other edits they require of a change (a
    version bump, a changelog entry). Done when each edited repository has its checks run, or is
    named in the report as having none after you read those files.
 5. Report one line per finding: `<code>: fixed`, `<code>: partly fixed, <what is left and why>`, or

@@ -11,7 +11,8 @@ they do not yet understand the problem well enough to choose. Take the most rece
 decision you put to them in this session; $ARGUMENTS names another one, or the part they do not
 follow.
 
-1. No open question in this session: say so and stop.
+1. Use the most recent open question or decision. If the preceding answer reported a blocker,
+   treat how to resolve it as the decision. If neither exists, say so and stop.
 2. Do the legwork the answer needs: read the code, config, docs, or output the question touches.
    Done when every claim you make about an option rests on something you read or ran in this
    session.
