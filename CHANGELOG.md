@@ -125,6 +125,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.9: `/cpr` bounds large diff reads, falls back to repository writing conventions when `oss-writing` is unavailable, and checks GitHub network permissions before use. `/fa` selects a permitted execution context for verification that needs services or local sockets. `/ww` treats a reported blocker as a decision even when the preceding answer asked no question.
 - 1.2.8: `/cprw` resolves writing helpers once from the host's skill catalog and falls back to repository wording rules when a helper is unavailable, reads large diffs in bounded windows with every hunk accounted for, and declares permitted GitHub network access before its preflight.
 - 1.2.7: `/cprw` leaves an issue named by `Closes #N` for GitHub to close after the merge, since a run closed one by hand 25 seconds after the merge and reported that GitHub had not closed it.
 - 1.2.6: `/cprw` writes the pull request body with the `pr` skill when it is installed and with `oss-writing` for the wording, also when the branch was already committed, instead of copying an earlier pull request's style. `/ww` names SuperMatt as the home of `/jury`, which moved there, and leaves the jury line out when SuperMatt is not installed.
