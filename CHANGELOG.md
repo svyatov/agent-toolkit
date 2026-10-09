@@ -45,6 +45,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### cut-release
 
+- 1.1.3: target the selected release PR explicitly in check and merge commands, and handle missing bot checks before merge while preserving the stop on failed checks.
 - 1.1.2: remove the external writing-skill dependency from release commit instructions.
 - 1.1.1: a bot release PR opened with `GITHUB_TOKEN` starts no required checks, so the merge is refused. The run now closes and reopens the PR to start them, never merges with `--admin`, and names the problem in the report.
 - 1.1.0: a repository that a release bot (release-please, changesets) releases now goes through the bot's open release PR: watch its checks, squash-merge it, and watch the publish. The publish watch finds the run by workflow file, and stops at a job waiting on environment approval to report the run URL.
@@ -127,6 +128,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.11: `/cprw` queries Actions settings after network approval, `/fci` inspects and watches workflow runs when no PR exists, and `/cp` reads every page of branch rules before committing.
 - 1.2.10: remove the external writing-skill dependency from commit and pull request instructions.
 - 1.2.9: `/cpr` bounds large diff reads, falls back to repository writing conventions when `oss-writing` is unavailable, and checks GitHub network permissions before use. `/fa` selects a permitted execution context for verification that needs services or local sockets. `/ww` treats a reported blocker as a decision even when the preceding answer asked no question.
 - 1.2.8: `/cprw` resolves writing helpers once from the host's skill catalog and falls back to repository wording rules when a helper is unavailable, reads large diffs in bounded windows with every hunk accounted for, and declares permitted GitHub network access before its preflight.

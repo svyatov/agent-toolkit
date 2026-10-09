@@ -15,7 +15,7 @@ Commit everything above on the current branch, then push. Do not switch or creat
 main.
 
 1. On the repository's default branch, run
-   `gh api repos/{owner}/{repo}/rules/branches/<branch> --jq '[.[].type]'`. If it lists
+   `gh api repos/{owner}/{repo}/rules/branches/<branch> --paginate --jq '[.[].type]'`. If it lists
    `pull_request`, the push would be refused: stop, commit nothing, and name `/cprw` instead.
 2. Read the full diff (`git diff HEAD`) and every untracked file `git status` lists before writing
    anything.

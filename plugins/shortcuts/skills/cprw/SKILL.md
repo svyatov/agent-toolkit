@@ -12,7 +12,6 @@ Branch and status: !`git status --short --branch`
 Changed files: !`git diff HEAD --stat || true`
 Branch commits: !`git log --oneline origin/HEAD..HEAD || true`
 Recent subjects: !`git log --oneline -10 || true`
-Actions enabled: !`gh api 'repos/{owner}/{repo}/actions/permissions' --jq .enabled 2>&1 || true`
 
 Run GitHub commands through the host's permitted network mode.
 If network access needs host approval, obtain that access before the GitHub preflight.
@@ -21,6 +20,10 @@ Commit everything above, push, open a pull request, and merge it once CI is gree
 the default branch. The lines above describe the session's working directory. When this session's
 work sits in another worktree (`git worktree list`), run every step there with `git -C <path>` and
 leave the changes above untouched.
+
+Before step 1, run `gh api 'repos/{owner}/{repo}/actions/permissions' --jq .enabled` through
+the permitted network mode and record the result as Actions enabled for step 8.
+If the query fails, stop and report the error; do not treat it as Actions disabled.
 
 1. Read the full diff (`git diff HEAD`), every untracked file `git status` lists, and, when
    `Branch commits` lists any, their diff (`git diff origin/HEAD...HEAD`) before writing anything.
@@ -48,7 +51,7 @@ leave the changes above untouched.
    With no template or helper, write a brief body stating the problem, behavior, and validation.
    Apply the repository's wording rules even when no commit was written.
    When the host has no Skill tool, read the helper at its supplied path.
-8. Actions enabled `false` above means the repository runs no CI: skip the watch and treat it as
+8. Actions enabled `false` from the preflight means the repository runs no CI: skip the watch and treat it as
    green. Otherwise, `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
    read the result rather than treating it as a crash. CI takes a few seconds to register a new pull
    request, so when it reports no checks, `sleep 20` and watch again. No checks the second time
