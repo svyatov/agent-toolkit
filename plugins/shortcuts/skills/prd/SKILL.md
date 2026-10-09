@@ -19,6 +19,6 @@ Pull request: !`gh pr view --json number,title,url,baseRefName,body 2>&1 || true
    sections of the old body that are still true; drop what the diff no longer supports. A test plan
    with checkboxes: run each item you can and check it off; leave unchecked what you could not run
    and say why.
-5. Follow the `oss-writing` skill for the wording. Never hard-wrap.
+5. Never hard-wrap.
 6. `gh pr edit --title ... --body-file -` with the body on stdin (heredoc). Report the URL and the
    new title.

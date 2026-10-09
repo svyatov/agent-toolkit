@@ -54,7 +54,7 @@ naming.
 
 ## Step 5: Draft
 
-Follow the `oss-writing` skill for every sentence. Never hard-wrap.
+Never hard-wrap.
 
 An issue: title in the project's convention, then what happened, what was expected, the minimal
 reproduction, versions, and the environment. Use the issue template when there is one.

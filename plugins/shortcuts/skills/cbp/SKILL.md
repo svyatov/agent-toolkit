@@ -22,7 +22,7 @@ Commit everything above and push, never onto the default branch.
    and the description comes from the change itself.
 4. Stage the changes. Prefer explicit paths over `git add -A`.
 5. Write a Conventional Commit `type(scope): description`, matching the subject style already in
-   `git log`. Follow the `oss-writing` skill for the wording. $ARGUMENTS is a hint at what the change
+   `git log`. $ARGUMENTS is a hint at what the change
    is about, not the message itself.
 6. Commit, then `git push -u origin HEAD`.
 7. Report the branch, the subject, and the short hash.

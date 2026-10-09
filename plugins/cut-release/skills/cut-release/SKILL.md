@@ -17,13 +17,16 @@ Release workflows: !`ls .github/workflows 2>/dev/null || true`
 A release bot in those workflows (release-please, changesets) owns the bump, the changelog, the tag,
 and the release. Its open PR is the release: list PRs with
 `gh pr list --json number,title,headRefName,url` and take the one whose head starts
-`release-please--` or `changeset-release/`. Run only Steps 5.2, 5.3, 6.3, and 7 on it. The invocation is
-the go-ahead to merge. With no open bot PR, nothing is releasable yet: say so and stop. A bot that
-opens its PR with `GITHUB_TOKEN` starts no `pull_request` workflows, so required checks never
-appear, `gh pr checks --watch` passes without them, and `gh pr merge` fails with "the base branch
-policy prohibits the merge". Then run `gh pr close <n> && gh pr reopen <n>`, which starts them
-under your account, and go back to Step 5.2. Never merge with `--admin`. Name this in the Step 7
-report: every future bot PR will hit it until the repository gives the bot an App token.
+`release-please--` or `changeset-release/`. Record its number as `<n>` and run only Steps 5.2,
+5.3, 6.3, and 7 on that PR. The invocation is the go-ahead to merge. With no open bot PR,
+nothing is releasable yet: say so and stop.
+
+If Step 5.2 reports no checks for a bot PR, confirm from its workflow that the PR was opened
+with `GITHUB_TOKEN` and that this prevented the required `pull_request` workflows from running.
+Only for that case, run `gh pr close <n> && gh pr reopen <n>` once to start them under your
+account. Wait for the workflows to register, then return to Step 5.2. If checks remain absent,
+report that and stop. This recovery does not apply to failed checks. Never merge with `--admin`.
+When this recovery was needed, name it in Step 7 and explain that an App token avoids the trigger problem.
 
 Take everything under the Unreleased heading (`## Unreleased` or `## [Unreleased]`) in
 CHANGELOG.md to a tagged release. Version override: $ARGUMENTS.
@@ -65,15 +68,16 @@ An argument that is lower than the last tag, or equal to it, is an error.
    `docs/` version switcher, a Homebrew formula. Grep for the previous version string and judge
    each hit.
 
-Commit as `chore(release): X.Y.Z` following the `oss-writing` skill. Never hard-wrap.
+Commit as `chore(release): X.Y.Z`. Never hard-wrap.
 
 ## Step 5: Land it
 
 1. `git push -u origin HEAD`, then `gh pr create` titled `chore(release): X.Y.Z` with the new
-   changelog section as the body.
-2. `gh pr checks --watch`. It exits non-zero on failure; read the result. Red: stop, name the
-   failing check, and merge nothing.
-3. Green: `gh pr merge --squash --delete-branch`, then `git pull` on the default branch.
+   changelog section as the body. Record the created PR's number as `<n>` for the following steps.
+2. `gh pr checks <n> --watch`. It exits non-zero on failure; read the result. No checks: use the
+   bot recovery above when applicable; otherwise stop and report the missing checks. Red: stop,
+   name the failing check, and merge nothing.
+3. Green: `gh pr merge <n> --squash --delete-branch`, then `git pull` on the default branch.
 
 ## Step 6: Tag and release
 
