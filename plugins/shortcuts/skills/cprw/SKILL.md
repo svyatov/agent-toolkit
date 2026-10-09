@@ -36,8 +36,7 @@ leave the changes above untouched.
    and the merge can fast-forward it.
 4. Stage the changes. Prefer explicit paths over `git add -A`.
 5. Write a Conventional Commit `type(scope): description`, matching the subject style already in
-   `git log`. Resolve writing helpers once from the host's skill catalog and supplied paths.
-   Follow `oss-writing` when available. Otherwise, use the repository's wording rules.
+   `git log`. Use the repository's wording rules.
    $ARGUMENTS is a hint at what the change
    is about, not the message itself.
 6. Commit, then `git push -u origin HEAD` with a 600000 ms Bash timeout: a pre-push hook can run the
@@ -47,7 +46,7 @@ leave the changes above untouched.
    commit, otherwise one Conventional Commit subject spanning every commit. Use the repository's
    pull request template when it has one. Otherwise, use `pr` when available from the host's catalog.
    With no template or helper, write a brief body stating the problem, behavior, and validation.
-   Apply the wording route from step 5 even when no commit was written.
+   Apply the repository's wording rules even when no commit was written.
    When the host has no Skill tool, read the helper at its supplied path.
 8. Actions enabled `false` above means the repository runs no CI: skip the watch and treat it as
    green. Otherwise, `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and

@@ -65,7 +65,7 @@ An argument that is lower than the last tag, or equal to it, is an error.
    `docs/` version switcher, a Homebrew formula. Grep for the previous version string and judge
    each hit.
 
-Commit as `chore(release): X.Y.Z` following the `oss-writing` skill. Never hard-wrap.
+Commit as `chore(release): X.Y.Z`. Never hard-wrap.
 
 ## Step 5: Land it
 

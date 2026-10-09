@@ -27,7 +27,7 @@ Check the host's network policy before GitHub operations. Use its approved netwo
    and the description comes from the change itself.
 4. Stage the changes. Prefer explicit paths over `git add -A`.
 5. Write a Conventional Commit `type(scope): description`, matching the subject style already in
-   `git log`. Follow `oss-writing` when available; otherwise use the repository's writing conventions.
+   `git log`. Use the repository's writing conventions.
    $ARGUMENTS is a hint at what the change is about, not the message itself.
 6. Commit, then `git push -u origin HEAD`.
 7. `gh pr create`. A squash merge makes the title the one commit on the default branch, so the

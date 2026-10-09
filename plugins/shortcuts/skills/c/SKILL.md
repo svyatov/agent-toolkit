@@ -22,7 +22,7 @@ Commit everything above on the current branch. Do not switch or create a branch,
    its path there, commit that line with the rest, and say so in the report.
 4. Stage the changes. Prefer explicit paths over `git add -A`.
 5. Write a Conventional Commit `type(scope): description`, matching the subject style already in
-   `git log`. Follow the `oss-writing` skill for the wording. $ARGUMENTS is a hint at what the change
+   `git log`. $ARGUMENTS is a hint at what the change
    is about, not the message itself.
 6. Commit. Report the subject and the short hash, plus the `.gitignore` line from step 3 if you
    added one, nothing else.
