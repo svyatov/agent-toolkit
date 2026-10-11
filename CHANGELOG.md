@@ -156,6 +156,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### verify-skill
 
+- 1.5.1: distinguish retired or unavailable model IDs from callable deprecated models and newer replacements, so a replacement alone does not produce a Blocking finding. Refresh Claude Code and Codex guidance with description-display limits and the current Codex documentation URL.
 - 1.5.0: normal runs use dated local references for Agent Skills, Claude Code, Codex and GitHub guidance. Self-checks and `--refresh` stage current guidance for verification and offer approved reference updates; failed fetches preserve the previous files and dates. Reports distinguish saved guidance from live target checks, which still verify links, time-sensitive claims and upstream changes.
 - 1.4.2: check GitHub comparison completeness before declaring a source in sync or advancing its SHA, and distinguish unavailable comparisons from removed commits. Resolve targets through session paths and host-specific skill locations, allow shell discovery when Glob is unavailable, and size fan-outs to the active host's available worker capacity.
 - 1.2.0: new host-parity check compares `disable-model-invocation` in the frontmatter with `allow_implicit_invocation` in `agents/openai.yaml`, fetching the rule from developers.openai.com. Catalog and README wording now match the manifest.

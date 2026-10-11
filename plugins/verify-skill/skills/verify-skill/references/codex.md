@@ -4,11 +4,11 @@ Refreshed: 2026-10-11
 
 Use for Codex discovery and axis B host parity. Rules summarize the linked source; the blockquote is an exact excerpt.
 
-Source: https://developers.openai.com/codex/skills.md
+Source: https://learn.chatgpt.com/docs/build-skills.md
 
 > When `false`, Codex won't implicitly invoke the skill based on user prompt; explicit `$skill` invocation still works.
 
-Codex uses skill names and descriptions for discovery. `agents/openai.yaml` sets optional interface metadata, invocation policy and tool dependencies. `policy.allow_implicit_invocation` defaults to `true`. Use this policy for Codex rather than relying on Claude-specific frontmatter. The documented schema has no `allowed-tools` equivalent.
+Codex uses skill names and descriptions for discovery. The initial list includes file paths and is limited to 2% of the model context window, or 8,000 characters when that window is unknown. Codex shortens descriptions first and can omit skills with a warning when the list is too large. Put key use cases first in model-facing descriptions; the full selected skill still loads when invoked. `agents/openai.yaml` sets optional interface metadata, invocation policy and tool dependencies. `policy.allow_implicit_invocation` defaults to `true`. Use this policy for Codex rather than relying on Claude-specific frontmatter. The documented schema has no `allowed-tools` equivalent.
 
 | Claude `disable-model-invocation` | Codex `policy.allow_implicit_invocation` | Result |
 |---|---|---|
