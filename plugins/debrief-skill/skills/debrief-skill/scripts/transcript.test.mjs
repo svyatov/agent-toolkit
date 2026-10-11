@@ -172,6 +172,21 @@ test("runs lists Codex $skill runs and skips subagent copies", () => {
   assert.equal(run("runs", "--session", "c1").trim().split("\n").length, 2);
 });
 
+test("lines preserves Codex timestamps for tool results, skill loads, and compaction", () => {
+  writeFileSync(codexFile, jsonl([
+    cx("session_meta", { id: "c1" }),
+    cout("x1", "custom result"),
+    cx("response_item", { type: "function_call_output", call_id: "x2", output: "function result" }),
+    skillBlock("wayfinder"),
+    cx("compacted", {}),
+  ]));
+  const out = run("lines", codexFile, "2", "3", "4", "5");
+  for (const n of [2, 3, 4, 5]) assert.ok(out.includes(`=== L${n} ${NOW}\n`), `missing timestamp for L${n}`);
+  assert.ok(out.includes("custom result"));
+  assert.ok(out.includes("function result"));
+  assert.ok(out.includes("Base directory for this skill: /agents/skills/wayfinder"));
+});
+
 test("show reads a Codex run", () => {
   const out = run("show", `${codexFile}:4`, "--subs");
   assert.match(out, /^L3 PREV Want me to plan it\?$/m);
