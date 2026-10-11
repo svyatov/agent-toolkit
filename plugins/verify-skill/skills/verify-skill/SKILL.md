@@ -224,9 +224,12 @@ target's specific claim or URL; do not turn them into a general guidance
 refresh. Reuse successful requests within this run. Failures leave dependent
 checks **Not checked**. Live target evidence does not update saved references.
 
-- **Model names and IDs.** Fetch official model documentation for each ID's
-  provider. A superseded model ID is Blocking when the skill tells the
-  reader to call it, and Should fix when it is only an example.
+- **Model names and IDs.** Fetch official lifecycle and availability documentation
+  for each ID's provider and intended platform. A retired or unavailable ID is
+  Blocking when the skill tells the reader to call it, and Should fix when it
+  is only an example. A deprecated but callable ID is Should fix. A newer
+  replacement alone is not a finding; verify any claim that the ID is latest
+  separately. If availability cannot be established, mark it Not checked.
 - **Time-bound phrasing.** `currently`, `as of`, `the latest`, `new in`,
   `recently`, bare years, and pinned version numbers. Each one is a claim with
   an expiry date. Either verify it against the fetched docs or rewrite it so it

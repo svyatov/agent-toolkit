@@ -75,13 +75,13 @@ function codex(list) {
     const ts = e.timestamp;
     const text = Array.isArray(p.content) ? p.content.map((c) => c.text ?? "").join("\n") : "";
     if (n === 1 || n < own) return [n, n === 1 ? e : {}];
-    if (e.type === "compacted") return [n, { type: "system", subtype: "compact_boundary" }];
+    if (e.type === "compacted") return [n, { type: "system", timestamp: ts, subtype: "compact_boundary" }];
     if (p.type === "turn_aborted" && p.reason === "interrupted") return [n, { type: "user", timestamp: ts, message: { content: "[Request interrupted by user]" } }];
     if (p.type === "message" && p.role === "user") {
       const skill = text.match(/^<skill>\s*<name>([^<]+)<\/name>\s*<path>([^<]+)<\/path>/);
       if (skill) {
         if (human) human.cmd ??= skill[1];
-        return [n, { type: "user", isMeta: true, message: { content: `Base directory for this skill: ${dirname(skill[2])}` } }];
+        return [n, { type: "user", timestamp: ts, isMeta: true, message: { content: `Base directory for this skill: ${dirname(skill[2])}` } }];
       }
       if (/^\s*(<|# AGENTS\.md instructions)/.test(text)) return [n, {}];
       human = { type: "user", timestamp: ts, message: { content: text } };
@@ -93,7 +93,7 @@ function codex(list) {
     }
     if (/_call_output$/.test(p.type ?? "")) {
       const out = typeof p.output === "string" ? p.output : (p.output ?? []).map((o) => o.text ?? "").join("\n");
-      return [n, { type: "user", message: { content: [{ type: "tool_result", tool_use_id: p.call_id, content: out, is_error: FAILED.test(out) }] } }];
+      return [n, { type: "user", timestamp: ts, message: { content: [{ type: "tool_result", tool_use_id: p.call_id, content: out, is_error: FAILED.test(out) }] } }];
     }
     return [n, {}];
   });

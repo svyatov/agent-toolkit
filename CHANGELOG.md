@@ -53,6 +53,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### debrief-skill
 
+- 1.0.10: recover historical instructions from verified snapshots instead of assuming `HEAD`, respect the active host's available worker capacity, and preserve Codex timestamps for tool results, skill loads, and compaction records.
 - 1.0.0: new skill for debriefing a skill's runs from the Claude Code and Codex session transcripts. A bundled Node.js script lists the runs and prints each one as a timeline of user messages, tool calls, errors, denials, interrupts, and oversized results, with one summary line per subagent and its friction lines on request. The skill reads that timeline for friction, traces each item to a skill line, and proposes edits to the skill's source, not to the installed copy. `/debrief-skill` checks the newest run in this session; `/debrief-skill <name>` and `/debrief-skill all` read the runs of the last 30 days, and `/debrief-skill self` debriefs the previous debrief.
 - 1.0.1: `compatibility` now asks for Node.js 18.17, the first 18.x release where `readdirSync` reads Codex session folders recursively. `allowed-tools` drops `Edit`, which pre-approved edits in the read-only turn, and `Grep` and `Glob`, which Claude Code leaves out by default on macOS and Linux. The arguments table header no longer contains `$ARGUMENTS`, which Claude Code replaced with the typed arguments. `self` now falls back to the last 30 days when the current run is the only one in the session.
 - 1.0.2: `/debrief-skill` with no argument takes the newest run the user invoked, and a skill that another run loaded counts as part of that run. The skill now says a slice ends only at the next command the user types, which is what the script does.
@@ -155,6 +156,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### verify-skill
 
+- 1.5.1: distinguish retired or unavailable model IDs from callable deprecated models and newer replacements, so a replacement alone does not produce a Blocking finding. Refresh Claude Code and Codex guidance with description-display limits and the current Codex documentation URL.
 - 1.5.0: normal runs use dated local references for Agent Skills, Claude Code, Codex and GitHub guidance. Self-checks and `--refresh` stage current guidance for verification and offer approved reference updates; failed fetches preserve the previous files and dates. Reports distinguish saved guidance from live target checks, which still verify links, time-sensitive claims and upstream changes.
 - 1.4.2: check GitHub comparison completeness before declaring a source in sync or advancing its SHA, and distinguish unavailable comparisons from removed commits. Resolve targets through session paths and host-specific skill locations, allow shell discovery when Glob is unavailable, and size fan-outs to the active host's available worker capacity.
 - 1.2.0: new host-parity check compares `disable-model-invocation` in the frontmatter with `allow_implicit_invocation` in `agents/openai.yaml`, fetching the rule from developers.openai.com. Catalog and README wording now match the manifest.
