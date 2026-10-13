@@ -129,6 +129,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.12: `/cprw` checks the pull request's actual CI status without querying repository Actions settings, so a settings permission error no longer blocks pushing or opening a pull request. The delayed retry for missing checks and stop on failed checks remain in place.
 - 1.2.11: `/cprw` queries Actions settings after network approval, `/fci` inspects and watches workflow runs when no PR exists, and `/cp` reads every page of branch rules before committing.
 - 1.2.10: remove the external writing-skill dependency from commit and pull request instructions.
 - 1.2.9: `/cpr` bounds large diff reads, falls back to repository writing conventions when `oss-writing` is unavailable, and checks GitHub network permissions before use. `/fa` selects a permitted execution context for verification that needs services or local sockets. `/ww` treats a reported blocker as a decision even when the preceding answer asked no question.
