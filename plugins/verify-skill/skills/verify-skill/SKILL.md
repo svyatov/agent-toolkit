@@ -4,7 +4,10 @@ description: Verify skills against saved Agent Skills and host guidance, with li
 license: MIT
 compatibility: >
   Requires file access. Live target checks and guidance refreshes require curl
-  and network access to the relevant official documentation and repositories.
+  and network access to official Agent Skills, Claude Code, Codex, Cursor,
+  OMP documentation and relevant repositories.
+  OMP guidance refresh uses the available GitHub CLI (gh) for revision pinning;
+  without it, dependent refresh checks are Not checked. No CLI installation.
   Read-only until the user approves fixes or saved-reference updates.
   No install and no dependencies.
 allowed-tools: Bash Read Grep Glob Edit
@@ -23,6 +26,13 @@ A self-check or `--refresh` fetches current guidance, verifies against it, and
 offers saved-reference updates with the findings. Refreshing is explicit;
 reference age alone never starts a download.
 
+Keep audits passive: inspect files and links, not target scripts, hooks,
+extensions or MCP execution. Do not register/install/update/remove plugins,
+copy them into active discovery roots or launch with `--plugin-dir`.
+Headless mode and install dry-run do not establish read-only behavior.
+Qualify CLI suggestions by actual host availability; Claude validation is
+only for Claude-format targets, not a universal Cursor or OMP validator.
+
 Four axes:
 
 - **A. Conformance** to the selected spec and authoring guidance.
@@ -39,11 +49,13 @@ Four axes:
 | `self` | Verify this verifier and refresh its guidance |
 | "all skills in \<dir\>" or "all my skills" | Every SKILL.md below that root, one subagent and one report each. Dispatch up to the active host's available worker capacity in one message, queue the rest, and start the next one each time a worker finishes |
 | Pasted skill content, no file | Verify the text, skip the file-layout checks |
-| No target given | Ask which skill, with `AskUserQuestion` |
+| No target given | Ask which skill using the active host's question tool, or chat |
 
 For a fan-out, select the Step 2 guidance once and give each subagent the same reference paths, dates and mode. If the batch includes this verifier or uses `--refresh`, prepare the refreshed guidance once before dispatch. Workers run Steps 1 and 3 to 7 and load only the references their targets need. Step 8 stays with you.
 
 Determine capacity from the active host's limits, configuration, and already-running workers. On Claude Code, check `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` against the selected Claude reference; use its default only when no valid override is set. If capacity is unknown, use one worker at a time. If subagents are unavailable, verify the skills sequentially in the current session.
+
+Use the active host's available delegation, read and search tools, not assumed Claude tool names or concurrency settings. A worker without write access returns findings in its response; sequential verification and chat questions are valid fallbacks.
 
 When every report is in, print one table (skill, Blocking, Should fix, Consider), then every finding grouped by severity and tagged with its skill, then the clean skills on one line. Number the findings F1, F2, and so on across the whole printout, so Step 8 can take them by code.
 
@@ -61,10 +73,12 @@ Then search the active host's locations:
 
 - Claude Code: `.claude/skills/*/SKILL.md`, `~/.claude/skills/*/SKILL.md`, then `~/.claude/plugins/cache/*/*/*/skills/**/SKILL.md`.
 - Codex: `.agents/skills/*/SKILL.md` at each directory from the current directory up to the repository root, then `~/.agents/skills/*/SKILL.md` and `/etc/codex/skills/*/SKILL.md`. Use the session's supplied paths for bundled system and plugin skills.
+- Cursor IDE and CLI: recursively search project/user `.agents/skills` and `.cursor/skills`, plus documented `.claude/skills` and `.codex/skills` compatibility roots. Include nested project roots; they scope surfacing to their subtree. Identity is the directory containing `SKILL.md`. Do not infer collision precedence from search order.
+- OMP: scan immediate children of ancestor `.omp/skills` roots and the effective user root (default `~/.omp/agent/skills`). Prefer session-resolved paths and effective custom/profile/XDG configuration. Managed skills are distinct, lower priority. Establish the provider before diagnosing discovery; a same-name file does not establish bare-name ownership.
 
 If the target is still missing, check the active host's local reference from
-Step 2 before reporting it as not found. Offer `--refresh` if the saved
-discovery guidance cannot resolve it; do not fetch guidance automatically.
+Step 2. Missing discovery evidence is **Not checked**, not proof of rejection.
+Offer `--refresh` if saved discovery guidance cannot resolve it; do not fetch automatically.
 
 Read the SKILL.md, then read every file it names: `references/`, `scripts/`,
 `assets/`, and any bundled companion. A reference the body names but that does
@@ -87,13 +101,17 @@ inside a repository, or the file mtime otherwise, for dated target claims.
 Resolve these files relative to this verifier's skill directory, not the
 target skill or working directory. Read only the rows needed for the target:
 
+Select hosts from the active host, explicit requests, target compatibility claims and enclosing manifests/catalogs. Plain "Cursor" selects separate Cursor IDE and Cursor CLI targets. Classify conventional skill/provider versus portable Agent Plugins (root `plugin.json` with an Agent Plugins schema) before applying host rules. Record the evidence for that classification; shared Agent Skills conformance always applies, but a conformance defect is not automatically a host load failure.
+
 | Condition | Reference |
 |---|---|
 | Every target, including descriptions, scripts and requested eval advice | [Agent Skills](references/agent-skills.md) |
 | Claude Code skills, tools, plugins, CLI settings or parallel work | [Claude Code](references/claude-code.md) |
 | Codex discovery or distribution, including `agents/openai.yaml` or a Codex plugin catalog | [Codex](references/codex.md) |
+| Cursor IDE or CLI discovery, invocation or package claims | [Cursor](references/cursor.md), with IDE/CLI qualifications retained |
+| OMP discovery, visibility, resources or packages | [OMP](references/omp.md), with provider and pinned implementation identified |
 | A comparable source in `sources.json` | [GitHub comparisons](references/github.md) |
-| A self-check or explicit `--refresh` | [Refresh procedure](references/refresh.md), plus all four guidance files above |
+| A self-check or explicit `--refresh` | [Refresh procedure](references/refresh.md), plus all six rule references: Agent Skills, Claude Code, Codex, Cursor, OMP and GitHub |
 
 Treat a target as a self-check when it is this verifier, or another installed
 or repository copy of the `verify-skill` skill. This includes a self-check
@@ -162,17 +180,17 @@ Normal mode assesses compatibility with their dates, not today's latest host.
 - **Deprecated fields.** Diff the skill's frontmatter keys against the field
   list in the selected reference. An absent field is **Not checked**, not
   deprecated: the saved list may be incomplete or older than the target.
-- **Fields the skill should use but does not.** `allowed-tools` when the skill
-  needs scoped tool pre-approval, `disable-model-invocation` when the skill is meant
-  to be user-invoked only, `license` and `compatibility` when the skill ships
-  to other people.
-- **Hand-rolled mechanisms that are now native.** A skill that describes how to
-  fan work out to parallel workers, gate on a plan, ask the user a
-  multiple-choice question, react to a tool call, or locate its own bundled
-  files, when Claude Code now does that through subagents, plan mode,
-  `AskUserQuestion`, hooks, or `CLAUDE_PLUGIN_ROOT`. Name the native feature
-  and cite the reference rule that supports it.
-- **Native features that fit, where the skill hand-rolls nothing.** The check
+- **Fields the skill should use but does not.** Recommend Claude `allowed-tools`
+  for documented pre-approval only on Claude, and Claude explicit-only metadata
+  only under its invocation rules. Use Codex YAML policy only for Codex.
+  Cursor explicit invocation follows the documented surface and release.
+  OMP hiding controls advertising, not model authorization. Check shared
+  `license` and `compatibility` authoring guidance for distributed skills.
+- **Hand-rolled mechanisms that are now native, on Claude Code only.** Check
+  available subagents, plan mode, `AskUserQuestion`, hooks and
+  `CLAUDE_PLUGIN_ROOT` against the Claude reference. Do not prescribe these
+  features on other hosts without an applicable selected rule.
+- **Native Claude features that fit, where the skill hand-rolls nothing.** The check
   above needs the skill to have reinvented something. This one does not. Read
   the procedure and ask which step the host could now carry. Most skills match
   no row: one that edits a single document in one pass matches none of them,
@@ -191,7 +209,7 @@ Normal mode assesses compatibility with their dates, not today's latest host.
 - **Stale tool and command names.** Check every tool name, slash command, and
   CLI invocation against the selected references. Mark unlisted names
   **Not checked**; only refresh mode follows general host documentation.
-- **Host parity, when the skill also ships to Codex.** Codex reads the same
+- **Host parity, when the skill ships to both Claude Code and Codex.** Codex reads the same
   SKILL.md but takes only `name` and `description` from its frontmatter; the
   Claude Code fields `disable-model-invocation` and `allowed-tools` have no
   effect there. Codex keeps its own switch in `agents/openai.yaml`. Take the
@@ -201,15 +219,18 @@ Normal mode assesses compatibility with their dates, not today's latest host.
   Codex counterpart, so note it under Checks that passed rather than reporting
   it. When the fix adds or edits `agents/openai.yaml`, keep the file to the
   keys the selected reference lists.
-- **Trigger text in a user-invoked skill.** This applies when no host can
-  invoke the skill on its own. On Claude Code that is
-  `disable-model-invocation: true`. On Codex, when the skill ships there, it is
-  `allow_implicit_invocation: false`. Find the
-  selected Claude rule on what `disable-model-invocation` does to the
-  description in context. When the rule says the description is not in context,
-  trigger phrases, "Use when" clauses, and exclusions in it do no work. Grade
-  it **Consider** and cite that rule. The fix is a one-line summary of what
-  the command does, for the person who reads it in the `/` menu.
+- **Other host/provider boundaries.** Apply Cursor discovery, invocation and
+  CLI-warning rules without requiring Codex YAML or Claude tool features.
+  On OMP distinguish conventional fields from the portable closed schema;
+  reject unsupported portable keys only with the pinned validator evidence.
+  Hidden OMP skills remain readable and explicitly invocable. Neither
+  Claude tool metadata nor Codex policy proves OMP authorization.
+- **Catalog-summary descriptions.** Decide whether each selected host advertises
+  the description from its governing rule, not whether the model can access the
+  file. When a description is not advertised, trigger lists do no work there:
+  recommend a useful one-line menu summary at **Consider**. Retain trigger
+  guidance where another claimed host still advertises the description.
+  Cite the host's advertising rule; do not equate hiding with access control.
 
 A skill that predates a feature is not wrong for missing it, and an author may
 have chosen the simpler shape on purpose. So grade every fit at **Consider**,
@@ -349,6 +370,8 @@ Report skeleton:
 # Skill verification: <name>
 
 Guidance: saved | refreshed for this run
+Hosts/surfaces: <selected hosts, IDE/CLI separately, and selection evidence>
+Package/provider: <conventional provider | portable Agent Plugins | host plugin, evidence>
 Verified against guidance refreshed on <date, or dates per reference>:
 - <local reference path, source URLs and date>
 Live target checks performed <date>:
@@ -362,6 +385,7 @@ Blocking: N · Should fix: N · Consider: N
 
 ### <one-line summary>
 **Axis**: A conformance | B features | C freshness | D upstream
+**Hosts**: <applicable hosts/surfaces; shared conformance when host-neutral>
 **Location**: `path/to/SKILL.md:LINE`
 **Problem**: what is wrong
 **Evidence**: the saved rule with reference date and source, a labeled exact

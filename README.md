@@ -113,7 +113,7 @@ Use `/polya <problem>` in Claude Code or `$polya <problem>` in Codex for guided 
 |-------|-------------|---------|
 | `debrief-skill` | Debrief a skill's recent runs from the session transcripts, find the errors, retries, corrections, and dead ends the skill caused, and propose the edits that make the next run smooth. | `claude plugin install debrief-skill@svyatov-agent-toolkit`<br>`codex plugin add debrief-skill@svyatov-agent-toolkit` |
 | `import-skill` | Import skills from GitHub repos (copy or merge) | `claude plugin install import-skill@svyatov-agent-toolkit`<br>`codex plugin add import-skill@svyatov-agent-toolkit` |
-| `verify-marketplace` | Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions | `claude plugin install verify-marketplace@svyatov-agent-toolkit`<br>`codex plugin add verify-marketplace@svyatov-agent-toolkit` |
+| `verify-marketplace` | Verify plugin marketplaces for Claude Code, Codex, Cursor IDE and CLI, and OMP against live official guidance: catalogs, manifests, layout, installation, and updates. | `claude plugin install verify-marketplace@svyatov-agent-toolkit`<br>`codex plugin add verify-marketplace@svyatov-agent-toolkit` |
 | `verify-skill` | Verify skills against saved Agent Skills and host guidance, with live link and upstream checks. Self-checks and --refresh update the guidance. | `claude plugin install verify-skill@svyatov-agent-toolkit`<br>`codex plugin add verify-skill@svyatov-agent-toolkit` |
 
 ### Writing
