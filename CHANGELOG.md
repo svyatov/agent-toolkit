@@ -158,10 +158,12 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### verify-marketplace
 
+- 1.2.0: verify Cursor IDE, Cursor CLI and OMP catalogs and packages against live first-party guidance, with effective host-specific discovery, installation/update boundaries and passive-audit reporting. Keep Claude Code and Codex checks scoped to applicable formats.
 - 1.1.0: a cwd with a plugin manifest and no catalog is verified as that plugin instead of prompting for a repo. A plugin whose `source` is the marketplace root gets its component directories validated, since the validator opens no skill file on that root, and the CI check reports a workflow that skips them. Version drift uses `git log -G`, because `-S` returned the commit that added the `version` key rather than the last bump. The SchemaStore lookup gets a `curl -sSL` command on the `www` host the old URL redirects to, and doc sections are located with one anchored grep per file. `/debrief-skill` found all of these in four recent runs.
 
 ### verify-skill
 
+- 1.6.0: add sourced Cursor and pinned OMP guidance, route discovery and invocation checks by host and package/provider, distinguish hiding from authorization, and refresh platform groups independently with approval-gated saved updates.
 - 1.5.2: handle upstream renames and deletions explicitly, and refresh the saved guidance to 2026-10-17 with Claude metadata restrictions, tool-permission exceptions, the ultracode concurrency exception, and the default Codex listing limit.
 - 1.5.1: distinguish retired or unavailable model IDs from callable deprecated models and newer replacements, so a replacement alone does not produce a Blocking finding. Refresh Claude Code and Codex guidance with description-display limits and the current Codex documentation URL.
 - 1.5.0: normal runs use dated local references for Agent Skills, Claude Code, Codex and GitHub guidance. Self-checks and `--refresh` stage current guidance for verification and offer approved reference updates; failed fetches preserve the previous files and dates. Reports distinguish saved guidance from live target checks, which still verify links, time-sensitive claims and upstream changes.

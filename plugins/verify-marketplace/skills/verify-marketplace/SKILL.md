@@ -1,11 +1,14 @@
 ---
 name: verify-marketplace
-description: 'Verify a plugin marketplace repo against the current Claude Code and Codex docs fetched live: catalog, manifests, layout, README, versions'
+description: 'Verify plugin marketplaces for Claude Code, Codex, Cursor IDE and CLI, and OMP against live official guidance: catalogs, manifests, layout, installation, and updates.'
 license: MIT
 compatibility: >
-  Requires curl and network access to code.claude.com and developers.openai.com.
-  Uses the claude and codex CLIs when present, never requires them. Read-only
-  until the user approves a fix. No install and no dependencies.
+  Requires curl and network access to official Claude Code, Codex, Cursor and
+  OMP documentation and repositories. Uses available host CLIs only for their
+  documented inspection scopes, never requires new CLIs or dependencies.
+  OMP source pinning uses the available GitHub CLI (gh); if unavailable,
+  dependent checks are Not checked.
+  Read-only until the user approves a fix. No install.
 allowed-tools: Bash Read Grep Glob Edit
 disable-model-invocation: true
 argument-hint: "[repo path, marketplace.json, or owner/repo]"
@@ -15,8 +18,8 @@ argument-hint: "[repo path, marketplace.json, or owner/repo]"
 
 Marketplace rules change faster than any repo that copies them: reserved names
 appear, path rules tighten, Codex adds a manifest format. So this skill stores
-none of them. Every rule applied here is fetched from the upstream docs on each
-run, and every finding quotes the fetched line it came from.
+none of the normative platform rules. Fetch applicable first-party guidance on
+each run; every finding quotes its governing fetched evidence.
 
 Four axes:
 
@@ -33,32 +36,47 @@ to it.
 | Trigger | Scope |
 |---|---|
 | A repo path, or no argument and the cwd holds a catalog | That repo |
-| A path to a `marketplace.json` | The marketplace root is the directory that holds `.claude-plugin/` or `.agents/` |
+| A path to a `marketplace.json` | Resolve the root above `.claude-plugin/`, `.agents/plugins/`, `.cursor-plugin/` or `.omp-plugin/` |
 | `owner/repo` | `git clone --depth 1` into a temp dir, verify, delete the clone |
 | No argument, no catalog, and a plugin manifest in the cwd | That plugin: Axes B to D, and Axis A reports the catalog it needs before anyone can install it |
-| No argument, no catalog, and no plugin manifest in the cwd | Ask which repo, with `AskUserQuestion` |
+| No argument, no catalog, and no plugin manifest in the cwd | Ask which repo using the active host's question tool, or chat |
 
-Inventory the repo by Glob, all in one turn:
+Inventory the repo using available file/search tools, in one batch:
 
 | File | Meaning |
 |---|---|
 | `.claude-plugin/marketplace.json` | Claude Code catalog. Codex also reads it, as a compatible catalog |
 | `.agents/plugins/marketplace.json` | Codex native catalog |
+| `.cursor-plugin/marketplace.json` | Cursor native catalog |
+| `.omp-plugin/marketplace.json` | OMP native catalog, before its Claude fallback |
 | `<plugin>/.claude-plugin/plugin.json` | Claude Code manifest. Codex also accepts it |
 | `<plugin>/.codex-plugin/plugin.json` | Codex compatibility manifest |
+| `<plugin>/.cursor-plugin/plugin.json` | Cursor native manifest |
+| `<plugin>/.omp-plugin/plugin.json` | OMP native manifest; component-specific behavior still needs evidence |
 | `<plugin>/plugin.json` naming an agent-plugins.org `$schema` | Portable Agent Plugins manifest |
 
-Both hosts are always checked. A repo with only `.claude-plugin/` files is
-still a Codex marketplace, because Codex reads those files as a compatible
-catalog. Confirm that reading rule against the fetched Codex doc before
-applying it. Rules the Codex doc states for its native catalog are Consider
-findings on a compatible one, and the fix they point at is a native
-`.agents/plugins/marketplace.json`: adding Codex fields to the shared catalog
-fails `claude plugin validate --strict` as an unknown field.
+Select hosts from catalogs/packages, explicit requests and repository support
+claims. A Claude catalog selects Claude Code, existing Codex compatibility
+checks and OMP's documented fallback checks. Native-only Cursor or OMP catalogs
+do not require foreign catalogs. Cursor requires its native catalog, a portable
+package, explicit request or support claim; imported Claude-plugin support alone
+does not establish general Claude marketplace acceptance. Plain "Cursor" selects
+separate IDE and CLI targets.
 
-The plugin set is the union of every `source` the catalogs name and every
-directory under the roots those sources sit in. The union is what catches an
-orphan directory with no entry.
+Classify each selected host's effective catalog and package/provider before
+applying rules. OMP uses native before Claude fallback, without merging.
+Cursor uses its native catalog; undocumented mixed-manifest precedence is
+Not checked. Read [Cursor's live map](references/cursor.md) when either Cursor
+surface is selected and [OMP's live map](references/omp.md) when OMP is selected.
+These independently installed references define the applicable fetch/check branches.
+
+Codex-native-only constraints on a compatible Claude catalog remain Consider
+where the fetched Codex guidance supports that distinction; suggest a native
+Codex catalog rather than inserting unknown fields into the shared Claude one.
+Compare plugin sets, descriptions and versions across hosts only where equivalent
+listings are claimed. Intentional audience-specific listings may differ.
+Inventory entries and orphan directories within each host's effective source
+roots, not a union that turns another host's directories into orphans.
 
 Record the repo's last change date with `git log -1 --format=%cs`. Step 2
 needs it. Uncommitted changes count as newer than any commit, and a plugin
@@ -66,8 +84,9 @@ with no history has no version drift to check.
 
 ## Step 2: Fetch the current guidance
 
-Always fetch these four, in **one turn with parallel calls**, each into a temp
-file:
+Fetch the selected groups in **one turn with parallel calls**, into temporary
+files. Use the active host's available fetch/read/search tools. Fetch these
+Claude and Codex sources only for their selected checks:
 
 ```bash
 curl -sSL -o "$T/cc-marketplaces.md" https://code.claude.com/docs/en/plugin-marketplaces.md
@@ -76,11 +95,13 @@ curl -sSL -o "$T/codex-build.md"     https://developers.openai.com/plugins/build
 curl -sSL -o "$T/codex-errors.md"    https://developers.openai.com/plugins/deploy/submission-errors.md
 ```
 
-The two Claude Code pages are well over 100 KB each. Never read them whole.
-Locate the sections with one anchored grep per file over the headings in this
-table, such as
-`grep -n -E '^#+ (Required fields|Optional fields|Plugin entries)' "$T/cc-marketplaces.md"`,
-then read each section from its line to the next heading's line:
+Fetch Cursor and OMP sources from their conditional maps in the same phase.
+OMP resolves one current upstream revision and pins all files to it, including
+the package version. A failed group leaves only dependent checks Not checked.
+
+The Claude Code pages can exceed 100 KB. Locate relevant headings with the
+available search tool, then read bounded sections to the next heading; do not
+read entire large pages.
 
 | File | Sections to grep for |
 |---|---|
@@ -93,12 +114,12 @@ Then fetch by condition, again in one parallel batch:
 
 | Condition | Also fetch |
 |---|---|
-| Any entry or manifest has `dependencies` | `https://code.claude.com/docs/en/plugin-dependencies.md` |
-| Any entry has `relevance` | `https://code.claude.com/docs/en/plugin-relevance.md` |
-| Any plugin ships `evals/` or sets `experimental.evals` | `https://code.claude.com/docs/en/plugin-evals.md` |
-| Any plugin ships hooks, agents, commands, MCP, or LSP config | `https://code.claude.com/docs/en/plugins.md` and `https://developers.openai.com/plugins/guides/submit-claude-plugin.md`, which lists what Codex ignores |
+| Claude selected and any entry or manifest has `dependencies` | `https://code.claude.com/docs/en/plugin-dependencies.md` |
+| Claude selected and any entry has `relevance` | `https://code.claude.com/docs/en/plugin-relevance.md` |
+| Claude selected and a plugin ships `evals/` or sets `experimental.evals` | `https://code.claude.com/docs/en/plugin-evals.md` |
+| Claude/Codex selected and plugins ship hooks, agents, commands, MCP or LSP | Fetch applicable `https://code.claude.com/docs/en/plugins.md` and `https://developers.openai.com/plugins/guides/submit-claude-plugin.md` |
 | The user asks about ChatGPT workspace import | `https://learn.chatgpt.com/docs/enterprise/plugin-management.md` |
-| The repo is more than a month older than today | `https://code.claude.com/docs/en/whats-new/index.md` |
+| Claude selected and the repo is more than a month older than today | `https://code.claude.com/docs/en/whats-new/index.md` |
 
 From `whats-new/index.md`, take the weeks dated after the repo's last change,
 read the one-line summaries, and open only the weeks that mention plugins or
@@ -114,8 +135,8 @@ remembered rule is the failure this skill exists to prevent.
 
 ## Step 3: Mechanized evidence
 
-Run these when the CLI is on `PATH`. When it is not, one header line says it
-was skipped.
+Run these only for Claude-format targets when `claude` is available on `PATH`.
+Otherwise report the specific skipped evidence, without blocking static checks:
 
 ```bash
 claude plugin validate --strict --json <marketplace root>   # catalog, every local plugin.json, entry-vs-manifest version
@@ -137,15 +158,28 @@ fetched line before it becomes a finding. `claude plugin details <name>` adds a
 component inventory and token cost for an installed plugin, useful for a
 Consider finding on a heavy plugin, never required.
 
-Codex has no offline validator. `codex plugin marketplace add <path>` writes
-to `~/.codex/config.toml`, so offer it as an opt-in check and never run it
-unasked: `add`, then `codex plugin list -m <name> --json` to see which entries
-Codex parsed, then `codex plugin marketplace remove <name>`.
+Separate **static checks**, optional **installed-state inspection**, and
+**explicit opt-in runtime checks**. Available Cursor help/list commands and
+OMP list/doctor describe only their documented scopes; never use doctor `--fix`.
+No documented universal `agent plugin validate` or `omp plugin validate` exists
+in these contracts. Verify actual help before suggesting CLI commands.
+
+Passive audits never add/install/update/remove marketplaces or plugins, copy
+plugins into active discovery roots, launch with `--plugin-dir`, start MCP or
+execute hooks/scripts/extensions. Headless mode is not read-only. Install
+dry-run is not an unrestricted safe validator because package-manager paths
+can create state. Runtime execution requires separate approval and a bounded
+side-effect description; missing CLI access affects only dependent evidence.
 
 ## Step 4: Axis A, catalog
 
 For each catalog present, find the governing line in the fetched text first,
 then check:
+
+The bullets below are Claude/Codex checks only where the fetched host rule
+applies, not universal constraints. For Cursor and OMP, use their selected live
+map instead. Unsupported restrictions require affirmative schema/runtime
+evidence: omission from a summary table alone is Not checked, not rejection.
 
 - JSON parses. The required top-level fields for that host are present and
   non-empty. Take the list from the fetched page for each host.
@@ -176,14 +210,18 @@ then check:
   always required, and `policy` values come from its lists. Neither host
   lists allowed entry `category` values, so only consistency across entries
   is a finding there.
-- When both catalogs exist: same plugin set, same versions, same
-  descriptions. Drift is one finding with a table, not one finding per cell.
+- Where equivalent listings are claimed: compare plugin sets, effective
+  versions and descriptions; merge shared drift into one finding with a table.
 
 ## Step 5: Axis B, plugins
 
-Fewer than four plugins: check them inline. Otherwise dispatch one subagent
-per plugin in one message, each returning its findings in the Step 8 format
-with quotes, and merge. Per plugin:
+Fewer than four plugins: check inline. Otherwise use available delegation tools
+up to the active host's effective capacity, dispatching independent work together
+and queuing excess. Preserve Claude capacity checks when on Claude; do not use
+its settings on other hosts. Unknown capacity means one worker; no delegation
+means sequential audits. Read-only workers return findings in their response.
+Give workers selected host/package classifications and fetched evidence.
+The following checks are Claude/Codex-scoped; apply Cursor/OMP maps for those hosts:
 
 - The manifest parses. `name` follows the character rule and equals the
   directory name. `version` is semver. `description`, `author.name`,
@@ -221,11 +259,10 @@ it lists for itself and offer to dispatch it, one subagent per skill.
 
 ## Step 6: Axis C, repository
 
-- README: the install commands are present and copy-paste correct. The
-  `@marketplace` suffix equals the catalog `name`, every plugin `name` appears
-  in an install line and once in the skills table, and the table descriptions
-  match the manifests. A Codex install line appears when the repo claims
-  Codex support.
+- README: require installation instructions only for hosts the repository
+  claims, not every compatible consumer selected for checks. Verify commands,
+  names, catalog suffixes and descriptions against those hosts' fetched rules.
+  Check claimed equivalent README listings against effective manifests.
 - `LICENSE` at the root, and every manifest `license` agrees with it. When at
   least one plugin carries a `sources.json`, every plugin copied from another
   repository does. A skill that only cites an article is authored, not copied.
@@ -278,15 +315,16 @@ Report skeleton:
 ````markdown
 # Marketplace verification: <repo>
 
-Verified against docs fetched <date>:
-- https://code.claude.com/docs/en/plugin-marketplaces.md
-- https://code.claude.com/docs/en/plugins-reference.md
-- https://developers.openai.com/plugins/build/plugins.md
-- https://developers.openai.com/plugins/deploy/submission-errors.md
-- <any conditional source>
+Verified against sources fetched <date>:
+- <applicable source URLs, access dates, OMP revision/version and conflicts>
 
-Hosts: Claude Code (native) · Codex (via .claude-plugin/ compatibility | native)
-Validator: claude plugin validate exit N | skipped, not on PATH
+Hosts: list Claude Code, Codex, Cursor IDE, Cursor CLI and OMP separately:
+- <host>: checked native | checked compatible | not targeted | Not checked: <reason>
+Effective catalog/package/provider: <classification and evidence per selected host>
+Static checks: <performed and limits>
+Installed-state inspection: <performed | not requested | unavailable, scoped reason>
+Opt-in runtime checks: <separately approved evidence | not performed>
+Validator: <Claude-format targets and exit results | skipped, reason>
 
 Blocking: N · Should fix: N · Consider: N
 <Not checked: which checks, and which fetch failed>
@@ -295,10 +333,11 @@ Blocking: N · Should fix: N · Consider: N
 
 ### <one-line summary>
 **Axis**: A catalog | B plugins | C repository | D currency
+**Hosts**: <affected hosts/surfaces; merge one shared problem across applicable hosts>
 **Location**: `path/to/file:LINE`
 **Problem**: what is wrong
-**Evidence**: the fetched doc line, the validator message, the HTTP code, or
-the two disagreeing lines inside the repo. Quoted
+**Evidence**: governing fetched quote and URL/access date, pinned OMP source
+revision where applicable, validator message, HTTP result or conflicting repo lines
 **Fix**:
 ```diff
 - old
@@ -338,9 +377,10 @@ so rather than closing out.
   that passed** carry the work you did.
 - **Steps 4 to 7 are a checklist of where to look, not of what to report.** A
   category with nothing under it is a normal outcome, not a failed run.
-- **The fetched docs win any conflict.** The validator, other skills, and
-  example repos all disagree with the docs somewhere. Apply what the fetched
-  docs say and quote it.
+- **Use governing first-party evidence.** Fetched documentation governs documented
+  contracts; pinned executable OMP source can settle implementation-specific
+  branches. Disclose documentation/source conflicts and cite both. A validator
+  message alone does not establish a rule for another host.
 - **Style is not a finding.** Report what the fetched guidance calls wrong.
   A repo that is organized differently from your preference is not defective.
 - **Verifying this skill.** Run this skill on the repo that ships it, and run
