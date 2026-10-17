@@ -192,6 +192,17 @@
       ]
     },
     {
+      "name": "polya",
+      "source": "./plugins/polya",
+      "description": "Learn to solve a problem with George Pólya's four-step method, guided questions, and checked reasoning.",
+      "category": "code-design",
+      "tags": [
+        "problem-solving",
+        "tutoring",
+        "reasoning"
+      ]
+    },
+    {
       "name": "prior-art",
       "source": "./plugins/prior-art",
       "description": "Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols.",

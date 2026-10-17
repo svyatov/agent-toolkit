@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "polya",
+  "description": "Learn to solve a problem with George Pólya's four-step method, guided questions, and checked reasoning.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonid Svyatov",
+    "email": "leonid@svyatov.com",
+    "url": "https://www.svyatov.com"
+  },
+  "homepage": "https://github.com/svyatov/agent-toolkit",
+  "repository": "https://github.com/svyatov/agent-toolkit",
+  "license": "MIT"
+}
