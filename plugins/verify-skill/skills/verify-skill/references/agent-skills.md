@@ -1,8 +1,8 @@
 # Agent Skills conformance and authoring
 
-Refreshed: 2026-10-11
+Refreshed: 2026-10-17
 
-Use for axis A. Rules below summarize the linked sources; blockquotes are exact excerpts. These are dated guidance, not a claim about today's documentation.
+Use for axis A. Rules below summarize the linked sources; blockquotes are exact excerpts. Labeled audit policies are this verifier's decisions, not upstream requirements. These are dated guidance, not a claim about today's documentation.
 
 ## Format and limits
 
@@ -27,19 +27,23 @@ Source: https://agentskills.io/skill-creation/best-practices.md
 
 Teach domain-specific procedures, constraints and failure cases. Prefer a coherent task with clear steps over exhaustive background material. Put conditional detail behind a pointer that states when to read it. Choose a default approach, calibrate how prescriptive the steps are to the risk, and include a validation loop where errors matter. Evaluate whether the guidance improves actual runs before adding more instructions.
 
-## Descriptions
+## Descriptions and Claude constraints
 
 Source: https://agentskills.io/skill-creation/optimizing-descriptions.md
 
 > **Focus on user intent, not implementation.**
 
-For implicitly invoked skills, cover distinct user intents and boundaries. Test realistic positive prompts and near-miss negatives. This source favors imperative and broad trigger wording; use the host's guidance when it conflicts. Explicit-only skills need a useful menu summary rather than a trigger list.
+For implicitly invoked skills, cover distinct user intents and boundaries. Test realistic positive prompts and near-miss negatives. This source favors imperative and broad trigger wording; use the host's guidance when it conflicts.
 
 Source: https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices.md
 
 > **Always write in third person**.
 
-Anthropic's authoring guidance favors third-person descriptions. Apply that voice guidance to model-facing descriptions, not as a reason to reject an explicit-only command summary. Treat style alone as insufficient evidence of a defect.
+> Cannot contain reserved words: "anthropic", "claude"
+
+Anthropic's authoring guidance forbids XML tags in `name` and `description`, and the reserved words `anthropic` and `claude` in `name`. Apply these constraints to Claude targets. It favors third-person descriptions.
+
+Audit policy: apply description voice guidance to model-facing descriptions, not as a reason to reject an explicit-only command summary. Use the selected host's invocation policy to decide whether the description is model-facing. Explicit-only skills need a useful menu summary rather than a trigger list. Treat style alone as insufficient evidence of a defect.
 
 ## Bundled scripts
 
@@ -47,7 +51,9 @@ Source: https://agentskills.io/skill-creation/using-scripts.md
 
 > **State prerequisites** in your `SKILL.md`
 
-Check that the instructions say how to run each script, name required runtimes and dependencies, and use skill-relative paths. Prefer reproducible versions and self-contained execution. Complex fragile commands may belong in a tested script. Do not install dependencies just to perform a static audit.
+Check that the instructions say how to run each script, name required runtimes and dependencies, and use skill-relative paths. Prefer reproducible versions and self-contained execution. Complex fragile commands may belong in a tested script.
+
+Audit policy: do not install dependencies just to perform a static audit.
 
 ## Evidence of behavior
 

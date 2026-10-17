@@ -285,7 +285,8 @@ from a local checkout before deciding which paths changed. If complete commit
 or file evidence is unavailable, mark that source **Not checked** and exclude
 it from Step 8's SHA advancement.
 
-Keep only the files under `path` in the complete comparison:
+Keep files whose `filename` or, for renames, `previous_filename` is under
+`path` in the complete comparison. Retain each status and both rename paths:
 `path` may be a directory, one file, or `.` for a whole-repository fork.
 `ahead_by: 0`, or no kept file, means the source is in sync. Record that under
 Checks that passed and stop.
@@ -302,8 +303,11 @@ A 403 whose body
 names the rate limit is a fetch failure: report it as **Not checked** like any
 other.
 
-For each kept file, fetch the current upstream text and diff it against the
-local counterpart, in one batch:
+Handle removed files and renames out of `path` as deletions, without fetching
+them at the head. Treat renames into `path` as additions. For renames within
+`path`, map the local counterpart using the old path and fetch the new path
+at the head. For the other kept files, fetch the current upstream text and
+diff it against the local counterpart, in one batch:
 
 ```bash
 curl -sS "https://raw.githubusercontent.com/{repository}/{head_sha}/{filename}" | diff -u <local file> -
