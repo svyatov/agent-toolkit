@@ -114,6 +114,10 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 - 1.1.2: removing a `mktemp -d` directory that the worker made in this run is a safe action, so the orchestrator approves the worker's cleanup of its scratch files once it has listed the directory.
 - 1.1.3: session A, which implements and fixes, runs Sonnet at `high` effort instead of `medium`.
 
+### polya
+
+- 1.0.0: add an explicitly invoked problem-solving tutor based on George Pólya's four-step method. It clarifies facts, assumptions, constraints, and unknowns, compares three approaches, guides execution with progressively stronger hints, and checks the result for weaknesses and reusable lessons. Includes source-backed research notes and matching Claude Code and Codex catalog entries.
+
 ### refactor
 
 - 1.2.6: a Minor verdict recommends applying the findings or leaving the code as is, with the deciding reason, before it asks.

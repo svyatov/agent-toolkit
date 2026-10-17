@@ -92,7 +92,10 @@ Use `/lm` to squash merge the current branch into local `main`, or `/lm <branch>
 | Skill | Description | Install |
 |-------|-------------|---------|
 | `grill-me` | Stress-test any plan, design, or idea through relentless interviewing: domain-agnostic | `claude plugin install grill-me@svyatov-agent-toolkit`<br>`codex plugin add grill-me@svyatov-agent-toolkit` |
+| `polya` | Learn to solve a problem with George Pólya's four-step method, guided questions, and checked reasoning. | `claude plugin install polya@svyatov-agent-toolkit`<br>`codex plugin add polya@svyatov-agent-toolkit` |
 | `prior-art` | Check arXiv prior art before designing non-trivial architecture, algorithms, or protocols | `claude plugin install prior-art@svyatov-agent-toolkit`<br>`codex plugin add prior-art@svyatov-agent-toolkit` |
+
+Use `/polya <problem>` in Claude Code or `$polya <problem>` in Codex for guided problem solving, one question at a time.
 
 ### Web
 
