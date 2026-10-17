@@ -1,6 +1,6 @@
 # GitHub comparison guidance
 
-Refreshed: 2026-10-11
+Refreshed: 2026-10-17
 
 Use for axis D. These are saved API rules; every target repository comparison still runs live. Rules summarize the linked sources; blockquotes are exact excerpts.
 
