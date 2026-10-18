@@ -53,11 +53,15 @@ Four axes:
 
 For a fan-out, select the Step 2 guidance once and give each subagent the same reference paths, dates and mode. If the batch includes this verifier or uses `--refresh`, prepare the refreshed guidance once before dispatch. Workers run Steps 1 and 3 to 7 and load only the references their targets need. Step 8 stays with you.
 
+Before dispatch, the coordinator assigns shared metadata parsing, file identities, change dates, and URL checks to available tools. Run each shared check once; give workers its evidence or name the owner of the pending result. Workers return their case checks and findings in the audit record format below, using the same target keys. Only the coordinator writes the shared record and merges completed evidence into final reports. A worker's missing capability is not automatically a batch-level **Not checked** result.
+
 Determine capacity from the active host's limits, configuration, and already-running workers. On Claude Code, check `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` against the selected Claude reference; use its default only when no valid override is set. If capacity is unknown, use one worker at a time. If subagents are unavailable, verify the skills sequentially in the current session.
 
 Use the active host's available delegation, read and search tools, not assumed Claude tool names or concurrency settings. A worker without write access returns findings in its response; sequential verification and chat questions are valid fallbacks.
 
-When every report is in, print one table (skill, Blocking, Should fix, Consider), then every finding grouped by severity and tagged with its skill, then the clean skills on one line. Number the findings F1, F2, and so on across the whole printout, so Step 8 can take them by code.
+When every report is in, the coordinator reconciles each declared skill dependency once: compare invocation policy, arguments, prerequisites, permitted side effects, approval gates, independence, and completion assumptions against the callee and shared contract. Assign each edge to one reviewer and resolve shared-policy interpretations for the whole batch. Reuse worker evidence rather than repeating the per-skill audits.
+
+Then print one table (skill, Blocking, Should fix, Consider), every finding grouped by severity and tagged with its skill, and the clean skills on one line. Number findings F1, F2, and so on across the whole printout, so Step 8 can take them by code.
 
 To find a skill by name, first use a matching target path supplied by the user
 or the current session's skill listing. Otherwise search these repository
@@ -95,6 +99,16 @@ D is skipped and reported as one line under Checks that passed.
 
 Record the skill's last change date with `git log -1 --format=%cs -- <path>`
 inside a repository, or the file mtime otherwise, for dated target claims.
+
+Keep a compact `audit.json` beside the report, outside the target tree, at the caller's output location or in a fresh OS temporary directory. Report its path. If writing is unavailable, return the record to the caller. Use one object keyed by absolute target skill path, never a positional array:
+
+```json
+{"<skill-path>": {"files": {"<file-path>": "<sha256>"}, "checks": {"<case-or-rule>": {"status": "pending", "owner": "<coordinator-or-worker>", "evidence": []}}, "findings": {"<rule-and-location>": {"code": "F1", "disposition": "open"}}}}
+```
+
+Hash the inspected skill and its relevant resources/configuration, including uncommitted contents. Check statuses are `pending`, `passed`, `finding`, `not_checked`, or `not_applicable`; evidence names the source location, result, or unresolved prerequisite. Final reports have no pending checks: retain unresolved ones as **Not checked**, with the reason. Finding dispositions are `open`, `deferred`, or `resolved`; retain their rule/location identity when display codes change.
+
+When a prior record is supplied or available from this session's report, compare identities and dispositions. Label findings as still open, previously missed on unchanged content, or associated with changed content. Missing prior evidence means the history is unknown. Changed content alone does not prove a regression, and an earlier clean verdict never suppresses a supported new finding.
 
 ## Step 2: Select the guidance
 
@@ -156,6 +170,8 @@ Check these categories, and find the governing reference rule first:
 - Bundled scripts are portable, are documented, and state whether they are run
   or read.
 - Host-specific constraints the spec lists, for the hosts the skill claims.
+
+Before marking a procedure checked, enumerate its documented input forms, successful and failed outcomes, and safety invariants. Trace each applicable case through the body, examples, and bundled helpers, recording its evidence or **Not checked** gap. When one branch violates an invariant, inspect the other branches and analogous operations governed by it before reporting. Reading every file is not evidence that every applicable case was checked; this pass remains passive.
 
 Shortcut: if `oss-kit:oss-skill` is installed, its bundled validator mechanizes
 the frontmatter subset. Locate it with the file search method from Step 1, never by a hardcoded version path,
@@ -380,6 +396,8 @@ Live target checks performed <date>:
 
 Blocking: N · Should fix: N · Consider: N
 <Not checked: which checks, and which fetch failed>
+Audit record: <path, or inline record if writing is unavailable>
+Coverage: <checked cases and unresolved gaps; prior finding dispositions when available>
 
 ## Blocking
 
@@ -426,9 +444,9 @@ compare response, and `fetched_at` to today. The next run then starts from
 there, and a declined hunk is not reported again. Offer it only for sources
 that were completely compared in Step 6, and only after the user has seen the findings.
 
-After applying, re-run Steps 3 to 6 on the changed file, reusing the selected guidance and
-the compare responses already fetched. Expect an empty report. If a fix introduced a new finding, say
-so rather than closing out.
+For approved fixes, include the affected case/invariant checks in the implementation handoff, even when another skill applies them. After application, re-run Steps 3 to 6 on the repaired contract, its adjacent branches, relevant resources, and directly affected callers, reusing the selected guidance and valid fetched evidence. Update file identities, check evidence, and finding dispositions in the audit record.
+
+Close an approved finding only when its acceptance case and affected invariants pass. Repository tests alone do not establish this semantic recheck. Report unresolved and deferred items rather than expecting an empty report. Fix regressions within the approved scope; present unrelated new findings for approval. If the recheck has not run, state that verification is pending instead of reporting closure.
 
 ## Notes
 
