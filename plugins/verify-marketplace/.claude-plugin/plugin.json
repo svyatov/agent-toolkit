@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "verify-marketplace",
   "description": "Verify plugin marketplaces for Claude Code, Codex, Cursor IDE and CLI, and OMP against live official guidance: catalogs, manifests, layout, installation, and updates.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",
