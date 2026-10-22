@@ -1,164 +1,99 @@
 ---
 name: llms-visibility
-description: 'Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal'
+description: Make websites, docs, and blogs readable to LLMs and AI agents with accessible HTML, crawl access, and linked discovery files.
 disable-model-invocation: true
 license: MIT
 ---
 
 # Make a website visible to LLMs
 
-Apply the techniques below to get a site's content to LLMs and AI agents in clean Markdown over standard HTTP. Companion to <https://evilmartians.com/chronicles/how-to-make-your-website-visible-to-llms.md>.
+Make the site's real answers discoverable and readable before adding alternate formats. Use [AgentReady](https://www.agentready.org/)'s find, read, then act order. Its MUST/SHOULD/MAY levels describe that specification, not universal provider requirements. Its studies support priorities, not guaranteed visibility gains on every site.
 
-Most of these are emerging conventions, not committed standards. No major provider has formally promised to read `llms.txt` or `.md` routes. Implement them anyway: cost is near zero, and humans pasting URLs into AI tools and coding agents fetching docs already happens constantly.
+## 1. Establish scope and host controls
 
-## Workflow
+Identify representative pages and the questions they should answer: homepage, docs or articles, and pricing or setup when applicable. Determine whether agents only need to read or must complete product actions. An informational site needs no action API.
 
-Each step is independently shippable.
+Inspect rendering, routing, robots rules, sitemap generation, and host controls before editing. Headers may come from `_headers`, `vercel.json`, a proxy, or a hosting control panel. Check deployed behavior with GET requests; repository configuration and HEAD responses alone do not prove what readers receive. Ask about panel or proxy access only when a needed control is absent from the repository. State which change that access would enable.
 
-### 0. Map what the host lets you control
+Finish with a baseline of observed failures and the smallest applicable changes. Preserve the owner's existing training policy and access restrictions; ask before changing an unknown policy.
 
-Steps 3 (`Content-Type`), 4 (the `Link` header) and 6 need control over response headers. Before planning, find the host's config surface: a `_headers` file (Netlify, Cloudflare Pages), `vercel.json`, nginx or Caddy config, `.htaccess` when Apache actually serves the files, or a hosting control panel setting (such as a handler or PHP mode that puts Apache behind nginx). Confirm each conclusion with `curl -sI` against the live site and report it as measured. When the repository shows no surface, ask the user whether they have control panel or proxy access before marking a header step blocked, and name what would unblock it (for example Cloudflare in front of the site). On a static host, check the live `Content-Type` of a `.md` URL after deploy: many serve unknown extensions as `application/octet-stream`.
+## 2. Make public answers reachable
 
-### 1. Audit `robots.txt` and add `Content-Signal:`
+Audit `robots.txt` and CDN/WAF rules separately (AR-FIND-01). A permissive file cannot overcome a challenge page or 403. Prefer a wildcard policy for public content over a list of known bot names; inspect specific user-agent groups because they override the wildcard group.
 
-Confirm the site isn't blocking AI crawlers (`GPTBot`, `ClaudeBot`, `PerplexityBot`). Then add Cloudflare's directive (CC0):
+Distinguish bot purposes:
 
-```
-User-agent: *
-Content-Signal: search=yes, ai-input=yes, ai-train=yes
-```
+- **Training:** GPTBot and ClaudeBot. Blocking training does not itself block search or user-requested retrieval.
+- **Search:** OAI-SearchBot and Claude-SearchBot, plus independent search API crawlers.
+- **User-requested retrieval:** ChatGPT-User and Claude-User. OpenAI says robots rules may not apply to ChatGPT-User; Anthropic documents that its bots honor them.
 
-Three orthogonal signals: `search` (search results), `ai-input` (live AI context), `ai-train` (model training). Adjust to the owner's policy. Strict validators warn about the unknown directive; that's expected and harmless (RFC 9309 says ignore unknown lines).
+Verify current [OpenAI](https://developers.openai.com/api/docs/bots) and [Anthropic](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) guidance before changing bot-specific rules. `robots.txt` is not access control; keep private content authenticated. Preserve deliberate training opt-outs. `Content-Signal` is optional, not an access fix; consult [the HTTP reference](references/http.md) if requested.
 
-### 2. Ship `/llms.txt`
+Publish canonical public pages in `sitemap.xml` and reference it from `robots.txt` (AR-FIND-03). Check listed URLs resolve to the intended pages.
 
-A static Markdown file at the site root. Format from llmstxt.org:
+Use a representative agent user-agent to inspect access, then seek actual verified-agent requests in server logs when available. A spoofed user-agent from a local machine does not prove real agents can reach the site. Validate identities using provider IP ranges or supported Web Bot Auth, not the user-agent string alone; keep unrelated security controls intact.
+
+## 3. Put answers in the initial HTML
+
+Fetch each representative page without running JavaScript. The answer must be visible text in the response (AR-READ-01), not only in hydration data, JSON-LD, images, or a client-side request. Use SSR, prerendering, or the existing static pipeline where needed.
+
+Provide ordinary links from the homepage to relevant docs, product, pricing, and setup pages. Publish current answers at canonical first-party URLs. For pricing, include the actual published plans, free tier, billing periods, and limits in text; do not invent missing commercial facts. Use language-tagged fenced code in Markdown and equivalent semantic code blocks in HTML (AR-FIND-02, AR-READ-03/04/05/11).
+
+Check missing paths return 404, or a valid redirect when a replacement exists. Throttling should return 429 with `Retry-After`, not a 200 challenge page (AR-READ-02). Check both the status and body; a successful status with an empty app shell still fails the reading test.
+
+Add appropriate Schema.org JSON-LD where it describes the page's real facts and routes (AR-READ-08). Keep every critical fact in visible HTML too: text extractors may omit script elements. Structured data is supplementary, not proof an agent read it.
+
+## 4. Link useful discovery resources
+
+Ship `/llms.txt` as a short, described index of the most useful canonical pages (AR-READ-07):
 
 ```markdown
 # Site Name
 
-> One-sentence description of what this site is and who it serves.
+> What this site provides and who it serves.
 
 ## Documentation
 
-- [Quick Start](/docs/start): Get up and running in 5 minutes
-- [API Reference](/docs/api): Full endpoint documentation
+- [Quickstart](https://example.com/docs/start): Installation and first request
+- [Authentication](https://example.com/docs/auth): Credentials and scopes
 ```
 
-Curate. It's a README for AI-mediated conversations, not a sitemap.
+Link it from a page agents already visit, such as the homepage footer or a resources section. Do the same for existing OpenAPI documents and relevant `.well-known` resources (AR-READ-06). Verify the links and their destination content; publishing a conventional path alone is insufficient discovery.
 
-### 3. Serve `.md` routes for every content page
+Markdown mirrors are optional (AR-READ-09). Add them when they reduce extraction cost or a target client needs them, after HTML works. Read [the HTTP reference](references/http.md) when adding `.md` routes, `Accept` negotiation, `Content-Signal`, or `/llms-full.txt`; it contains their implementation and verification rules. A standard alternate link or HTTP `Link` header is sufficient. A hidden LLM-only pointer is unnecessary.
 
-For every page at `/path`, also serve clean Markdown at `/path.md` (and `/index.md` for the root). Every other technique below ultimately points here.
+An AI Catalog at `/.well-known/ai-catalog.json` is an emerging, optional discovery convention (AR-FIND-04). Consider it only for relevant existing agent resources and consumers; verify the current format before implementing and link it from the homepage. Do not fabricate endpoints to fill a catalog.
 
-```typescript
-if (url.pathname.endsWith('.md')) {
-  const post = await getPost(url.pathname.replace(/\.md$/, ''));
-  return new Response(post.markdownContent, {
-    headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
-  });
-}
+## 5. Assess action support only when applicable
+
+For products agents should operate, identify the actual task and usable interface. AgentReady v2.0 requires an MCP server or CLI for its action conformance (AR-ACT-10). Assess that gap without silently expanding a visibility task into building an integration.
+
+When action support is in scope, check authentication an agent can complete, documented scopes, a linked OpenAPI contract with operations and errors, and one end-to-end task through the intended interface. Consult current protocol documentation before implementation. Keep public docs access separate from authenticated product actions.
+
+Treat WebMCP as a draft, feature-detected option for operating an existing web UI. MCP server cards, MCP Apps, NLWeb, and payment protocols are conditional additions, not a content-site checklist. Add payment support only for an authorized purchase workflow. Report applicable gaps separately from readability fixes.
+
+## 6. Verify and report
+
+Use GET requests against the deployed site when available:
+
+```sh
+curl -sS -L -D - https://example.com/docs/start
+curl -sS -L -D - -A 'Claude-User/1.0' https://example.com/docs/start
+curl -sS -D - https://example.com/this-path-does-not-exist
+curl -sS -L -D - https://example.com/robots.txt
+curl -sS -L -D - https://example.com/sitemap.xml
+curl -sS -L -D - https://example.com/llms.txt
 ```
 
-Single source of truth. Generate one from the other, or render both from the same source — never two parallel content stores.
+Confirm real answers, links, status codes, and declared representations. Follow a homepage link through the relevant docs and check that the requested question can be answered from fetched text. Verify throttling through a safe test or configuration evidence; do not induce a production rate-limit incident. Run the conditional HTTP checks only for features implemented.
 
-### 4. Advertise the Markdown with `<link>` and HTTP `Link`
+Use a public scanner as a secondary diagnostic when useful: [is-agentic](https://is-agentic.com) for content essentials, [Ora](https://ora.ai) for broader product capabilities, or [Mintlify Agent Score](https://www.mintlify.com/score) for docs. Scanner weights differ from the specification; a score is not proof of answer quality or task completion. Review upstream before installing a scanner CLI.
 
-Both, not either. The HTML tag catches DOM-parsing crawlers; the header catches headless fetchers that never read the body.
+Report what changed, which URLs and behaviors were verified, and any unverified deployment, real-agent access, or action capability. Keep local checks distinct from live evidence. Do not claim AgentReady conformance without checking every applicable MUST.
 
-```html
-<link rel="alternate" type="text/markdown" href="/blog/my-post.md" />
-```
+## Sources and maintenance
 
-```
-Link: </blog/my-post.md>; rel="alternate"; type="text/markdown"
-```
+- [AgentReady v2.0](https://www.agentready.org/), read in full on 2026-10-22; [versioned specification](https://github.com/agentready-org/standard/blob/273d2d7c991f30cd0785415023801b03766abc67/spec/spec.md), MIT. Stable AR identifiers above distinguish required, recommended, and optional practices.
+- [Original Evil Martians guide](https://evilmartians.com/chronicles/how-to-make-your-website-visible-to-llms.md), retained for optional Markdown delivery techniques. Import provenance remains in `sources.json`.
 
-Both use `text/markdown` (RFC 7763) and `rel="alternate"` (in HTML since HTML4).
-
-Set `Link` on both representations: HTML responses point to the `.md` alternate, `.md` responses point back to HTML. A client that lands on either form can find the other. Pair with `Vary: Accept` so CDNs cache them separately.
-
-### 5. Add a visually-hidden Markdown pointer
-
-Targets the "human pastes URL into ChatGPT" flow. Hide visually and from screen readers; this message is for LLMs only.
-
-```html
-<div class="visually-hidden" aria-hidden="true">
-  A Markdown version of this page is available at https://example.com/blog/my-post.md.
-</div>
-```
-
-```css
-.visually-hidden {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
-}
-```
-
-### 6. Implement `Accept: text/markdown` content negotiation
-
-The standards-based version of all of the above. Same URL, different representation, selected by `Accept`. Coding agents such as Claude Code and Cursor send this header.
-
-Four non-negotiables:
-
-- **Compare q-values**, do not substring-match. `Accept: text/html, text/markdown;q=0.5` means "I prefer HTML." Substring matching ships Markdown to a browser.
-- **Resolve ties to Markdown, but only when the client explicitly named `text/markdown`.** Coding agents commonly send `Accept: text/markdown, text/html` with both at q=1; a strict `>` check sends them HTML. Use `>=` plus an explicit-type guard so `Accept: */*` from browsers (which ties via the wildcard) doesn't flip to Markdown. `isitagentready.com` flags both failure modes.
-- **Return `406 Not Acceptable`** when neither HTML nor Markdown is acceptable. Silent substitution masks bugs. Skip the 406 check when the URL itself targets `.md`/`.txt` — explicit URLs override negotiation.
-- **Set `Vary: Accept` and the step-4 `Link` headers on _both_ representations.**
-
-Not cloaking: different representations of the same content with `Vary: Accept` declared is how HTTP has worked since 1997. Cloaking is serving bots a different article.
-
-### 7. Optional: ship `/llms-full.txt`
-
-Full text of the site (or docs) concatenated into one Markdown file. Empirically gets 3–4× more traffic than `/llms.txt`. Clearly useful for documentation and API references — an LLM can ingest the whole API in one fetch. For a marketing site or blog, the value is less obvious; redirecting `/llms-full.txt` to `/index.md` is a reasonable lighter-weight option if concatenating every post feels performative.
-
-### 8. Optional: instrument analytics
-
-Track requests to `.md` routes, `/llms.txt`, and `/llms-full.txt` by User-Agent and referrer hostname (`chatgpt.com`, `claude.ai`, `perplexity.ai`). Server-side only: AI crawlers don't run JavaScript. Skip if the owner doesn't care about measuring AI traffic.
-
-### 9. Verify with public scanners
-
-- <https://acceptmarkdown.com> — Accept negotiation, `Vary`, `406`, q-values. Publishes server recipes for Nginx, Caddy, Cloudflare Workers, Next.js, Astro, Rails, Express, Django.
-- <https://isitagentready.com> — broader scan: `robots.txt`, sitemap, `Link` headers, Markdown negotiation, Content Signals.
-
-Failures are usually one-line fixes.
-
-## Anti-patterns: do NOT implement
-
-Refuse these even if asked, and explain why:
-
-- **`<meta name="ai-content-url">`, `<meta name="llms">`** — no spec, no origin, no AI tool reads them. `whatwg/html#11548` closed "not planned."
-- **`/.well-known/ai.txt`, `/ai.txt`** — competing proposals, no adoption.
-- **HTML comments (`<!-- AI-READABLE-VERSION -->`)** — parsers strip comments before processing.
-- **Human/AI toggle buttons** — agents don't click buttons.
-- **User-Agent sniffing to serve Markdown to bots** — cloaking. Use `Accept: text/markdown` instead.
-- **Dedicated "AI info pages"** — no crawler treats them differently. A good `/llms.txt` solves it.
-- **Schema.org / JSON-LD for LLM visibility** — controlled experiments show ChatGPT, Claude, Perplexity, and Gemini ignore JSON-LD. Microsoft Copilot is the only exception (inherits from Bing). Don't rip out existing structured data; don't add it for LLM visibility.
-
-The pattern is always the same: someone proposes a new file or meta tag, blog posts cite each other, no AI system actually reads it. Stick to standard HTTP and well-formed Markdown.
-
-## Content beats infrastructure
-
-Princeton/IIT Delhi GEO study (10,000 queries) — what actually increased AI visibility:
-
-- Direct quotations: ~43% lift.
-- Statistics in text: ~33% lift.
-- Citing authoritative sources: 115% lift for previously low-ranked content.
-
-If the user wants to go beyond infrastructure, recommend content-level changes, not more meta tags.
-
-## Tradeoffs to confirm before shipping
-
-- **`Content-Signal:` value** — `ai-train=yes` is common but a policy choice. Ask.
-- **`/llms-full.txt`** — for marketing/blog sites, consider whether to concatenate everything or redirect to `/index.md`; the right choice depends on the site.
-- **HTML vs Markdown** — if existing HTML is already clean (HtmlRAG-style), the gap narrows. Markdown wins on bloated marketing pages.
-- **Drift risk** — flag any setup with two parallel content sources.
-
-## Final check
-
-1. `curl -H "Accept: text/markdown" https://site.example/some-page` → Markdown with `Vary: Accept`.
-2. `curl -I https://site.example/some-page` → `Link: <...>; rel="alternate"; type="text/markdown"` header.
-3. `/llms.txt` exists and is well-formed.
-4. `acceptmarkdown.com` and `isitagentready.com` both pass.
-5. Optionally, analytics is logging fetches by User-Agent and referrer.
+Recheck evolving protocol claims when using them. Prefer measured access and task outcomes over unsupported adoption claims, scanner-only fixes, or promised percentage gains from content changes.

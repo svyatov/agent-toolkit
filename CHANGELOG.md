@@ -104,6 +104,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### llms-visibility
 
+- 1.1.0: align the workflow with AgentReady v2.0: verify crawl access, initial HTML, real status codes, first-party answers, and linked discovery before optional Markdown delivery. Replace the blanket JSON-LD rejection with visible-text safeguards, preserve training policy, and assess action interfaces only for products that need them. Move HTTP negotiation details into a conditional reference and separate scanner scores from verified outcomes.
 - 1.0.7: a new Step 0 maps which response headers the host lets the run set, confirms each conclusion with `curl -sI`, and asks the user about control panel or proxy access before calling a header step blocked.
 
 ### orchestrate
