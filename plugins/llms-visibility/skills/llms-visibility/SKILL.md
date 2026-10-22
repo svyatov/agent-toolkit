@@ -27,7 +27,7 @@ Distinguish bot purposes:
 - **Search:** OAI-SearchBot and Claude-SearchBot, plus independent search API crawlers.
 - **User-requested retrieval:** ChatGPT-User and Claude-User. OpenAI says robots rules may not apply to ChatGPT-User; Anthropic documents that its bots honor them.
 
-Verify current [OpenAI](https://developers.openai.com/api/docs/bots) and [Anthropic](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) guidance before changing bot-specific rules. `robots.txt` is not access control; keep private content authenticated. Preserve deliberate training opt-outs. `Content-Signal` is optional, not an access fix; consult [the HTTP reference](references/http.md) if requested.
+Verify current [OpenAI](https://developers.openai.com/api/docs/bots.md) and [Anthropic](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler.md) guidance before changing bot-specific rules. `robots.txt` is not access control; keep private content authenticated. Preserve deliberate training opt-outs. `Content-Signal` is optional, not an access fix; consult [the HTTP reference](references/http.md) if requested.
 
 Publish canonical public pages in `sitemap.xml` and reference it from `robots.txt` (AR-FIND-03). Check listed URLs resolve to the intended pages.
 
