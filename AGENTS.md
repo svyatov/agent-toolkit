@@ -21,12 +21,12 @@ Note: Claude Code ≥ 2.1.116 rejects `"skills": ["./"]` with `path escapes plug
 
 ## Checklist — After Any Skill Change
 
-- Bump the `version` in that skill's own `plugins/<name>/.claude-plugin/plugin.json` (not any shared file — there is no shared version). A plugin that is not on the default branch yet keeps the version it was created with.
+- Prepare one version per unreleased change set in that skill's own `plugins/<name>/.claude-plugin/plugin.json`. Compare with the published version on the remote default branch: if the current version is already newer, reuse it for all follow-up edits, reviews, and fixes until publication. If it still matches the published version, bump once for the upcoming release. Local commits do not publish a version. A new plugin keeps its initial version until its first publication.
 - Keep `description` identical in `plugin.json`, the `marketplace.json` entry, and the `README.md` table row. The entry text is what Claude Code shows; the manifest text is what Codex shows.
 - Keep invocation policy in step across hosts: a skill with `disable-model-invocation: true` in `SKILL.md` also has `skills/<name>/agents/openai.yaml` with `policy.allow_implicit_invocation: false`. Codex ignores `disable-model-invocation` and `allowed-tools`. `/verify-skill` checks this.
 - A slash-only skill's `SKILL.md` description is its one-line catalog summary, without trigger lists. Claude Code keeps it out of context and Codex does not match on it, so it only has to tell a person what the command does. `/verify-skill` checks this.
 - If a skill was added, renamed, or removed: update the `Skills` table in `README.md` (the row goes under its group heading) and the `plugins[]` array in both `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`, with `category` set to the group slug: `delivery`, `code-design`, `web`, `skill-tooling`, or `writing`. A removed or renamed name also gets a `renames` entry in `.claude-plugin/marketplace.json`.
-- Add a line under `Unreleased` in `CHANGELOG.md`.
+- Record changes under `Unreleased` in `CHANGELOG.md`. Fold follow-up fixes into the existing pending-version entry; do not create another version entry for each edit.
 - Run `claude plugin validate --strict .` and the same for the changed `plugins/<name>`; CI runs both.
 
 ## Commands

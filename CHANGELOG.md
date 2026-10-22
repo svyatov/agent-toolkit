@@ -6,6 +6,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### Marketplace
 
+- Prepare one pending plugin version per release and reuse it for follow-up edits; consolidate its Unreleased notes instead of bumping after every commit.
 - Add a native Codex catalog at `.agents/plugins/marketplace.json` and a Codex install section in the README.
 - Add `renames` for the ten plugin names removed since the `leo` bundle was split, so old installs migrate instead of failing.
 - Point the catalog `$schema` at SchemaStore and move `description` to the top level.
@@ -104,6 +105,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### llms-visibility
 
+- 1.1.0: align the workflow with AgentReady v2.0: verify crawl access, initial HTML, real status codes, first-party answers, and linked discovery before optional Markdown delivery. Replace the blanket JSON-LD rejection with visible-text safeguards, preserve training policy, and assess action interfaces only for products that need them. Move HTTP negotiation details into a conditional reference, link directly to Markdown crawler documentation, and separate scanner scores from verified outcomes.
 - 1.0.7: a new Step 0 maps which response headers the host lets the run set, confirms each conclusion with `curl -sI`, and asks the user about control panel or proxy access before calling a header step blocked.
 
 ### orchestrate
@@ -158,6 +160,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### verify-marketplace
 
+- 1.2.1: use publication evidence for version-drift findings instead of local commit timestamps, and preserve an existing pending version when applying follow-up fixes.
 - 1.2.0: verify Cursor IDE, Cursor CLI and OMP catalogs and packages against live first-party guidance, with effective host-specific discovery, installation/update boundaries and passive-audit reporting. Keep Claude Code and Codex checks scoped to applicable formats.
 - 1.1.0: a cwd with a plugin manifest and no catalog is verified as that plugin instead of prompting for a repo. A plugin whose `source` is the marketplace root gets its component directories validated, since the validator opens no skill file on that root, and the CI check reports a workflow that skips them. Version drift uses `git log -G`, because `-S` returned the commit that added the `version` key rather than the last bump. The SchemaStore lookup gets a `curl -sSL` command on the `www` host the old URL redirects to, and doc sections are located with one anchored grep per file. `/debrief-skill` found all of these in four recent runs.
 

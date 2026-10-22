@@ -105,7 +105,7 @@ Use `/polya <problem>` in Claude Code or `$polya <problem>` in Codex for guided 
 | `browser-compat` | Audit frontend code for 50 cross-browser bugs and mobile compatibility pitfalls | `claude plugin install browser-compat@svyatov-agent-toolkit`<br>`codex plugin add browser-compat@svyatov-agent-toolkit` |
 | `browser-qa` | Check a web page, or the pages this branch changed, in a real browser at mobile, tablet, and desktop widths, and report what is off | `claude plugin install browser-qa@svyatov-agent-toolkit`<br>`codex plugin add browser-qa@svyatov-agent-toolkit` |
 | `generate-favicon` | Generate a minimal favicon set from SVG: ICO, SVG with dark mode, Apple Touch Icon, PWA icons, manifest | `claude plugin install generate-favicon@svyatov-agent-toolkit`<br>`codex plugin add generate-favicon@svyatov-agent-toolkit` |
-| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal | `claude plugin install llms-visibility@svyatov-agent-toolkit`<br>`codex plugin add llms-visibility@svyatov-agent-toolkit` |
+| `llms-visibility` | Make websites, docs, and blogs readable to LLMs and AI agents with accessible HTML, crawl access, and linked discovery files. | `claude plugin install llms-visibility@svyatov-agent-toolkit`<br>`codex plugin add llms-visibility@svyatov-agent-toolkit` |
 
 ### Skills and marketplace
 

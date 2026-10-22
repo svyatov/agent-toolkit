@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "llms-visibility",
-  "description": "Make websites, docs, and blogs readable to LLMs and AI agents: llms.txt, .md routes, Accept negotiation, Content-Signal.",
-  "version": "1.0.7",
+  "description": "Make websites, docs, and blogs readable to LLMs and AI agents with accessible HTML, crawl access, and linked discovery files.",
+  "version": "1.1.0",
   "author": {
     "name": "Leonid Svyatov",
     "email": "leonid@svyatov.com",

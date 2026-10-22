@@ -245,13 +245,14 @@ The following checks are Claude/Codex-scoped; apply Cursor/OMP maps for those ho
   behaviour, and Consider otherwise. When a `.codex-plugin` manifest exists,
   its `interface` fields and `category` value are checked against the
   fetched lists.
-- Version drift: when the last commit that changed the manifest `version`
-  (`git log -1 --format=%ct -G'"version"' -- <manifest>`: `-G` matches a
-  changed value, `-S` only a changed count) is older than the
-  newest commit under the plugin (`git log -1 --format=%ct -- <plugin>`),
-  edits shipped without a bump. Should fix, quoting the fetched line that
-  says users get updates only on a bump. Skip this for a plugin whose docs
-  say it loads in place.
+- Version drift: establish the last published plugin version and payload
+  from the repository's release or distribution mechanism. A newer pending
+  version can cover multiple unreleased commits, reviews, and fixes; commit
+  timestamps alone do not prove that an edit shipped. Report Should fix only
+  when publication evidence shows changed payload distributed under an
+  already-published version, quoting the fetched update rule. Skip plugins
+  documented to load in place. If the published baseline cannot be established,
+  mark the check Not checked instead of inferring a release from local history.
 
 Close the axis with one line: "N skills not content-verified. Run
 `/verify-skill` on each." When `verify-skill` is installed, Glob the same roots
@@ -361,8 +362,10 @@ before that, and do not apply the **Consider** findings at all unless the user
 names them. Group the offer by severity so the user can take the Blocking
 findings alone.
 
-A fix that edits a plugin bumps that plugin's `version` in the same change,
-and the offer says so.
+Follow the repository's version policy when offering a plugin fix. Reuse an
+existing pending version for unreleased work. Propose a new version only when
+the fix needs a release beyond the published version, and state the baseline
+and proposed version in the offer. A local follow-up commit is not a release.
 
 After applying, re-run Steps 3 to 7 on the changed files, reusing the docs
 already fetched. Expect an empty report. If a fix introduced a new finding, say
