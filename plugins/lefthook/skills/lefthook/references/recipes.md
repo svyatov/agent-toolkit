@@ -11,6 +11,8 @@ The must-have. It scans the staged diff, so it has no `glob` and no file templat
 
 Checked 2026-09-27 against betterleaks 1.8.1 and gitleaks 8.30.1.
 
+Before using a scanner recipe, check the installed version and its `git --help`. Use upstream documentation for that version, or for the release selected for installation. For Betterleaks 1.x, use the matching release tag or `v1.x` documentation; `main` documents v2. Confirm the major version supplied by an installation command before proposing it.
+
 ```yaml
 pre-commit:
   jobs:

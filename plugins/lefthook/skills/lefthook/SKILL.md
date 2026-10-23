@@ -22,7 +22,7 @@ git config --get core.hooksPath; git config --global --get core.hooksPath
 ls .git/hooks | grep -v '\.sample$'
 ```
 
-`config.md` records the lefthook version it was checked against. When the latest release is newer, read the CHANGELOG entries since that version (`curl -sL https://raw.githubusercontent.com/evilmartians/lefthook/master/CHANGELOG.md`) and apply any renamed or removed key to what you write.
+`config.md` records the lefthook version it was checked against. When the latest release is newer, fetch the changelog into a temporary file. Return only entries newer than the checked version, recognizing grouped headings such as `2.1.13/2.1.14`. If the boundary cannot be identified, return the headings first and select the relevant range. Apply any renamed or removed key to what you write.
 
 List every lefthook config file by the names in `config.md`, and run `lefthook dump` when one exists. List every other hook source: `.husky/`, `.pre-commit-config.yaml`, `.overcommit.yml`, `simple-git-hooks` or `lint-staged` in `package.json`, a hook file in `.git/hooks` that lefthook did not write.
 
