@@ -136,6 +136,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### shortcuts
 
+- 1.2.15: add `/clmp [message hint]` to commit changes on the current branch, then follow `/lmp`'s shared merge and push procedure. Stop on `main`, detached HEAD, or failed commits.
 - 1.2.14: add `/lmp` to synchronize `main`, squash merge the current branch, and push `main`. Reuse `/lm`'s merge procedure, preserve source branches and linked worktrees, and stop on unpublished local `main` commits or rejected pushes.
 - 1.2.13: add `/lm [branch]` to squash merge committed local work into `main`, with clean-worktree checks, linked-worktree support, and no network operations or branch deletion.
 - 1.2.12: `/cprw` checks the pull request's actual CI status without querying repository Actions settings, so a settings permission error no longer blocks pushing or opening a pull request. The delayed retry for missing checks and stop on failed checks remain in place.

@@ -83,11 +83,13 @@ Your existing `leo:` skill invocations (e.g., `leo:refactor`) become `<skill>:<s
 | `generate-dockerfile` | Generate optimized, multi-stage Dockerfiles | `claude plugin install generate-dockerfile@svyatov-agent-toolkit`<br>`codex plugin add generate-dockerfile@svyatov-agent-toolkit` |
 | `lefthook` | Propose lefthook git hooks for a repository from its linters, CI checks, and git history: secret scanning, staged-file fixers, pre-push checks, and commit message rules, each approved and proven before it lands | `claude plugin install lefthook@svyatov-agent-toolkit`<br>`codex plugin add lefthook@svyatov-agent-toolkit` |
 | `report-upstream` | Take a bug found in a third-party dependency upstream: locate the repo, check for an existing report, reproduce, follow its contributing rules, draft the issue or PR for confirmation | `claude plugin install report-upstream@svyatov-agent-toolkit`<br>`codex plugin add report-upstream@svyatov-agent-toolkit` |
-| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop, and for a question the agent asked: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /lm, /lmp, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps, /ww. | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
+| `shortcuts` | Short slash commands for the git, pull request, CI, docs, and dependency loop, and for a question the agent asked: /c, /cp, /cb, /cbp, /cpr, /cprw, /p, /m, /lm, /lmp, /clmp, /wm, /ci, /fci, /prd, /cl, /fa, /docs, /rule, /lint, /deps, /ww. | `claude plugin install shortcuts@svyatov-agent-toolkit`<br>`codex plugin add shortcuts@svyatov-agent-toolkit` |
 
 Use `/lm` to squash merge the current branch into local `main`, or `/lm <branch>` to select a local branch. It commits the result on `main`, keeps the source branch, and makes no network calls.
 
 Use `/lmp` to synchronize `main`, squash merge the current branch, and push `main`. It keeps the source branch and supports linked worktrees. It stops if local `main` contains unpublished commits.
+
+Use `/clmp [message hint]` to commit changes on the current branch, then run the same merge and push procedure. It stops on `main`, detached HEAD, or a failed commit.
 
 ### Code and design
 
