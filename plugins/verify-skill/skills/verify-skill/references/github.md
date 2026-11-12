@@ -1,6 +1,6 @@
 # GitHub comparison guidance
 
-Refreshed: 2026-10-17
+Refreshed: 2026-11-12
 
 Use for axis D. These are saved API rules; every target repository comparison still runs live. Rules summarize the linked sources; blockquotes are exact excerpts.
 
@@ -27,3 +27,11 @@ Source: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-r
 > The primary rate limit for unauthenticated requests is 60 requests per hour.
 
 Report rate-limited requests as fetch failures. Inspect the response before treating a 403 as a rate-limit response; respect retry guidance rather than repeatedly issuing the same request.
+
+## Fetch format
+
+Source: https://docs.github.com/llms.txt
+
+> The `/api/article/body` endpoint returns markdown, ideal for LLM consumption.
+
+For refreshes, use `https://docs.github.com/api/article/body?pathname=<article-path>` for Markdown. Keep canonical article links as provenance.

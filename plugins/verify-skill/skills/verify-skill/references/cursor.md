@@ -1,6 +1,6 @@
 # Cursor guidance
 
-Refreshed: 2026-10-17
+Refreshed: 2026-11-12
 
 Use for Cursor IDE and Cursor CLI discovery and axis B host parity. Rules summarize the linked sources; blockquotes are exact excerpts. General skills documentation applies to Cursor; release-specific evidence below is CLI-only. Audit policies are labeled separately from documented behavior. Discovery index checked: https://cursor.com/llms.txt.
 
