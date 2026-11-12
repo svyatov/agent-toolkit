@@ -1,6 +1,6 @@
 # Claude Code guidance
 
-Refreshed: 2026-10-17
+Refreshed: 2026-11-12
 
 Use for axis B on Claude Code, discovery and fan-out. Rules summarize the linked sources; blockquotes are exact excerpts. An unlisted field or command is not proof of deprecation: mark it Not checked against this snapshot.
 
@@ -63,3 +63,15 @@ Source: https://code.claude.com/docs/en/plugin-evals.md
 > # Test plugins with evals
 
 When behavioral proof is requested for a plugin, Claude Code supports plugin evals with fixtures, graders and a no-plugin baseline. A manifest validation alone is not an eval. Consult refresh mode for command options absent from this snapshot.
+
+## Effective invocation and content lifecycle
+
+Source: https://code.claude.com/docs/en/skills.md
+
+> Claude Code reads the frontmatter only when the opening `---` is the file's first line.
+
+Malformed YAML loads the body with empty metadata. Unknown fields are ignored. Separate shared conformance findings from demonstrated invocation failures.
+
+The `skillOverrides` setting can override skill visibility without editing frontmatter. Check effective settings before attributing invocation behavior to metadata alone.
+
+Skill content persists across turns, but compaction can retain only its beginning. Put essential constraints near the start.

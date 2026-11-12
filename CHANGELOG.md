@@ -169,6 +169,8 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### verify-skill
 
+- 1.6.2: check HTTP and transport success before diffing upstream content, and block source SHA advancement when required content is unavailable. Refresh all six guidance groups to 2026-11-12, including Claude invocation and content lifecycle, Codex listing configuration, OMP 18.19.0, and GitHub Markdown retrieval.
+
 - 1.6.1: require documented case and invariant coverage plus coordinator-owned cross-skill contract checks; retain content identities, finding dispositions, and affected-contract rechecks through approved fixes; assign shared mechanical checks before dispatch and merge their evidence into one keyed audit record before final reporting.
 - 1.6.0: add sourced Cursor and pinned OMP guidance, route discovery and invocation checks by host and package/provider, distinguish hiding from authorization, and refresh platform groups independently with approval-gated saved updates.
 - 1.5.2: handle upstream renames and deletions explicitly, and refresh the saved guidance to 2026-10-17 with Claude metadata restrictions, tool-permission exceptions, the ultracode concurrency exception, and the default Codex listing limit.

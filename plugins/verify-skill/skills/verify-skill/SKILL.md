@@ -343,12 +343,17 @@ other.
 Handle removed files and renames out of `path` as deletions, without fetching
 them at the head. Treat renames into `path` as additions. For renames within
 `path`, map the local counterpart using the old path and fetch the new path
-at the head. For the other kept files, fetch the current upstream text and
-diff it against the local counterpart, in one batch:
+at the head. For the other kept files, fetch the current upstream text in one batch.
+For each response, set `upstream_file` to a separate path in the temporary directory:
 
 ```bash
-curl -sS "https://raw.githubusercontent.com/{repository}/{head_sha}/{filename}" | diff -u <local file> -
+curl -fsSL --max-time 20 -o "$upstream_file" "https://raw.githubusercontent.com/{repository}/{head_sha}/{filename}"
 ```
+
+Diff each successful response against its local counterpart.
+Treat HTTP and transport failures as **Not checked** for that source.
+Exclude sources with missing required content from Step 8's SHA advancement.
+Never interpret a failed response as changed or deleted upstream content.
 
 For `type: copy` the local counterpart is the same relative path under the
 skill. For `fork` and `merge` do not diff line by line: the local copy was

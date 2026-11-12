@@ -1,6 +1,6 @@
 # Agent Skills conformance and authoring
 
-Refreshed: 2026-10-17
+Refreshed: 2026-11-12
 
 Use for axis A. Rules below summarize the linked sources; blockquotes are exact excerpts. Labeled audit policies are this verifier's decisions, not upstream requirements. These are dated guidance, not a claim about today's documentation.
 
@@ -39,7 +39,7 @@ Source: https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-pract
 
 > **Always write in third person**.
 
-> Cannot contain reserved words: "anthropic", "claude"
+> Cannot contain reserved words: `anthropic`, `claude`
 
 Anthropic's authoring guidance forbids XML tags in `name` and `description`, and the reserved words `anthropic` and `claude` in `name`. Apply these constraints to Claude targets. It favors third-person descriptions.
 
