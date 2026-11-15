@@ -1,30 +1,9 @@
 # Local squash merge
 
-1. Resolve the source and `main` with `git rev-parse --verify refs/heads/<branch>`, and record both
-   commit IDs. Stop if either local branch is missing, the source is `main`, or no source was
-   supplied from a detached HEAD. Use `git worktree list --porcelain` to find the worktree holding
-   `main`; if none holds it, use the current worktree. Before changing anything, require a clean
-   index and working tree, including untracked files, and no merge, rebase, cherry-pick, or revert
-   in progress in the current, source, and target worktrees that exist. Stop and name any blocker;
-   leave the user's work intact.
-2. Read the source commits (`git log main..<source>`) and their full diff
-   (`git diff main...<source>`). Stop if the branches have no common ancestor or the diff exposes
-   credentials or private keys. If the source commit is already an ancestor of `main`, report
-   that it is already merged and stop. Derive a Conventional Commit subject from the complete
-   change, following the repository's wording rules.
-3. If `main` has a worktree, run the remaining commands there. Otherwise, `git switch main` in
-   the current worktree. Confirm that source and target still match the recorded commit IDs and
-   the target is still clean. Run `git merge --squash <recorded-source-commit>`. A conflict or
-   other failure stops the workflow before committing: report the target path and conflicting
-   files, and leave the result for inspection. A squash merge has no `MERGE_HEAD`; do not suggest
-   `git merge --abort` as recovery.
-4. If `git diff --cached --quiet` reports no staged changes, report that there is nothing new to
-   commit and stop. Otherwise, inspect the staged diff and run the repository's required checks
-   in the target worktree. A failed check, a changed staged diff, or new unstaged or untracked
-   files stops before committing. Commit the squash with the derived subject, keeping commit
-   hooks enabled. If a hook fails or changes files, inspect and report the actual state; stop
-   rather than silently adding files, bypassing the hook, or retrying the commit.
-5. Confirm that the new commit has the recorded `main` commit as its sole parent and the target
-   worktree is clean, and that the source branch still points to its recorded commit. Report the
-   source branch, commit subject and short hash, and target worktree path. If verification fails,
-   report the actual state and stop without resetting history.
+Use local mode unless the calling shortcut explicitly requests push mode. Keep source branches, worktrees, and hooks intact. Never force push or reset history.
+
+1. Resolve and record the local source and `main` commit IDs. Use the supplied source or current branch; stop if missing, identical to `main`, or unresolved from detached HEAD. Locate `main`'s worktree, using the current checkout when none holds it. Require clean indexes and worktrees, including untracked files, and no unfinished Git operation in every involved worktree before changing anything.
+2. Push mode only: resolve `main`'s upstream, falling back to `origin/main`. Require a nonlocal remote and destination `refs/heads/main`. Fetch that branch and record its commit. Stop on fetch failure or when local `main` is not its ancestor. Recheck the recorded refs and target state. In the target worktree, switch to `main` if needed, fast-forward it, and update the recorded target ID. Local mode performs no network operation.
+3. Read the source commits and full diff against the recorded target. Stop for no common ancestor, exposed secrets, or an already merged source. Derive a Conventional Commit subject from the complete change and repository rules.
+4. In `main`'s worktree, or after switching to `main`, recheck the recorded refs and clean target. Squash merge the recorded source. Inspect the staged diff and run the repository's required checks. Stop on conflict, empty staged diff, failed checks, changed staged content, or new unstaged or untracked files. Commit the staged result with hooks enabled; stop if a hook fails or changes files. Leave failures for inspection; a squash merge cannot be recovered with `git merge --abort`.
+5. Record the squash commit ID. Verify its sole parent is the recorded target, the source ref is unchanged, and the target is clean. Stop on failed verification. Push mode only: confirm `main` still points to the recorded squash commit and the target remains clean before pushing. In push mode, push `refs/heads/main:refs/heads/main` to the resolved remote and verify its remote SHA equals the recorded squash commit. Stop on rejection or failed verification. Report the source, squash subject and hash, target worktree, and any pushed destination.

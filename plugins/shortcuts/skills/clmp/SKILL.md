@@ -30,6 +30,6 @@ Commit all changes on the current branch, then squash merge that branch into `ma
    If hooks change files, stop and report the actual state before any merge or push.
    Require the recorded source branch to remain checked out.
    Require a clean index and worktree, including untracked files.
-6. Read [the squash merge and push procedure](../../references/squash-merge-push.md). Follow all six steps with the recorded source branch.
+6. Read [the local squash merge procedure](../../references/local-squash-merge.md). Follow all five steps in push mode with the recorded source branch.
    Every stop condition stops this workflow. Retain source commits if merging or pushing fails.
    Report the source commits, any added ignore entry, and the merge and push result.

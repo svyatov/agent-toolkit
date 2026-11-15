@@ -10,4 +10,4 @@ allowed-tools: Bash(git status:*), Bash(git symbolic-ref:*), Bash(git rev-parse:
 Branch and status: !`git status --short --branch`
 Worktrees: !`git worktree list --porcelain`
 
-Read [the squash merge and push procedure](../../references/squash-merge-push.md). Follow all six steps.
+Read [the local squash merge procedure](../../references/local-squash-merge.md). Follow all five steps in push mode.
