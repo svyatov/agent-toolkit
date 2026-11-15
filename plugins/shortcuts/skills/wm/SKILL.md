@@ -7,16 +7,9 @@ disable-model-invocation: true
 allowed-tools: Bash(gh pr:*), Bash(gh run:*), Bash(git status:*), Bash(git branch:*), Bash(sleep:*)
 ---
 
-Pull request: !`gh pr view --json number,title,url,isDraft,mergeable,mergeStateStatus 2>&1 || true`
-Actions enabled: !`gh api 'repos/{owner}/{repo}/actions/permissions' --jq .enabled 2>&1 || true`
+Pull request: !`gh pr view --json number,title,url,isDraft,mergeable,mergeStateStatus,headRefOid 2>&1 || true`
 
-1. No open pull request for this branch: say so and stop.
-2. Actions enabled `false` above means the repository runs no CI: skip the watch and treat it as
-   green. Otherwise, `gh pr checks --watch` until every check settles. It exits non-zero on failure, so allow that and
-   read the result rather than treating it as a crash. CI takes a few seconds to register a new pull
-   request, so when it reports no checks, `sleep 20` and watch again. No checks the second time
-   means the branch runs no CI: treat it as green.
-3. Green: `gh pr merge --squash --delete-branch`. Red: stop, name the failing check and the reason,
-   and merge nothing. Do not retry, do not fix, do not merge past a failure.
-4. A draft PR, a merge conflict, or a blocked merge state stops you too. Report which it is.
-5. Report whether it merged, and the URL.
+1. Stop if this branch has no open PR, or the PR is a draft or conflicted.
+2. Record the PR identity and head SHA. Run `gh pr checks <PR> --watch` until all applicable checks pass. If none appear, establish from CI configuration and PR requirements that none apply; otherwise stop with CI unverified. Disabled Actions alone proves nothing about other checks. Failed, cancelled, or unresolved checks stop the merge.
+3. Re-read the head SHA; if it changed, repeat validation. Stop if merging remains blocked. Run `gh pr merge <PR> --squash --delete-branch --match-head-commit <validated-sha>`. Keep repository enforcement intact; stop on refusal.
+4. Verify that the PR merged, waiting if it entered a merge queue. Report the URL and actual result. Do not fix or retry failed checks.
