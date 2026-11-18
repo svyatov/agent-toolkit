@@ -40,7 +40,7 @@ function skillDir(e) {
   if (e.type !== "user" || !e.isMeta) return null;
   const c = e.message?.content;
   const text = typeof c === "string" ? c : parts(e).map((p) => p?.text ?? "").join("");
-  return text.match(/^Base directory for this skill: (\S+)/)?.[1] ?? null;
+  return text.match(/^Base directory for this skill: ([^\r\n]+)/)?.[1] ?? null;
 }
 
 const skillCall = (e) => (e.type === "assistant" ? parts(e).find((p) => p?.name === "Skill")?.input?.skill ?? null : null);
@@ -57,33 +57,48 @@ function loadedDir(after) {
 
 const resultText = (r) => (typeof r.content === "string" ? r.content : (r.content ?? []).map((p) => p?.text ?? "").join("\n"));
 
-function entries(file) {
-  const list = readFileSync(file, "utf8").split("\n").map((l, i) => {
-    try { return [i + 1, JSON.parse(l)]; } catch { return [i + 1, {}]; }
+function records(file) {
+  return readFileSync(file, "utf8").split("\n").map((l, i) => {
+    if (!l.trim()) return [i + 1, {}];
+    try {
+      const event = JSON.parse(l);
+      if (!event || typeof event !== "object" || Array.isArray(event)) throw new Error();
+      return [i + 1, event];
+    } catch {
+      console.error(`Incomplete transcript: ${file}:${i + 1}: unreadable record`);
+      return [i + 1, { unreadable: true }];
+    }
   });
-  return list[0]?.[1].type === "session_meta" ? codex(list) : list;
+}
+
+const sessionMeta = list => list.find(([, e]) => e.type || e.unreadable)?.[1];
+
+function entries(file) {
+  const list = records(file);
+  return sessionMeta(list)?.type === "session_meta" ? codex(list) : list;
 }
 
 // Maps Codex rollout records onto the Claude Code shapes the timeline reads.
-function codex(list) {
-  const meta = list[0][1].payload ?? {};
-  // A forked subagent first repeats its parent's history, up to its own first turn.
-  const own = meta.forked_from_id ? (list.filter(([, e]) => e.payload?.type === "task_started")[1]?.[0] ?? Infinity) : 0;
+function codex(list, own = 0) {
   let human = null;
   return list.map(([n, e]) => {
     const p = e.payload ?? {};
     const ts = e.timestamp;
     const text = Array.isArray(p.content) ? p.content.map((c) => c.text ?? "").join("\n") : "";
-    if (n === 1 || n < own) return [n, n === 1 ? e : {}];
+    if (e.type === "session_meta") return [n, e];
+    if (n < own) return [n, {}];
     if (e.type === "compacted") return [n, { type: "system", timestamp: ts, subtype: "compact_boundary" }];
     if (p.type === "turn_aborted" && p.reason === "interrupted") return [n, { type: "user", timestamp: ts, message: { content: "[Request interrupted by user]" } }];
     if (p.type === "message" && p.role === "user") {
       const skill = text.match(/^<skill>\s*<name>([^<]+)<\/name>\s*<path>([^<]+)<\/path>/);
       if (skill) {
-        if (human) human.cmd ??= skill[1];
+        if (human) {
+          (human.skills ??= []).push([skill[1], dirname(skill[2])]);
+          human.cmd ??= skill[1];
+        }
         return [n, { type: "user", timestamp: ts, isMeta: true, message: { content: `Base directory for this skill: ${dirname(skill[2])}` } }];
       }
-      if (/^\s*(<|# AGENTS\.md instructions)/.test(text)) return [n, {}];
+      if (/^\s*(?:<environment_context>[\s\S]*<\/environment_context>\s*$|# AGENTS\.md instructions for )/.test(text)) return [n, {}];
       human = { type: "user", timestamp: ts, message: { content: text } };
       return [n, human];
     }
@@ -128,15 +143,17 @@ function runs(args) {
   const codexRecent = codexFiles().filter((f) => (session ? f.endsWith(`-${session}.jsonl`) : statSync(f).mtimeMs > since));
   const found = [...files, ...codexRecent].flatMap((file) => {
     const list = entries(file);
-    if (list[0]?.[1].payload?.parent_thread_id) return []; // a subagent: shown under its parent's run
+    if (sessionMeta(list)?.payload?.parent_thread_id) return []; // shown under its parent's run
     return list.flatMap(([n, e], idx) => {
-      const name = command(e) ?? skillCall(e);
-      if (!name) return [];
-      const dir = loadedDir(list.slice(idx + 1, idx + 21));
-      const short = name.split(":").at(-1);
-      const ts = String(e.timestamp ?? "");
-      if (!dir || (want ? ![name, short].includes(want) : short === SELF) || (!session && ts < sinceIso)) return [];
-      return [[ts, name, `${file}:${n}`, dir]];
+      const invoked = command(e) ?? skillCall(e);
+      if (!invoked) return [];
+      const skills = e.skills ?? [[invoked, loadedDir(list.slice(idx + 1, idx + 21))]];
+      return skills.flatMap(([name, dir]) => {
+        const short = name.split(":").at(-1);
+        const ts = String(e.timestamp ?? "");
+        if (!dir || (want ? ![name, short].includes(want) : short === SELF) || (!session && ts < sinceIso)) return [];
+        return [[ts, name, `${file}:${n}`, dir]];
+      });
     });
   });
   found.sort((a, b) => b.join("\t").localeCompare(a.join("\t")));
@@ -194,42 +211,60 @@ function timeline(list, prefix = "", { level = "all", onAgent } = {}) {
 
 function show(ref, subs) {
   const [, file, start, last] = ref.match(/^(.*):(\d+)(?:-(\d+))?$/);
-  const all = entries(file);
+  const raw = records(file);
+  const meta = sessionMeta(raw);
+  const all = meta?.type === "session_meta" ? codex(raw) : raw;
   const said = ([, e]) => e.type === "assistant" && parts(e).some((p) => p?.type === "text");
   const prev = all.slice(0, Number(start) - 1).findLast(said);
   if (prev) console.log(`L${prev[0]} PREV ${squeeze(parts(prev[1]).map((p) => p?.text ?? "").join(" "), 240)}`);
-  let list = all.slice(Number(start) - 1, last ? Number(last) : undefined);
-  const stop = list.slice(1).findIndex(([, e], i) => command(e) && loadedDir(list.slice(i + 2, i + 22)));
-  const end = stop >= 0 ? list[stop + 1][1].timestamp : "9";
-  if (stop >= 0) list = list.slice(0, stop + 1);
+  const remaining = all.slice(Number(start) - 1);
+  const next = remaining.slice(1).findIndex(([, e], i) => command(e) && loadedDir(remaining.slice(i + 2, i + 22)));
+  const boundary = next < 0 ? undefined : remaining[next + 1][1].timestamp;
+  const run = next < 0 ? remaining : remaining.slice(0, next + 1);
+  const list = last ? run.filter(([n]) => n <= Number(last)) : run;
+  const windowEnd = last && raw.slice(0, Number(last)).findLast(([, e]) => e.timestamp)?.[1].timestamp;
   const subDir = join(file.replace(/\.jsonl$/, ""), "subagents");
   const metas = existsSync(subDir) ? readdirSync(subDir).filter((f) => f.endsWith(".meta.json")).map((f) => join(subDir, f)) : [];
   const subTotal = { errors: 0, denied: 0 };
-  const sub = (label, path) => {
-    const c = timeline(entries(path), "", { level: "none" });
+  const sub = (label, path, events) => {
+    const c = timeline(events, "", { level: "none" });
     subTotal.errors += c.errors;
     subTotal.denied += c.denied;
     console.log(`  SUB ${label} ${path} calls=${c.calls} errors=${c.errors} denied=${c.denied} stops=${c.stops}`);
-    if (subs) timeline(entries(path), "  sub ", { level: "friction" });
+    if (subs) timeline(events, "  sub ", { level: "friction" });
   };
   const counts = timeline(list, "", {
     onAgent: (toolId) => {
       for (const m of metas) {
         let meta;
         try { meta = JSON.parse(readFileSync(m, "utf8")); } catch { continue; }
-        if (meta.toolUseId === toolId) sub(meta.description ?? "subagent", m.replace(/\.meta\.json$/, ".jsonl"));
+        if (meta.toolUseId === toolId) {
+          const path = m.replace(/\.meta\.json$/, ".jsonl");
+          sub(meta.description ?? "subagent", path, entries(path));
+        }
       }
     },
   });
-  const id = all[0][1].type === "session_meta" && all[0][1].payload?.id;
+  const id = meta?.type === "session_meta" && meta.payload?.id;
   if (id) {
-    const begin = list[0][1].timestamp ?? "";
+    const begin = raw[Number(start) - 1]?.[1].timestamp ?? "";
+    const parentTurns = new Set(raw.filter(([, e]) => e.payload?.type === "task_started").map(([, e]) => e.payload.turn_id));
     for (const f of codexFiles()) {
       const h = head(f);
       const born = h.match(/"timestamp":"([^"]+)"/)?.[1] ?? "";
-      if (!h.includes(`"parent_thread_id":"${id}"`) || born < begin || born > end) continue;
-      const meta = entries(f)[0][1].payload ?? {};
-      sub(meta.agent_path ?? meta.agent_nickname ?? "subagent", f);
+      if (!h.includes(`"parent_thread_id":"${id}"`) || born < begin || (boundary && born >= boundary) || (windowEnd && born > windowEnd)) continue;
+      const child = records(f);
+      const meta = sessionMeta(child)?.payload ?? {};
+      let own = 0;
+      if (meta.forked_from_id) {
+        const firstOwn = child.find(([, e]) => e.payload?.type === "task_started" && e.payload.turn_id && !parentTurns.has(e.payload.turn_id));
+        if (meta.forked_from_id !== id || !parentTurns.size || parentTurns.has(undefined) || raw.some(([, e]) => e.unreadable) || child.some(([, e]) => e.unreadable) || !firstOwn) {
+          console.log(`  SUB ${f} counts unavailable: fork boundary unverified`);
+          continue;
+        }
+        own = firstOwn[0];
+      }
+      sub(meta.agent_path ?? meta.agent_nickname ?? "subagent", f, codex(child, own));
     }
   }
   console.log(`${Object.entries(counts).map(([k, v]) => `${k}=${v}`).join(" ")} sub_errors=${subTotal.errors} sub_denied=${subTotal.denied}`);

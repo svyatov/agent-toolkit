@@ -6,7 +6,7 @@ compatibility: Requires Node.js 18.17 or later (built-in modules only) to read C
 disable-model-invocation: true
 argument-hint: "[skill name | self | all] [days]"
 allowed-tools:
-  - Bash(node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs *)
+  - Bash(node "${CLAUDE_SKILL_DIR}/scripts/transcript.mjs" *)
   - Read
 ---
 
@@ -21,7 +21,7 @@ A healthy skill debriefs clean. The report then says so in one line per run.
 List runs with the bundled script, which reads Claude Code sessions in `~/.claude/projects/` and Codex sessions in `~/.codex/sessions/`. Each output line is a timestamp, the skill name, the `transcript:line` where the run starts, and the directory the skill loaded from, newest first. Without a skill name, the script leaves out runs of this skill.
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs runs [--session ID] [--days N] [skill]
+node "${CLAUDE_SKILL_DIR}/scripts/transcript.mjs" runs [--session ID] [--days N] [skill]
 ```
 
 | Arguments | Runs |
@@ -29,10 +29,12 @@ node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs runs [--session ID] [--days N] [
 | Empty | The newest run the user invoked in this session: `--session ${CLAUDE_SESSION_ID}`. A skill that another run loaded through a Skill call belongs to that run: skip its line and take the run that loaded it |
 | A skill name | Its runs in this session. None there: its runs in every project over the last 30 days |
 | A skill name and a number | Its runs over that many days |
-| `self` | The runs of `debrief-skill`, found as a skill name, minus the first output line: that line is this run, still in progress. Apply the "None there" fallback after you remove that line |
+| `self`, optionally a number | List `debrief-skill` by name. Identify this invocation in the current session by its user message and `transcript:line`. Exclude that exact reference from the session results and any fallback or days search before sampling. If its marker is missing, report that limitation and retain other rows. |
 | `all`, optionally a number or "in this session" | Every skill that ran over that many days (default 30), or with "in this session", every skill in `--session ${CLAUDE_SESSION_ID}`. A skill another run loaded is a skill of its own here: debrief it separately, and tell the loading run's subagent to attribute friction only to its own skill's text. Keep the skills whose source the user maintains (Step 2) and name the rest in the header as skipped |
 
 Take the five newest runs of each skill, and write in the header how many runs existed and how many you read. An invocation whose `show` has `calls=0` and no `SAY` line is not a run: leave it out, and count it in the header as empty.
+
+When several Codex skills share a `transcript:line`, read the slice once. Report shared counts once and attribute each finding to the skill whose text caused it. For `all`, pass shared evidence to the workers. If the helper reports an unreadable record or unavailable worker counts, mark affected coverage incomplete and exclude those runs from Smooth.
 
 In Codex, `${CLAUDE_SKILL_DIR}` and `${CLAUDE_SESSION_ID}` reach you as literal text: use the directory of this `SKILL.md` and `$CODEX_THREAD_ID` instead. Codex lists a run when the user named the skill with `$name`. A skill Codex picked on its own leaves no marker, so say in the header that such runs are not covered.
 
@@ -41,11 +43,11 @@ In Codex, `${CLAUDE_SKILL_DIR}` and `${CLAUDE_SESSION_ID}` reach you as literal 
 The directory from Step 1 is where the skill loaded from, and that is not always where it is edited:
 
 - `~/.claude/skills/<name>/` or `<project>/.claude/skills/<name>/` is the source.
-- `~/.agents/skills/<name>/` is the source for a Codex user skill.
-- `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/...` or `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/...` is an installed copy that the next update overwrites. Look `<marketplace>` up in `~/.claude/plugins/known_marketplaces.json`, or under `[marketplaces.<marketplace>]` in `~/.codex/config.toml`. A `directory` or `local` source is the local checkout. A `github` or `git` source needs its local clone: the current repository when `git remote get-url origin` names it, else the hit of `find ~ -maxdepth 4 -type d -name <repo> -not -path '*/.claude/*' 2>/dev/null` whose origin names it, else ask the user once. In the checkout, the plugin root is the `source` of its entry in `.claude-plugin/marketplace.json` (such as `./plugins/<plugin>`): the cache path after `<version>/` sits under that root.
+- For Codex project and user skills, resolve the recorded `.agents/skills/<name>` directory to its real path, including symlinks, and verify the skill name and ownership.
+- `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/...` or `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/...` is an installed copy that the next update overwrites. Look `<marketplace>` up in `~/.claude/plugins/known_marketplaces.json`, or under `[marketplaces.<marketplace>]` in `~/.codex/config.toml`. A `directory` or `local` source is the local checkout. A `github` or `git` source needs its local clone: the current repository when `git remote get-url origin` names it, else the hit of `find ~ -maxdepth 4 -type d -name <repo> -not -path '*/.claude/*' 2>/dev/null` whose origin names it, else ask the user once. In the checkout, use the matching host catalog: Claude uses `source` in `.claude-plugin/marketplace.json`, Codex uses `source.path` for local entries in `.agents/plugins/marketplace.json`. Resolve the skill below that plugin root and verify its name. Ask for the source when the catalog does not identify a local path.
 - A marketplace or skill the user does not maintain has no local source. Its findings become an upstream report.
 
-The `<version>` in a cache path is the version that ran, and `version` in the source plugin's `.claude-plugin/plugin.json` is the current one. When the source has moved past it, a friction the current text already fixes is not a finding. A skill that loads straight from its source (a user skill, or a symlink into a checkout) has no version: write `(loads from source)` in the header, and check `git status` there. Use the skill body recorded in the transcript, or another verified snapshot from the invocation, to establish what ran. File modification times (compare `stat -f %m`, or `stat -c %Y` on Linux) can show that the current file changed after the run, but do not identify its earlier contents. `git show HEAD:<path>` is the committed version, not proof of the version that ran. When no reliable snapshot exists, mark the historical text unavailable and exclude findings that depend on it. For a symlink, `readlink <dir>` names the checkout.
+The `<version>` in a cache path is the version that ran, and the source plugin manifest gives the current version (`.claude-plugin/plugin.json` for Claude, `.codex-plugin/plugin.json` for Codex when present). If no manifest declares a version, use a verified snapshot for comparison. When the source has moved past it, a friction the current text already fixes is not a finding. A skill that loads straight from its source (a user skill, or a symlink into a checkout) has no version: write `(loads from source)` in the header, and check `git status` there. Use the skill body recorded in the transcript, or another verified snapshot from the invocation, to establish what ran. File modification times (compare `stat -f %m`, or `stat -c %Y` on Linux) can show that the current file changed after the run, but do not identify its earlier contents. `git show HEAD:<path>` is the committed version, not proof of the version that ran. When no reliable snapshot exists, mark the historical text unavailable and exclude findings that depend on it.
 
 Done when every skill has a source path, or is marked upstream.
 
@@ -54,7 +56,7 @@ Done when every skill has a source path, or is marked upstream.
 Read the skill's `SKILL.md` and every file it names, so you know what the run was told to do. Then print each run:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs show <transcript:line>[-<end>] [--subs]
+node "${CLAUDE_SKILL_DIR}/scripts/transcript.mjs" show <transcript:line>[-<end>] [--subs]
 ```
 
 Each line is `L<n> <KIND> <text>`, where `n` is the transcript line:
@@ -76,7 +78,7 @@ Each line is `L<n> <KIND> <text>`, where `n` is the transcript line:
 | `SUB` | A subagent the run dispatched: its label, its transcript, and its counts |
 | `sub` | With `--subs`: an error, denial, or interrupt inside that subagent, with line numbers in its own transcript |
 
-The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next skill the user invokes (a built-in command such as `/reload-plugins` does not end it), and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. A slice over the host's output limit comes back as a file: print it in windows with `<transcript:start>-<end>`. To see lines in full, run `node ${CLAUDE_SKILL_DIR}/scripts/transcript.mjs lines <transcript> <n>...` (for a `sub` line, the transcript on its `SUB` line): it prints each line's timestamp, text, tool input, and tool result, each capped at 4,000 characters. Pass `--max N` to change the cap.
+The last line counts calls, errors, denials, interrupts, and user messages, then the subagents' errors and denials. The slice ends at the next skill the user invokes (a built-in command such as `/reload-plugins` does not end it), and a skill the run loads itself stays inside it, so it can carry later work that has nothing to do with the skill: the run ends where the conversation leaves the skill's task. A slice over the host's output limit comes back as a file: print it in windows with `<transcript:start>-<end>`. To see lines in full, run `node "${CLAUDE_SKILL_DIR}/scripts/transcript.mjs" lines <transcript> <n>...` (for a `sub` line, the transcript on its `SUB` line): it prints each line's timestamp, text, tool input, and tool result, each capped at 4,000 characters. Pass `--max N` to change the cap.
 
 Look for friction of these kinds:
 
@@ -88,7 +90,7 @@ Look for friction of these kinds:
 - **Bloat**: a `BIG` result that a narrower command in the skill would have avoided.
 - **Drift**: output whose shape differs from what the skill specifies.
 
-Run `show --subs` for a run whose `SUB` lines carry errors or denials. Subagent errors can be named unrelated in bulk, by pattern: a non-zero exit from a command that already printed what it ran for, such as a `grep` with no match, is unrelated.
+Run `show --subs` for a run whose `SUB` lines carry errors, denials, or interrupts. Subagent errors can be named unrelated in bulk, by pattern: a non-zero exit from a command that already printed what it ran for, such as a `grep` with no match, is unrelated.
 
 Done when every `ERR`, `DENY`, `STOP`, and `YOU` line in the run is either a friction item or named as unrelated.
 
@@ -145,10 +147,10 @@ Blocking: N · Should fix: N · Consider: N · Watch: N
 Unrelated: <each ERR, DENY, STOP, and YOU line named unrelated, with its line and why>. Omit when none.
 ````
 
-Number findings F1, F2, and so on across all levels, and omit a level that has none. **Smooth** lists every run with no finding, or reads `- None`: without it the reader cannot tell a clean run from one that was never read.
+Number findings F1, F2, and so on across all levels, and omit a level that has none. **Smooth** lists every fully checked run with no finding, or reads `- None`: without it the reader cannot tell a clean run from one that was never read.
 
 For `all`, use one subagent per skill. Determine the active host's worker capacity and occupied slots first. On Claude Code, `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` defaults to 20 and accepts positive whole numbers in plain digits; use a valid configured override. Other hosts use their own limits. Dispatch up to the available capacity in one message, queue the rest, and start the next each time a worker finishes. If capacity is unknown, use one worker at a time; if subagents are unavailable, process the skills sequentially. Give each the path of this file, the skill name, its source path, and its run references with their Step 1 timestamps, and have it run Steps 3 to 5 and return the report. Then print one table first (skill, runs read, Blocking, Should fix, Consider, Watch) and the per-skill reports below it, skills with the most severe findings first. Each subagent numbers from F1 and W1: renumber findings and Watch items across the whole printout, in print order, so every code is unique for Step 6. Change nothing else: each report's two header lines, its diffs, each Watch item's "what would make it a finding", and its `## Smooth` section stay as the subagent wrote them.
 
 ## Step 6: Apply
 
-Ask which findings to apply, by code. Apply the chosen ones to the source from Step 2, never to a cache copy, and then follow the source repository's own change checklist from its `AGENTS.md` or `CLAUDE.md`. For an upstream skill, hand the chosen findings to the `report-upstream` skill when it is installed, and print them as a ready-to-file issue otherwise.
+Ask which findings to apply, by code. Apply the chosen ones to the source from Step 2, never to a cache copy, and then follow the source repository's own change checklist from its `AGENTS.md` or `CLAUDE.md`. For an upstream skill, print the chosen findings as a ready-to-file issue. If `report-upstream` is installed, give the user its explicit invocation for this host. Submitting the issue requires separate approval.

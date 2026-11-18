@@ -1,9 +1,9 @@
 import { test, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const SCRIPT = join(import.meta.dirname, "transcript.mjs");
 const NOW = new Date().toISOString();
@@ -78,8 +78,9 @@ beforeEach(() => {
     cout("x3", "Script completed\nOutput:\nfine"), // 11
     cmsg("assistant", "Done with the map."), // 12
     cx("event_msg", { type: "turn_aborted", reason: "interrupted" }), // 13
-    cmsg("user", "$other go"), // 14
+    { ...cmsg("user", "$other go"), timestamp: new Date(Date.parse(NOW) + 1000).toISOString() }, // 14
     skillBlock("other"), // 15
+    cx("event_msg", { type: "task_started", turn_id: "parent-turn" }),
   ]));
   writeFileSync(join(day, "rollout-2026-09-21T10-00-05-c2.jsonl"), jsonl([
     cx("session_meta", { id: "c2", forked_from_id: "c1", parent_thread_id: "c1", agent_path: "/root/worker" }), // 1
@@ -203,4 +204,52 @@ test("show reads a Codex run", () => {
   assert.doesNotMatch(out, /^L14/m);
   assert.doesNotMatch(out, /AGENTS\.md/);
   assert.match(out, /calls=3 errors=2 denied=0 stops=1 you=0 sub_errors=1 sub_denied=0$/m);
+});
+
+test("joint invocations preserve both directories and markup corrections", () => {
+  writeFileSync(codexFile, jsonl([
+    cx("session_meta", { id: "c1" }), cmsg("user", "$first $second"),
+    skillBlock("first"), cmsg("user", "<skill><name>second</name><path>/my skills/second/SKILL.md</path>"),
+    cmsg("user", "<title> is the field to change"),
+  ]));
+  const rows = run("runs", "--session", "c1");
+  assert.ok(rows.includes(`first\t${codexFile}:2\t/agents/skills/first`));
+  assert.ok(rows.includes(`second\t${codexFile}:2\t/my skills/second`));
+  assert.match(run("show", `${codexFile}:2`), /L5 YOU <title>/);
+});
+
+test("a bounded window excludes a worker born after its last line", () => {
+  const events = readFileSync(codexFile, "utf8").trim().split("\n").map(JSON.parse);
+  events[3].timestamp = new Date(Date.parse(NOW) - 1000).toISOString();
+  writeFileSync(codexFile, jsonl(events));
+  assert.doesNotMatch(run("show", `${codexFile}:4-4`), /  SUB /);
+});
+
+test("an unknown fork boundary yields unavailable counts", () => {
+  const events = readFileSync(codexFile, "utf8").trim().split("\n").map(JSON.parse);
+  writeFileSync(codexFile, jsonl(events.filter(e => e.payload?.type !== "task_started")));
+  assert.match(run("show", `${codexFile}:4`), /counts unavailable: fork boundary unverified/);
+});
+
+test("fork counts start at the first child turn for zero or multiple inherited turns", () => {
+  const child = join(dirname(codexFile), "rollout-2026-09-21T10-00-05-c2.jsonl");
+  const metadata = cx("session_meta", { id: "c2", forked_from_id: "c1", parent_thread_id: "c1" });
+  const turn = turn_id => cx("event_msg", { type: "task_started", turn_id });
+  writeFileSync(codexFile, readFileSync(codexFile, "utf8") + jsonl([turn("another-parent-turn")]));
+  const copied = [turn("parent-turn"), turn("another-parent-turn"), cout("old", "Script failed: inherited")];
+  for (const history of [[], copied]) {
+    writeFileSync(child, jsonl([metadata, ...history, turn("child-turn"), cout("new", "Script failed: child")]));
+    const out = run("show", `${codexFile}:4`, "--subs");
+    assert.match(out, /sub_errors=1/);
+    assert.match(out, /Script failed: child/);
+    assert.doesNotMatch(out, /Script failed: inherited/);
+  }
+});
+
+test("malformed nonblank records identify the incomplete transcript", () => {
+  writeFileSync(file, '\n{broken\n' + jsonl([user("continue")]));
+  const result = spawnSync(process.execPath, [SCRIPT, "show", `${file}:1`], { encoding: "utf8" });
+  assert.equal(result.status, 0);
+  assert.equal(result.stderr.trim(), `Incomplete transcript: ${file}:2: unreadable record`);
+  assert.match(result.stdout, /L3 YOU continue/);
 });
