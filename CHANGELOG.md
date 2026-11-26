@@ -173,6 +173,7 @@ Each plugin carries its own version in `plugins/<name>/.claude-plugin/plugin.jso
 
 ### verify-skill
 
+- 1.6.3: compare pinned endpoint trees when an upstream branch rewinds or diverges. Check copies against local files and review forks and merges by upstream hunk. Pasted skills use a content hash as their audit key. Link checks distinguish required URLs from examples and templates. Move batch, discovery and comparison instructions into conditional references and refresh all six guidance files.
 - 1.6.2: check HTTP and transport success before diffing upstream content, and block source SHA advancement when required content is unavailable. Refresh all six guidance groups to 2026-11-12, including Claude invocation and content lifecycle, Codex listing configuration, OMP 18.19.0, and GitHub Markdown retrieval.
 
 - 1.6.1: require documented case and invariant coverage plus coordinator-owned cross-skill contract checks; retain content identities, finding dispositions, and affected-contract rechecks through approved fixes; assign shared mechanical checks before dispatch and merge their evidence into one keyed audit record before final reporting.

@@ -1,6 +1,6 @@
 # Codex guidance
 
-Refreshed: 2026-11-12
+Refreshed: 2026-11-26
 
 Use for Codex discovery and axis B host parity. Rules summarize the linked source; the blockquote is an exact excerpt.
 
@@ -22,3 +22,5 @@ Documented interface keys: `display_name`, `short_description`, `icon_small`, `i
 Search `.agents/skills` from the working directory through the repository root, then `~/.agents/skills` and `/etc/codex/skills`. Bundled system skills and plugin skills can be located through session-provided paths. Symlinked skill directories are supported. Explicit CLI invocation uses `$skill` or the `/skills` selector.
 
 The `skills.max_context_tokens` setting changes the initial listing budget, up to 10,000 tokens. The selected skill still loads fully.
+
+When two installed skills share a name, both can appear in selectors. Use their paths to distinguish copies.

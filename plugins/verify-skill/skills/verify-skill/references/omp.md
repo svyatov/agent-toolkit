@@ -1,48 +1,48 @@
 # OMP guidance
 
-Refreshed: 2026-11-12
+Refreshed: 2026-11-26
 
-Use for OMP discovery and axis B host parity. Rules summarize the linked sources; blockquotes are exact excerpts. Checked upstream revision: `52ff19a2dbc00853ff24c6e76ef7aecea88a722c`, resolved through GitHub's commits API; package version: `18.19.0`. These are revision-specific runtime findings, not universal Agent Skills requirements.
+Use for OMP discovery and axis B host parity. Rules summarize the linked sources; blockquotes are exact excerpts. Checked upstream revision: `e951857c66a407a163d1eb8b09aa57f12c5b8564`, resolved through GitHub's commits API; package version: `19.2.1`. These are revision-specific runtime findings, not universal Agent Skills requirements.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/package.json#L1-L4
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/package.json#L1-L4
 
-> "version": "18.19.0",
+> "version": "19.2.1",
 
 ## Discovery and provider identity
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L23-L81
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L23-L81
 
 > Nested patterns like `<skills-root>/group/<skill>/SKILL.md` are not discovered recursively.
 
 Conventional providers and `skills.customDirectories` scan immediate child directories for `SKILL.md`, unlike Cursor's recursive discovery. A Claude-plugin manifest can additionally name a directory containing `SKILL.md` directly. Portable Agent Plugins use the fixed `skills/<name>/SKILL.md` layout; registry-installed Skillshare packages use a root `SKILL.md`.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/discovery/builtin.ts#L308-L366
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/discovery/builtin.ts#L308-L366
 
 > // Walk up from cwd finding .omp/skills/ in ancestors (closest first). Home is
 
 Native project discovery walks ancestor `.omp/skills` roots, with the project's discovery boundary and user-config exclusions; the default user root is `~/.omp/agent/skills`. Managed auto-learn skills are a separate, lowest-priority provider, not an authored-skill directory.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/marketplace.md#L20-L29
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/marketplace.md#L20-L29
 
 > The `~/.omp` paths below are the default-profile, non-XDG defaults.
 
 **Audit policy:** Prefer session-provided skill paths and effective custom/profile/XDG roots to guessed default or cache paths. Establish provider, source toggles, custom-directory configuration and package type before diagnosing discovery. Failure to locate a skill without that evidence is **Not checked**, not a proven loader rejection.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L135-L153
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L135-L153
 
 > Custom-directory skills are merged after provider skills and outrank a same-named default-path provider skill regardless of admission order
 
-Same-name handling depends on provider priority, custom-directory order, content equality and namespaces. Identical copies can collapse; different copies can retain namespaced identities. Finding a same-name file alone does not establish runtime bare-name ownership. Check session discovery evidence before reporting which copy is invoked.
+Same-name handling depends on provider priority, custom-directory order, content equality and namespaces. Registry-installed Skillshare copies yield to authored copies. Copies with equal bodies and parsed frontmatter can collapse; different copies can retain namespaced identities. Finding a same-name file alone does not establish runtime bare-name ownership. Check session discovery evidence before reporting which copy is invoked.
 
 ## Conventional frontmatter versus authoring conformance
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L50-L73
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L50-L73
 
 > the claude/codex/agents/opencode/claude-plugins providers can load skills without description
 
 Conventional `name` defaults to the containing directory name. Native `.omp`, `omp-plugins`, GitHub `.github/skills`, and custom-directory providers require descriptions; the compatibility providers quoted above permit omissions. Agent Plugins require both name and description. Conventional scanners preserve additional frontmatter metadata; `enabled: false` skips discovery. Raw names containing `/` or `\` are rejected because separators are reserved for namespaces and resource addressing.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/discovery/helpers.ts#L480-L527
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/discovery/helpers.ts#L480-L527
 
 > if (requireDescription && !frontmatter.description) {
 
@@ -50,15 +50,15 @@ Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aec
 
 ## Visibility, invocation and authorization
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L50-L63
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L50-L63
 
 > `globs` and `alwaysApply` are metadata here, not automatic skill-invocation controls.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/extensibility/skills.ts#L472-L481
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/extensibility/skills.ts#L472-L492
 
 > hide: capSkill.frontmatter?.hide === true || capSkill.frontmatter?.disableModelInvocation === true,
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L155-L198
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L155-L198
 
 > `hide: true` does not disable the skill. Hidden skills are still loaded and remain reachable through `skill://<name>` and `/skill:<name>` when skill commands are enabled.
 
@@ -68,13 +68,13 @@ Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aec
 
 ## Bundled resources and containment
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L200-L245
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L200-L245
 
 > resolved path must remain lexically within `baseDir`
 
 `read` resolves `skill://<name>` to the skill's `SKILL.md`; `skill://<name>/<relative-path>` accesses bundled resources. Namespaced identities use `skill://<namespace>/<name>[/<path>]`. Paths are URL-decoded; absolute paths, `..` traversal and lexical escapes are rejected. Missing resources have no fallback search. Resolve ordinary instruction-relative paths against the skill directory, not the session working directory.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/internal-urls/skill-protocol.ts#L102-L144
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/internal-urls/skill-protocol.ts#L102-L144
 
 > if (!skill.containRoot && !contain) return { skill, path: resolvedPath };
 
@@ -82,21 +82,21 @@ General skill-resource containment is lexical, not a universal symlink sandbox. 
 
 ## Portable Agent Plugins: closed skill schema
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/discovery/agent-plugin-format.ts#L20-L25
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/discovery/agent-plugin-format.ts#L20-L25
 
 > export const AGENT_PLUGIN_MANIFEST_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json";
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/discovery/agent-plugin-format.ts#L115-L161
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/discovery/agent-plugin-format.ts#L115-L161
 
 > if (!SKILL_FIELDS[key]) return `unexpected frontmatter field "${key}"`;
 
 At this revision, a root `plugin.json` declaring the Agent Plugins 1.0.0 schema selects the portable branch. Its skill validator accepts only `name`, `description`, `license`, `allowed-tools`, `metadata`, and `compatibility`. It requires name/description, checks directory-name agreement and naming/field limits, and rejects every other raw frontmatter key, including `disable-model-invocation`, `hide`, and `enabled`. Acceptance of `allowed-tools` as a string is schema acceptance, not proof of permission enforcement.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/packages/coding-agent/src/discovery/agent-plugins.ts#L157-L179
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/packages/coding-agent/src/discovery/agent-plugins.ts#L157-L179
 
 > // Non-conforming skills are skipped without affecting other components.
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L52-L73
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L52-L73
 
 > `disableModelInvocation?: boolean` (Agent Skills equivalent of `hide`; normalized from kebab-case `disable-model-invocation`)
 
@@ -106,6 +106,6 @@ Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aec
 
 ## Settings that hide advertising
 
-Source: https://github.com/can1357/oh-my-pi/blob/52ff19a2dbc00853ff24c6e76ef7aecea88a722c/docs/skills.md#L118-L133
+Source: https://github.com/can1357/oh-my-pi/blob/e951857c66a407a163d1eb8b09aa57f12c5b8564/docs/skills.md#L124-L137
 
 `skills.manualSkills` hides matching loaded skills from the catalog without changing their files. Explicit commands and skill URIs remain available. Patterns match raw and resolved names; project arrays replace global arrays. This setting controls advertising, not authorization.

@@ -1,6 +1,6 @@
 # Cursor guidance
 
-Refreshed: 2026-11-12
+Refreshed: 2026-11-26
 
 Use for Cursor IDE and Cursor CLI discovery and axis B host parity. Rules summarize the linked sources; blockquotes are exact excerpts. General skills documentation applies to Cursor; release-specific evidence below is CLI-only. Audit policies are labeled separately from documented behavior. Discovery index checked: https://cursor.com/llms.txt.
 
@@ -16,7 +16,7 @@ Source: https://cursor.com/docs/skills.md
 
 Search project `.agents/skills/` and `.cursor/skills/`, and user `~/.agents/skills/` and `~/.cursor/skills/` recursively. Documented compatibility roots are `.claude/skills/`, `.codex/skills/`, `~/.claude/skills/`, and `~/.codex/skills/`. Organizational folders do not change skill identity. Nested project `.agents/skills/` and `.cursor/skills/` roots are discovered within the repository and scope surfacing to that subtree; repo-root skills are available throughout it. Prefer session-resolved or user-supplied paths when available. Same-name collision precedence is not established by these sources: Not checked, not inferred from directory order.
 
-Local roots do not prove remote availability: the source says Cursor does not copy `~/.agents/skills/` or unsynced local skills to Cloud Agents, remote SSH sessions, or self-hosted workers. Only `~/.cursor/skills/` participates in the documented personal-skill sync.
+Local roots do not prove remote availability: the source says Cursor does not copy `~/.agents/skills/` or unsynced local skills to Cloud Agents, remote SSH sessions, or self-hosted workers. Only `~/.cursor/skills/` participates in the documented personal-skill sync. User-started Cloud Agents can load synced skills. Automation runs require the skill in the repository.
 
 Source: https://cursor.com/docs/cli/changelog.md — March 2026; May 14, 2026; v2026.08.11
 

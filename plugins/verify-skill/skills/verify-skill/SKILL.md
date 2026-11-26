@@ -51,40 +51,11 @@ Four axes:
 | Pasted skill content, no file | Verify the text, skip the file-layout checks |
 | No target given | Ask which skill using the active host's question tool, or chat |
 
-For a fan-out, select the Step 2 guidance once and give each subagent the same reference paths, dates and mode. If the batch includes this verifier or uses `--refresh`, prepare the refreshed guidance once before dispatch. Workers run Steps 1 and 3 to 7 and load only the references their targets need. Step 8 stays with you.
+For multiple targets, follow [batch verification](references/batch.md) for shared evidence, worker capacity, dependency checks and reporting.
 
-Before dispatch, the coordinator assigns shared metadata parsing, file identities, change dates, and URL checks to available tools. Run each shared check once; give workers its evidence or name the owner of the pending result. Workers return their case checks and findings in the audit record format below, using the same target keys. Only the coordinator writes the shared record and merges completed evidence into final reports. A worker's missing capability is not automatically a batch-level **Not checked** result.
+When resolving a name, follow [skill discovery](references/discovery.md).
 
-Determine capacity from the active host's limits, configuration, and already-running workers. On Claude Code, check `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` against the selected Claude reference; use its default only when no valid override is set. If capacity is unknown, use one worker at a time. If subagents are unavailable, verify the skills sequentially in the current session.
-
-Use the active host's available delegation, read and search tools, not assumed Claude tool names or concurrency settings. A worker without write access returns findings in its response; sequential verification and chat questions are valid fallbacks.
-
-When every report is in, the coordinator reconciles each declared skill dependency once: compare invocation policy, arguments, prerequisites, permitted side effects, approval gates, independence, and completion assumptions against the callee and shared contract. Assign each edge to one reviewer and resolve shared-policy interpretations for the whole batch. Reuse worker evidence rather than repeating the per-skill audits.
-
-Then print one table (skill, Blocking, Should fix, Consider), every finding grouped by severity and tagged with its skill, and the clean skills on one line. Number findings F1, F2, and so on across the whole printout, so Step 8 can take them by code.
-
-To find a skill by name, first use a matching target path supplied by the user
-or the current session's skill listing. Otherwise search these repository
-patterns in order and stop at the first hit. Use Glob when available, or an
-equivalent shell file search when it is not:
-
-```
-plugins/*/skills/*/SKILL.md
-skills/*/SKILL.md
-```
-
-Then search the active host's locations:
-
-- Claude Code: `.claude/skills/*/SKILL.md`, `~/.claude/skills/*/SKILL.md`, then `~/.claude/plugins/cache/*/*/*/skills/**/SKILL.md`.
-- Codex: `.agents/skills/*/SKILL.md` at each directory from the current directory up to the repository root, then `~/.agents/skills/*/SKILL.md` and `/etc/codex/skills/*/SKILL.md`. Use the session's supplied paths for bundled system and plugin skills.
-- Cursor IDE and CLI: recursively search project/user `.agents/skills` and `.cursor/skills`, plus documented `.claude/skills` and `.codex/skills` compatibility roots. Include nested project roots; they scope surfacing to their subtree. Identity is the directory containing `SKILL.md`. Do not infer collision precedence from search order.
-- OMP: scan immediate children of ancestor `.omp/skills` roots and the effective user root (default `~/.omp/agent/skills`). Prefer session-resolved paths and effective custom/profile/XDG configuration. Managed skills are distinct, lower priority. Establish the provider before diagnosing discovery; a same-name file does not establish bare-name ownership.
-
-If the target is still missing, check the active host's local reference from
-Step 2. Missing discovery evidence is **Not checked**, not proof of rejection.
-Offer `--refresh` if saved discovery guidance cannot resolve it; do not fetch automatically.
-
-Read the SKILL.md, then read every file it names: `references/`, `scripts/`,
+For file targets, read the SKILL.md, then read every file it names: `references/`, `scripts/`,
 `assets/`, and any bundled companion. A reference the body names but that does
 not exist is a Blocking finding, so resolve each path even when the file
 turns out to be missing.
@@ -97,13 +68,12 @@ Also read `sources.json` in the skill directory when it exists. Keep its
 `repository`, `path`, `branch`, and `sha` (a pasted skill has none), means axis
 D is skipped and reported as one line under Checks that passed.
 
-Record the skill's last change date with `git log -1 --format=%cs -- <path>`
-inside a repository, or the file mtime otherwise, for dated target claims.
+For file targets, record the last change date from `git log -1 --format=%cs -- <path>` or the file mtime outside a repository. Key the audit object by absolute skill path. For pasted text, use `paste:sha256:<digest>` computed from the original UTF-8 bytes, including line endings. Use an empty `files` object and mark filesystem-only checks inapplicable. Cite pasted lines by number. Record claims requiring unavailable companion evidence as **Not checked**.
 
-Keep a compact `audit.json` beside the report, outside the target tree, at the caller's output location or in a fresh OS temporary directory. Report its path. If writing is unavailable, return the record to the caller. Use one object keyed by absolute target skill path, never a positional array:
+Keep `audit.json` beside the report outside the target tree, at the caller's output location or in a fresh temporary directory. Report its path, or return the record inline when writing is unavailable.
 
 ```json
-{"<skill-path>": {"files": {"<file-path>": "<sha256>"}, "checks": {"<case-or-rule>": {"status": "pending", "owner": "<coordinator-or-worker>", "evidence": []}}, "findings": {"<rule-and-location>": {"code": "F1", "disposition": "open"}}}}
+{"<target-key>": {"files": {"<file-path>": "<sha256>"}, "checks": {"<case-or-rule>": {"status": "pending", "owner": "<coordinator-or-worker>", "evidence": []}}, "findings": {"<rule-and-location>": {"code": "F1", "disposition": "open"}}}}
 ```
 
 Hash the inspected skill and its relevant resources/configuration, including uncommitted contents. Check statuses are `pending`, `passed`, `finding`, `not_checked`, or `not_applicable`; evidence names the source location, result, or unresolved prerequisite. Final reports have no pending checks: retain unresolved ones as **Not checked**, with the reason. Finding dispositions are `open`, `deferred`, or `resolved`; retain their rule/location identity when display codes change.
@@ -276,20 +246,7 @@ checks **Not checked**. Live target evidence does not update saved references.
   Use the relevant provider's official evidence. If it cannot settle a claim,
   mark it **Not checked** rather than declaring the fact wrong because its
   wording is dated.
-- **Dead links.** Collect every URL in the skill and its bundled files, then
-  batch one check. Feed the list on stdin: a URL with `&` or `?` in it breaks
-  an unquoted `for` loop.
-
-  ```bash
-  while IFS= read -r u; do printf "%-70s " "$u"; \
-    curl -sS -o /dev/null -w "%{http_code}\n" -L --max-time 20 "$u"; done <<'EOF'
-  https://example.com/one
-  https://example.com/two?a=1&b=2
-  EOF
-  ```
-
-  Report each non-2xx with its code. A 404 on a URL the procedure depends on is
-  Blocking.
+- **Dead links.** Classify URLs by their use in the target and bundled files. Batch-check literal dependencies and provenance URLs once, preserving query strings. Record illustrations without requesting them. Expand templates only from known target inputs and check the resulting URL. If a required input is missing, mark that check **Not checked**. Record final HTTP status or transport failure for each request. A confirmed 404 on a required URL is Blocking.
 - **Expensive doc URLs.** An HTML doc URL where the site serves `llms.txt` or
   the same page with an `.md` suffix. The `.md` variant costs a fraction of the
   context. Check for it before reporting.
@@ -299,83 +256,7 @@ checks **Not checked**. Live target evidence does not update saved references.
 
 ## Step 6: Axis D, upstream drift
 
-Skip this step when Step 1 found no comparable source.
-
-Use the selected GitHub reference for API limits and failure handling. Fetch
-the target's comparison and changed content live in both modes.
-
-For each source that carries `repository`, `path`, `branch`, and `sha`, one
-call, all sources in one parallel batch:
-
-```bash
-curl -sS "https://api.github.com/repos/{repository}/compare/{sha}...{branch}"
-```
-
-Read `ahead_by`, `commits[].sha`, `commits[].commit.message`,
-`files[].filename`, and `files[].status`. Record the head SHA from the original
-comparison and pin follow-up requests to it rather than the moving branch.
-Check completeness before filtering using the limits in the GitHub reference.
-Paginate the commits when `total_commits` exceeds the returned count. The file
-list appears only on the first page; pagination does not remove its limit.
-If the file list reaches the saved limit, obtain a complete comparison of the pinned revisions
-from a local checkout before deciding which paths changed. If complete commit
-or file evidence is unavailable, mark that source **Not checked** and exclude
-it from Step 8's SHA advancement.
-
-Keep files whose `filename` or, for renames, `previous_filename` is under
-`path` in the complete comparison. Retain each status and both rename paths:
-`path` may be a directory, one file, or `.` for a whole-repository fork.
-`ahead_by: 0`, or no kept file, means the source is in sync. Record that under
-Checks that passed and stop.
-
-A 404 means the comparison is unavailable, not that history was rewritten.
-Check the repository URL, access/authentication, and both refs before stating
-a cause. If repository access and the head ref work but the stored `sha`
-cannot be resolved, fall back to
-`https://api.github.com/repos/{repository}/commits?path={path}&sha={branch}&per_page=30`,
-read the messages, and say in each finding that the diff could not be
-anchored. If repository access or the head ref remains unresolved, mark the comparison
-**Not checked**; do not infer a force-push or squash from the status alone.
-A 403 whose body
-names the rate limit is a fetch failure: report it as **Not checked** like any
-other.
-
-Handle removed files and renames out of `path` as deletions, without fetching
-them at the head. Treat renames into `path` as additions. For renames within
-`path`, map the local counterpart using the old path and fetch the new path
-at the head. For the other kept files, fetch the current upstream text in one batch.
-For each response, set `upstream_file` to a separate path in the temporary directory:
-
-```bash
-curl -fsSL --max-time 20 -o "$upstream_file" "https://raw.githubusercontent.com/{repository}/{head_sha}/{filename}"
-```
-
-Diff each successful response against its local counterpart.
-Treat HTTP and transport failures as **Not checked** for that source.
-Exclude sources with missing required content from Step 8's SHA advancement.
-Never interpret a failed response as changed or deleted upstream content.
-
-For `type: copy` the local counterpart is the same relative path under the
-skill. For `fork` and `merge` do not diff line by line: the local copy was
-rewritten on purpose. Read the upstream commit messages and the changed hunks
-as a list of ideas, and check each idea against the local body.
-
-Keep a hunk only when one of these holds, and drop it otherwise:
-
-- It fixes an error the local copy still carries.
-- It adds a case, a rule, or a reference the local body does not cover, and
-  that fits the local skill's scope.
-- It removes something the local copy still says.
-
-A hunk that only restyles is not a finding. A hunk that touches a part the
-local copy dropped or rewrote on purpose is not a finding either: `sources.json`
-says so in `modifications` and in a per-source `note` when it did.
-
-Grade every kept hunk at **Consider**. Borrowing is the author's call. Raise it
-to **Should fix** only when the upstream commit fixes something the local copy
-still says wrong, and quote both lines. Evidence is the short upstream commit
-SHA and message plus the quoted hunk. Fix is the hunk adapted to the local
-file, or "borrow nothing, advance the sha".
+For each comparable source, follow [upstream comparison](references/upstream.md) using the selected GitHub limits. Otherwise record why axis D was skipped.
 
 ## Step 7: Report
 
@@ -444,8 +325,7 @@ dates. Approval already given for specific edits remains valid; do not ask
 again for the same authorized work.
 
 After the user has taken or declined the axis D findings, offer one more edit:
-set each compared source's `sha` in `sources.json` to the head commit from its
-compare response, and `fetched_at` to today. The next run then starts from
+set each completely compared source's `sha` in `sources.json` to its verified pinned head and `fetched_at` to today. The next run then starts from
 there, and a declined hunk is not reported again. Offer it only for sources
 that were completely compared in Step 6, and only after the user has seen the findings.
 

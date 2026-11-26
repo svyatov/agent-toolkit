@@ -1,6 +1,6 @@
 # Agent Skills conformance and authoring
 
-Refreshed: 2026-11-12
+Refreshed: 2026-11-26
 
 Use for axis A. Rules below summarize the linked sources; blockquotes are exact excerpts. Labeled audit policies are this verifier's decisions, not upstream requirements. These are dated guidance, not a claim about today's documentation.
 
@@ -35,7 +35,7 @@ Source: https://agentskills.io/skill-creation/optimizing-descriptions.md
 
 For implicitly invoked skills, cover distinct user intents and boundaries. Test realistic positive prompts and near-miss negatives. This source favors imperative and broad trigger wording; use the host's guidance when it conflicts.
 
-Source: https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices.md
+Source: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices.md
 
 > **Always write in third person**.
 

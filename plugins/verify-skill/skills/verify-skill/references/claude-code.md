@@ -1,6 +1,6 @@
 # Claude Code guidance
 
-Refreshed: 2026-11-12
+Refreshed: 2026-11-26
 
 Use for axis B on Claude Code, discovery and fan-out. Rules summarize the linked sources; blockquotes are exact excerpts. An unlisted field or command is not proof of deprecation: mark it Not checked against this snapshot.
 
@@ -52,7 +52,7 @@ Source: https://code.claude.com/docs/en/cli-reference.md
 
 Common tool configuration flags include `--tools`, `--allowedTools`, and `--disallowedTools`; `--agent` selects an agent. Confirm flags outside this saved subset with refresh mode instead of guessing their status.
 
-Source: https://code.claude.com/docs/en/plugins-reference.md
+Source: https://code.claude.com/docs/en/plugins/manifest-reference.md
 
 > `claude plugin validate` is the authoritative check for a manifest.
 
@@ -75,3 +75,5 @@ Malformed YAML loads the body with empty metadata. Unknown fields are ignored. S
 The `skillOverrides` setting can override skill visibility without editing frontmatter. Check effective settings before attributing invocation behavior to metadata alone.
 
 Skill content persists across turns, but compaction can retain only its beginning. Put essential constraints near the start.
+
+Claude Code also supports skills supplied by MCP servers from v2.1.331. Check the provider before applying the local frontmatter rules. The skills page lists ignored MCP fields, including tool grants, hooks, and fork settings. Auto-compaction retains up to the first 5,000 tokens per invoked skill within a shared 25,000-token budget.

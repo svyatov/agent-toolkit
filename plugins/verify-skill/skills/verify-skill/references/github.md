@@ -1,6 +1,6 @@
 # GitHub comparison guidance
 
-Refreshed: 2026-11-12
+Refreshed: 2026-11-26
 
 Use for axis D. These are saved API rules; every target repository comparison still runs live. Rules summarize the linked sources; blockquotes are exact excerpts.
 
@@ -12,7 +12,7 @@ Source: https://docs.github.com/en/rest/commits/commits#compare-two-commits
 
 Compare `BASE...HEAD` using the REST comparison endpoint. Without pagination, at most 250 commits are returned, with the comparison's latest commit last. Paginated commit results are chronological; a page's last commit need not be the head. The changed-file list appears only on the first page and remains capped at 300 across the comparison. Pagination cannot recover omitted files. Check `total_commits`, page through commits as needed, and use a complete local comparison of the pinned revisions when the file cap is reached. Mark incomplete evidence Not checked rather than declaring the source in sync or advancing its SHA.
 
-Read changed-file status and account for renames and removals when mapping upstream files to the target. Pin follow-up content reads to the compared head SHA. Path-filtered commit history is a fallback when a comparison cannot be anchored; it is not proof of a complete comparison.
+Check comparison status (identical, ahead, behind, or diverged) before interpreting ahead_by. Audit policy: if the base is not an ancestor of the head, compare the two pinned endpoint trees for the tracked path before accepting a replacement baseline. Read changed-file status and account for renames and removals when mapping upstream files to the target. Pin follow-up content reads to the compared head SHA. Path-filtered commit history is a fallback when a comparison cannot be anchored; it is not proof of a complete comparison.
 
 ## Failed requests
 
